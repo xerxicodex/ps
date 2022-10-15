@@ -7,6 +7,7 @@ type FormInputProps = {
   type?: string;
   hidden?: boolean;
   value?: any;
+  autoComplete?: string | undefined,
   onChange?: (event: any) => any;
   placeholder?: string;
 };
@@ -17,6 +18,7 @@ const FormInput: React.FC<FormInputProps> = ({
   placeholder,
   hidden,
   value,
+  autoComplete,
   onChange,
   type = "text",
 }) => {
@@ -44,6 +46,7 @@ const FormInput: React.FC<FormInputProps> = ({
         placeholder={placeholder}
         hidden={hidden}
         value={value}
+        autoComplete={autoComplete}
         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         {...register(name, {
           value,

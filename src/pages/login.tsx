@@ -1,21 +1,23 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { trpc } from "../client/utils/trpc";
 import { toast } from "react-toastify";
-import classnames from "classnames";
 import { useForm, FormProvider, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import FormInput from "../components/FormInput";
 import { LoginUserInput, loginUserSchema } from "../server/schema/user.schema";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 export default function LoginPage() {
-  const hello = trpc.useQuery(["hello"]);
+  const router = useRouter();
+
   const { mutate: login } = trpc.useMutation("auth.login", {
     onSuccess(data) {
       toast("You were successfully logged in!", {
         type: "success",
         position: "top-center",
       });
+      router.push("/");
     },
     onError(error: any) {
       toast(error.message, {
@@ -64,6 +66,7 @@ export default function LoginPage() {
               <FormInput
                 label="Username"
                 name="username"
+                autoComplete="off"
                 placeholder="username"
               />
             </div>
@@ -73,6 +76,7 @@ export default function LoginPage() {
                 label="Password"
                 name="password"
                 type="password"
+                autoComplete="off"
                 placeholder="******************"
               />
             </div>

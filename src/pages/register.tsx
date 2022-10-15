@@ -10,15 +10,18 @@ import {
   createUserSchema,
 } from "../server/schema/user.schema";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 export default function RegisterPage() {
-  const hello = trpc.useQuery(["hello"]);
+  const router = useRouter();
+
   const { mutate: register } = trpc.useMutation("auth.register", {
     onSuccess(data) {
       toast("You were successfully registered!", {
         type: "success",
         position: "top-center",
       });
+      router.push("/login");
     },
     onError(error: any) {
       console.log({ error });
