@@ -8,7 +8,7 @@ import FormInput from "../components/FormInput";
 import {
   CreateUserInput,
   createUserSchema,
-} from "../server/schema/user.schema";
+} from "../server/schema/trainer.schema";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
@@ -84,6 +84,7 @@ export default function RegisterPage() {
               <FormInput
                 label="Username"
                 name="username"
+                autoComplete="off"
                 placeholder="username"
               />
             </div>
@@ -93,6 +94,7 @@ export default function RegisterPage() {
                 label="Password"
                 name="password"
                 type="password"
+                autoComplete="off"
                 placeholder="******************"
               />
             </div>
@@ -102,6 +104,7 @@ export default function RegisterPage() {
                 label="Confirm Password"
                 name="passwordConfirm"
                 type="password"
+                autoComplete="off"
                 placeholder="******************"
               />
             </div>

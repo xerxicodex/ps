@@ -10,26 +10,232 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User{
-  @@map(name: "users")
-
-  id Int  @id @default(autoincrement())
-  name String  @db.VarChar(255)
-
-  role RoleEnumType? @default(user)
-
-  password String
-
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
-
-  @@unique([name])
-}
-
 enum RoleEnumType {
   admin
   super_moderator
   moderator
   promoter
   user
+}
+
+enum RarityEnumType {
+  common
+  uncommon
+  rare
+  legendary
+  mythical
+}
+
+enum PokemonColorEnumType {
+  colorless
+  shiny
+  dark
+  golden
+}
+
+enum PokemonGenderEnumType {
+  genderless
+  male
+  female
+  unknown
+}
+
+model Item {
+  @@map(name: "items")
+
+  id Int  @id @default(autoincrement())
+
+  name String
+
+  rarity RarityEnumType? @default(common)
+
+  max_amount Int?
+
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  trainer_items TrainerItem[]
+  pokemon_holding_items TrainerPokemon[]
+  wild_pokemon_holding_items WildPokemon[]
+  dungeons DungeonItem[]
+}
+
+model WildPokemon{
+  @@map(name: "wild_pokemon")
+
+  id Int  @id @default(autoincrement())
+
+  category RarityEnumType? @default(common)
+
+  dex_id Int
+
+  color PokemonColorEnumType? @default(colorless)
+
+  gender PokemonGenderEnumType? @default(unknown)
+
+  level Int? @default(4)
+
+  exp Int? @default(0)
+
+  item Item? @relation(fields: [item_id], references: [id])
+
+  item_id Int?
+
+  encounter_chance Int? @default(0)
+
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  dungeons DungeonPokemon[]
+}
+
+model Dungeon {
+  @@map(name: "dungeons")
+
+  id Int  @id @default(autoincrement())
+
+  name String
+
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  pokemon DungeonPokemon[]
+  items DungeonItem[]
+}
+
+model DungeonPokemon {
+  pokemon       WildPokemon     @relation(fields: [pokemon_id], references: [id])
+  pokemon_id     Int // relation scalar field (used in the `@relation` attribute above)
+  
+  dungeon   Dungeon @relation(fields: [dungeon_id], references: [id])
+  dungeon_id Int // relation scalar field (used in the `@relation` attribute above)
+  
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  @@id([pokemon_id, dungeon_id])
+}
+
+model DungeonItem {
+  item       Item     @relation(fields: [item_id], references: [id])
+  item_id     Int // relation scalar field (used in the `@relation` attribute above)
+
+  dungeon   Dungeon @relation(fields: [dungeon_id], references: [id])
+  dungeon_id Int // relation scalar field (used in the `@relation` attribute above)
+  
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  @@id([item_id, dungeon_id])
+}
+
+model Trainer{
+  @@map(name: "trainers")
+
+  id Int  @id @default(autoincrement())
+  name String  @db.VarChar(255)
+
+  role RoleEnumType? @default(user)
+
+  starter Int? @default(1)
+
+  level Int? @default(0)
+
+  exp Int? @default(0)
+
+  coins Int? @default(0)
+
+  password String
+
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  pokemon TrainerPokemon[]
+  items TrainerItem[]
+
+  @@unique([name])
+}
+
+model TrainerItem {
+  @@map(name: "trainer_items")
+
+  id Int  @id @default(autoincrement())
+
+  item Item @relation(fields: [item_id], references: [id])
+
+  item_id Int
+
+  trainer Trainer? @relation(fields: [trainer_id], references: [id])
+
+  trainer_id Int?
+
+  amount Int? @default(1)
+
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  market_items MarketItem[]
+}
+
+model TrainerPokemon{
+  @@map(name: "trainer_pokemon")
+
+  id Int  @id @default(autoincrement())
+
+  dex_id Int
+
+  slot Int? @default(0)
+
+  color PokemonColorEnumType? @default(colorless)
+
+  gender PokemonGenderEnumType? @default(unknown)
+
+  level Int? @default(4)
+
+  exp Int? @default(0)
+
+  trainer Trainer? @relation(fields: [trainer_id], references: [id])
+
+  trainer_id Int? @default(1)
+
+  item Item? @relation(fields: [item_id], references: [id])
+
+  item_id Int?
+
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  market_pokemon MarketPokemon[]
+}
+
+model MarketPokemon {
+  @@map(name: "market_pokemon")
+
+  id Int  @id @default(autoincrement())
+
+  pokemon TrainerPokemon @relation(fields: [trainer_pokemon_id], references: [id])
+
+  trainer_pokemon_id Int
+
+  coins Int
+
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+}
+
+model MarketItem {
+  @@map(name: "market_items")
+
+  id Int  @id @default(autoincrement())
+
+  item TrainerItem @relation(fields: [item_id], references: [id])
+
+  item_id Int
+
+  amount Int? @default(1)
+
+  coins Int
+
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
 }

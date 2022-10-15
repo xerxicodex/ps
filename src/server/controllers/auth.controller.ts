@@ -5,13 +5,13 @@ import { OptionsType } from "cookies-next/lib/types";
 import { getCookie, setCookie } from "cookies-next";
 import customConfig from "../config/default";
 import { Context } from "../createContext";
-import { CreateUserInput, LoginUserInput } from "../schema/user.schema";
+import { CreateUserInput, LoginUserInput } from "../schema/trainer.schema";
 import {
   createUser,
-  findUniqueUser,
+  findUniqueTrainer,
   findUser,
   signTokens,
-} from "../services/user.service";
+} from "../services/trainer.service";
 import redisClient from "../utils/connectRedis";
 import { signJwt, verifyJwt } from "../utils/jwt";
 
@@ -34,7 +34,7 @@ const refreshTokenCookieOptions: OptionsType = {
   ),
 };
 
-// [...] Register user
+// [...] Register trainer
 export const registerHandler = async ({
   input,
 }: {
@@ -43,15 +43,16 @@ export const registerHandler = async ({
   try {
     const hashedPassword = await bcrypt.hash(input.password, 12);
 
-    const user = await createUser({
+    const  trainer= await createUser({
       name: input.username,
       password: hashedPassword,
+      starter: input.starter
     });
 
     return {
       status: "success",
       data: {
-        user,
+        trainer,
       },
     };
   } catch (err: any) {
@@ -65,7 +66,7 @@ export const registerHandler = async ({
   }
 };
 
-// [...] Login user
+// [...] Login trainer
 export const loginHandler = async ({
   input,
   ctx: { req, res },
@@ -74,19 +75,19 @@ export const loginHandler = async ({
   ctx: Context;
 }) => {
   try {
-    // Get the user from the collection
-    const user = await findUser({ name: input.username });
+    // Get the  trainerfrom the collection
+    const  trainer= await findUser({ name: input.username });
 
-    // Check if user exist and password is correct
-    if (!user || !(await bcrypt.compare(input.password, user.password))) {
+    // Check if  trainerexist and password is correct
+    if (! trainer|| !(await bcrypt.compare(input.password, trainer.password))) {
       throw new TRPCError({
         code: "BAD_REQUEST",
-        message: "Invalid username or password",
+        message: "Invalid trainername or password",
       });
     }
 
     // Create the Access and refresh Tokens
-    const { access_token, refresh_token } = await signTokens(user);
+    const { access_token, refresh_token } = await signTokens(trainer);
 
     // Send Access Token in Cookie
     setCookie("access_token", access_token, {
@@ -141,21 +142,21 @@ export const refreshAccessTokenHandler = async ({
       throw new TRPCError({ code: "FORBIDDEN", message });
     }
 
-    // Check if the user has a valid session
-    const session = await redisClient.get(`user-${decoded.sub}`);
+    // Check if the  trainerhas a valid session
+    const session = await redisClient.get(`trainer-${decoded.sub}`);
     if (!session) {
       throw new TRPCError({ code: "FORBIDDEN", message });
     }
 
-    // Check if the user exist
-    const user = await findUniqueUser({ id: JSON.parse(session).id });
+    // Check if the  trainerexist
+    const  trainer= await findUniqueTrainer({ id: JSON.parse(session).id });
 
-    if (!user) {
+    if (!trainer) {
       throw new TRPCError({ code: "FORBIDDEN", message });
     }
 
     // Sign new access token
-    const access_token = signJwt({ sub: user.id }, "accessTokenPrivateKey", {
+    const access_token = signJwt({ sub: trainer.id }, "accessTokenPrivateKey", {
       expiresIn: `${customConfig.accessTokenExpiresIn}m`,
     });
 
@@ -182,7 +183,7 @@ export const refreshAccessTokenHandler = async ({
   }
 };
 
-// [...] Logout user
+// [...] Logout trainer
 const logout = ({ ctx: { req, res } }: { ctx: Context }) => {
   setCookie("access_token", "", { req, res, maxAge: -1 });
   setCookie("refresh_token", "", { req, res, maxAge: -1 });
@@ -191,8 +192,8 @@ const logout = ({ ctx: { req, res } }: { ctx: Context }) => {
 
 export const logoutHandler = async ({ ctx }: { ctx: Context }) => {
   try {
-    const user = ctx.user;
-    await redisClient.del(`user-${user?.id}`);
+    const  trainer= ctx.trainer;
+    await redisClient.del(`trainer-${trainer?.id}`);
     logout({ ctx });
     return { status: "success" };
   } catch (err: any) {

@@ -5,7 +5,7 @@ import {
   registerHandler,
 } from "../controllers/auth.controller";
 import { createRouter } from "../createRouter";
-import { createUserSchema, loginUserSchema } from "../schema/user.schema";
+import { createUserSchema, loginUserSchema } from "../schema/trainer.schema";
 
 const authRouter = createRouter()
   .mutation("register", {

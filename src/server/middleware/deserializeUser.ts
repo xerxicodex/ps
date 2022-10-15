@@ -1,6 +1,6 @@
 import { TRPCError } from "@trpc/server";
 import { NextApiRequest, NextApiResponse } from "next";
-import { findUniqueUser } from "../services/user.service";
+import { findUniqueTrainer } from "../services/trainer.service";
 import redisClient from "../utils/connectRedis";
 import { verifyJwt } from "../utils/jwt";
 
@@ -26,7 +26,7 @@ export const deserializeUser = async ({
     const notAuthenticated = {
       req,
       res,
-      user: null,
+      trainer: null,
     };
 
     if (!access_token) {
@@ -43,24 +43,24 @@ export const deserializeUser = async ({
       return notAuthenticated;
     }
 
-    // Check if user has a valid session
-    const session = await redisClient.get(`user-${decoded.sub}`);
+    // Check if  trainerhas a valid session
+    const session = await redisClient.get(`trainer-${decoded.sub}`);
 
     if (!session) {
       return notAuthenticated;
     }
 
-    // Check if user still exist
-    const user = await findUniqueUser({ id: JSON.parse(session).id });
+    // Check if  trainerstill exist
+    const  trainer= await findUniqueTrainer({ id: JSON.parse(session).id });
 
-    if (!user) {
+    if (!trainer) {
       return notAuthenticated;
     }
 
     return {
       req,
       res,
-      user: { ...user, id: user.id },
+      trainer: { ...trainer, id: trainer.id },
     };
   } catch (err: any) {
     throw new TRPCError({

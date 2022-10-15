@@ -3,11 +3,11 @@ import type { Context } from "../createContext";
 
 export const getMeHandler = ({ ctx }: { ctx: Context }) => {
   try {
-    const user = ctx.user;
+    const  trainer= ctx.trainer;
     return {
       status: "success",
       data: {
-        user,
+        trainer,
       },
     };
   } catch (err: any) {

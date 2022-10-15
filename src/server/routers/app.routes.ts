@@ -1,7 +1,7 @@
 import { createRouter } from "../createRouter";
 import redisClient from "../utils/connectRedis";
 import authRouter from "./auth.routes";
-import userRouter from "./user.routes";
+import trainerRouter from "./trainer.routes";
 
 import connectDB from "../utils/prisma";
 
@@ -21,6 +21,6 @@ export const appRouter = createRouter()
     },
   })
   .merge("auth.", authRouter)
-  .merge("users.", userRouter);
+  .merge("trainers.", trainerRouter);
 
 export type AppRouter = typeof appRouter;
