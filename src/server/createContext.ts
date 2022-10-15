@@ -1,8 +1,10 @@
+import { User } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 
 interface IContext {
   req: NextApiRequest;
   res: NextApiResponse;
+  user?: User
 }
 
 export function createContext({
