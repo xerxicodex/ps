@@ -1,8 +1,8 @@
-import { Prisma, User } from '@prisma/client';
-import customConfig from '../config/default';
-import redisClient from '../utils/connectRedis';
-import { signJwt } from '../utils/jwt';
-import { prisma } from '../utils/prisma';
+import { Prisma, User } from "@prisma/client";
+import customConfig from "../config/default";
+import redisClient from "../utils/connectRedis";
+import { signJwt } from "../utils/jwt";
+import { prisma } from "../utils/prisma";
 
 export const createUser = async (input: Prisma.UserCreateInput) => {
   return (await prisma.user.create({
@@ -45,11 +45,11 @@ export const signTokens = async (user: Prisma.UserWhereUniqueInput) => {
   });
 
   // 2. Create Access and Refresh tokens
-  const access_token = signJwt({ sub: user.id }, 'accessTokenPrivateKey', {
+  const access_token = signJwt({ sub: user.id }, "accessTokenPrivateKey", {
     expiresIn: `${customConfig.accessTokenExpiresIn}m`,
   });
 
-  const refresh_token = signJwt({ sub: user.id }, 'refreshTokenPrivateKey', {
+  const refresh_token = signJwt({ sub: user.id }, "refreshTokenPrivateKey", {
     expiresIn: `${customConfig.refreshTokenExpiresIn}m`,
   });
 

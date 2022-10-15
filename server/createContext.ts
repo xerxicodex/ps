@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextApiRequest, NextApiResponse } from "next";
 
 export function createContext({
   req,
@@ -7,7 +7,7 @@ export function createContext({
   req: NextApiRequest;
   res: NextApiResponse;
 }) {
-  return null
+  return null;
 }
 
 export type Context = ReturnType<typeof createContext>;

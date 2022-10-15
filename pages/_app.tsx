@@ -1,17 +1,17 @@
-import '../styles/globals.scss';
-import 'react-toastify/dist/ReactToastify.css';
-import type { AppProps } from 'next/app';
-import { withTRPC } from '@trpc/next';
-import type { AppRouter } from '../server/routers/app.routes';
-import { loggerLink } from '@trpc/client/links/loggerLink';
-import { httpBatchLink } from '@trpc/client/links/httpBatchLink';
-import superjson from 'superjson';
-import { ReactQueryDevtools } from 'react-query/devtools';
+import "../styles/globals.scss";
+import "react-toastify/dist/ReactToastify.css";
+import type { AppProps } from "next/app";
+import { withTRPC } from "@trpc/next";
+import type { AppRouter } from "../server/routers/app.routes";
+import { loggerLink } from "@trpc/client/links/loggerLink";
+import { httpBatchLink } from "@trpc/client/links/httpBatchLink";
+import superjson from "superjson";
+import { ReactQueryDevtools } from "react-query/devtools";
 import { ToastContainer } from "react-toastify";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <div className='bg-slate-700 select-none'>
+    <div className="bg-slate-700 select-none">
       <ToastContainer />
       <Component {...pageProps} />
       <ReactQueryDevtools initialIsOpen={false} />
@@ -44,7 +44,7 @@ export default withTRPC<AppRouter>({
         if (ctx?.req) {
           return {
             ...ctx.req.headers,
-            'x-ssr': '1',
+            "x-ssr": "1",
           };
         }
         return {};
@@ -54,7 +54,7 @@ export default withTRPC<AppRouter>({
       fetch(url, options) {
         return fetch(url, {
           ...options,
-          credentials: 'include',
+          credentials: "include",
         });
       },
     };
