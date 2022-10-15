@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import classnames from "classnames";
 import { useForm, FormProvider, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import FormInput from "../components/FormInput";
+import FormInput from "../client/components/FormInput";
 import {
   CreateUserInput,
   createUserSchema,

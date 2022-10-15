@@ -21,6 +21,6 @@ export const appRouter = createRouter()
     },
   })
   .merge("auth.", authRouter)
-  .merge("trainers.", trainerRouter);
+  .merge("trainer.", trainerRouter);
 
 export type AppRouter = typeof appRouter;

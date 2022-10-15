@@ -40,33 +40,33 @@ CREATE TABLE "wild_pokemon" (
 );
 
 -- CreateTable
-CREATE TABLE "dungeons" (
+CREATE TABLE "routes" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "dungeons_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "routes_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "DungeonPokemon" (
+CREATE TABLE "RoutePokemon" (
     "pokemon_id" INTEGER NOT NULL,
-    "dungeon_id" INTEGER NOT NULL,
+    "route_id" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "DungeonPokemon_pkey" PRIMARY KEY ("pokemon_id","dungeon_id")
+    CONSTRAINT "RoutePokemon_pkey" PRIMARY KEY ("pokemon_id","route_id")
 );
 
 -- CreateTable
-CREATE TABLE "DungeonItem" (
+CREATE TABLE "RouteItem" (
     "item_id" INTEGER NOT NULL,
-    "dungeon_id" INTEGER NOT NULL,
+    "route_id" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "DungeonItem_pkey" PRIMARY KEY ("item_id","dungeon_id")
+    CONSTRAINT "RouteItem_pkey" PRIMARY KEY ("item_id","route_id")
 );
 
 -- CreateTable
@@ -144,16 +144,16 @@ CREATE UNIQUE INDEX "trainers_name_key" ON "trainers"("name");
 ALTER TABLE "wild_pokemon" ADD CONSTRAINT "wild_pokemon_item_id_fkey" FOREIGN KEY ("item_id") REFERENCES "items"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "DungeonPokemon" ADD CONSTRAINT "DungeonPokemon_pokemon_id_fkey" FOREIGN KEY ("pokemon_id") REFERENCES "wild_pokemon"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "RoutePokemon" ADD CONSTRAINT "RoutePokemon_pokemon_id_fkey" FOREIGN KEY ("pokemon_id") REFERENCES "wild_pokemon"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "DungeonPokemon" ADD CONSTRAINT "DungeonPokemon_dungeon_id_fkey" FOREIGN KEY ("dungeon_id") REFERENCES "dungeons"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "RoutePokemon" ADD CONSTRAINT "RoutePokemon_route_id_fkey" FOREIGN KEY ("route_id") REFERENCES "routes"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "DungeonItem" ADD CONSTRAINT "DungeonItem_item_id_fkey" FOREIGN KEY ("item_id") REFERENCES "items"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "RouteItem" ADD CONSTRAINT "RouteItem_item_id_fkey" FOREIGN KEY ("item_id") REFERENCES "items"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "DungeonItem" ADD CONSTRAINT "DungeonItem_dungeon_id_fkey" FOREIGN KEY ("dungeon_id") REFERENCES "dungeons"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "RouteItem" ADD CONSTRAINT "RouteItem_route_id_fkey" FOREIGN KEY ("route_id") REFERENCES "routes"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "trainer_items" ADD CONSTRAINT "trainer_items_item_id_fkey" FOREIGN KEY ("item_id") REFERENCES "items"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

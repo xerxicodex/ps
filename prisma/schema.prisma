@@ -57,7 +57,7 @@ model Item {
   trainer_items TrainerItem[]
   pokemon_holding_items TrainerPokemon[]
   wild_pokemon_holding_items WildPokemon[]
-  dungeons DungeonItem[]
+  routes RouteItem[]
 }
 
 model WildPokemon{
@@ -86,11 +86,11 @@ model WildPokemon{
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
 
-  dungeons DungeonPokemon[]
+  routes RoutePokemon[]
 }
 
-model Dungeon {
-  @@map(name: "dungeons")
+model Route {
+  @@map(name: "routes")
 
   id Int  @id @default(autoincrement())
 
@@ -99,34 +99,34 @@ model Dungeon {
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
 
-  pokemon DungeonPokemon[]
-  items DungeonItem[]
+  pokemon RoutePokemon[]
+  items RouteItem[]
 }
 
-model DungeonPokemon {
+model RoutePokemon {
   pokemon       WildPokemon     @relation(fields: [pokemon_id], references: [id])
   pokemon_id     Int // relation scalar field (used in the `@relation` attribute above)
   
-  dungeon   Dungeon @relation(fields: [dungeon_id], references: [id])
-  dungeon_id Int // relation scalar field (used in the `@relation` attribute above)
+  route   Route @relation(fields: [route_id], references: [id])
+  route_id Int // relation scalar field (used in the `@relation` attribute above)
   
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
 
-  @@id([pokemon_id, dungeon_id])
+  @@id([pokemon_id, route_id])
 }
 
-model DungeonItem {
+model RouteItem {
   item       Item     @relation(fields: [item_id], references: [id])
   item_id     Int // relation scalar field (used in the `@relation` attribute above)
 
-  dungeon   Dungeon @relation(fields: [dungeon_id], references: [id])
-  dungeon_id Int // relation scalar field (used in the `@relation` attribute above)
+  route   Route @relation(fields: [route_id], references: [id])
+  route_id Int // relation scalar field (used in the `@relation` attribute above)
   
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
 
-  @@id([item_id, dungeon_id])
+  @@id([item_id, route_id])
 }
 
 model Trainer{

@@ -1,3 +1,4 @@
+import 'animate.css';
 import "../styles/globals.scss";
 import "react-toastify/dist/ReactToastify.css";
 import type { AppProps } from "next/app";
@@ -8,13 +9,19 @@ import { httpBatchLink } from "@trpc/client/links/httpBatchLink";
 import superjson from "superjson";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { ToastContainer } from "react-toastify";
+import AuthMiddleware from "../client/middleware/AuthMiddleware";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <div className="bg-slate-700 select-none">
-      <ToastContainer />
-      <Component {...pageProps} />
-      <ReactQueryDevtools initialIsOpen={false} />
+    <div className="w-screen h-screen bg-slate-800 select-none">
+      <AuthMiddleware
+        requireAuth={(pageProps as any).requireAuth}
+        enableAuth={(pageProps as any).enableAuth}
+      >
+        <ToastContainer />
+        <Component {...pageProps} />
+        <ReactQueryDevtools initialIsOpen={false} />
+      </AuthMiddleware>
     </div>
   );
 }
