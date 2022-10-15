@@ -12,7 +12,7 @@ const HomePage: NextPage = () => {
   ]);
 
   useEffect(() => {
-    store.setPageLoading(isLoading || isFetching)
+    store.setPageLoading(isLoading || isFetching);
   }, [isLoading, isFetching]);
 
   return (

@@ -7,7 +7,7 @@ type FormInputProps = {
   type?: string;
   hidden?: boolean;
   value?: any;
-  autoComplete?: string | undefined,
+  autoComplete?: string | undefined;
   onChange?: (event: any) => any;
   placeholder?: string;
 };

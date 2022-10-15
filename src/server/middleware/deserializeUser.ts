@@ -51,7 +51,7 @@ export const deserializeUser = async ({
     }
 
     // Check if  trainerstill exist
-    const  trainer= await findUniqueTrainer({ id: JSON.parse(session).id });
+    const trainer = await findUniqueTrainer({ id: JSON.parse(session).id });
 
     if (!trainer) {
       return notAuthenticated;

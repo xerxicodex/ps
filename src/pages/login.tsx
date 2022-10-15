@@ -4,7 +4,10 @@ import { toast } from "react-toastify";
 import { useForm, FormProvider, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import FormInput from "../client/components/FormInput";
-import { LoginUserInput, loginUserSchema } from "../server/schema/trainer.schema";
+import {
+  LoginUserInput,
+  loginUserSchema,
+} from "../server/schema/trainer.schema";
 import Link from "next/link";
 import { useRouter } from "next/router";
 

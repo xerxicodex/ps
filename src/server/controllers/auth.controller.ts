@@ -43,10 +43,10 @@ export const registerHandler = async ({
   try {
     const hashedPassword = await bcrypt.hash(input.password, 12);
 
-    const  trainer= await createUser({
+    const trainer = await createUser({
       name: input.username,
       password: hashedPassword,
-      starter: input.starter
+      starter: input.starter,
     });
 
     return {
@@ -76,10 +76,10 @@ export const loginHandler = async ({
 }) => {
   try {
     // Get the  trainerfrom the collection
-    const  trainer= await findUser({ name: input.username });
+    const trainer = await findUser({ name: input.username });
 
     // Check if  trainerexist and password is correct
-    if (! trainer|| !(await bcrypt.compare(input.password, trainer.password))) {
+    if (!trainer || !(await bcrypt.compare(input.password, trainer.password))) {
       throw new TRPCError({
         code: "BAD_REQUEST",
         message: "Invalid trainername or password",
@@ -149,7 +149,7 @@ export const refreshAccessTokenHandler = async ({
     }
 
     // Check if the  trainerexist
-    const  trainer= await findUniqueTrainer({ id: JSON.parse(session).id });
+    const trainer = await findUniqueTrainer({ id: JSON.parse(session).id });
 
     if (!trainer) {
       throw new TRPCError({ code: "FORBIDDEN", message });
@@ -192,7 +192,7 @@ const logout = ({ ctx: { req, res } }: { ctx: Context }) => {
 
 export const logoutHandler = async ({ ctx }: { ctx: Context }) => {
   try {
-    const  trainer= ctx.trainer;
+    const trainer = ctx.trainer;
     await redisClient.del(`trainer-${trainer?.id}`);
     logout({ ctx });
     return { status: "success" };

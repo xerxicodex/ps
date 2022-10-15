@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
-import { useQueryClient } from 'react-query';
-import { ITrainer } from '../lib/types';
-import useStore from '../store';
-import { trpc } from '../utils/trpc';
+import React, { useEffect } from "react";
+import { useQueryClient } from "react-query";
+import { ITrainer } from "../lib/types";
+import useStore from "../store";
+import { trpc } from "../utils/trpc";
 
 type AuthMiddlewareProps = {
   children: React.ReactNode;
@@ -15,22 +15,22 @@ const AuthMiddleware: React.FC<AuthMiddlewareProps> = ({
   requireAuth,
   enableAuth,
 }) => {
-  console.log('I was called from AuthMiddleware');
+  console.log("I was called from AuthMiddleware");
   const store = useStore();
   const queryClient = useQueryClient();
-  const query = trpc.useQuery(['auth.refresh'], {
+  const query = trpc.useQuery(["auth.refresh"], {
     enabled: false,
     retry: 1,
     onError(error: any) {
       store.setPageLoading(false);
-      document.location.href = '/login';
+      document.location.href = "/login";
     },
     onSuccess(data: any) {
       store.setPageLoading(false);
-      queryClient.refetchQueries(['trainer.me']);
+      queryClient.refetchQueries(["trainer.me"]);
     },
   });
-  const { isLoading, isFetching } = trpc.useQuery(['trainer.me'], {
+  const { isLoading, isFetching } = trpc.useQuery(["trainer.me"], {
     onSuccess: (data) => {
       store.setPageLoading(false);
       store.setAuthTrainer(data.data.trainer as unknown as ITrainer);
@@ -39,13 +39,14 @@ const AuthMiddleware: React.FC<AuthMiddlewareProps> = ({
     enabled: !!enableAuth,
     onError(error) {
       store.setPageLoading(false);
-      if (error.message.includes('must be logged in')) {
+      if (error.message.includes("must be logged in")) {
         query.refetch({ throwOnError: true });
       }
     },
   });
 
-  const loading = isLoading || isFetching || query.isLoading || query.isFetching;
+  const loading =
+    isLoading || isFetching || query.isLoading || query.isFetching;
 
   useEffect(() => {
     if (loading) {

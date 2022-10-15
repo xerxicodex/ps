@@ -1,5 +1,5 @@
-import create from 'zustand';
-import { ITrainer } from '../lib/types';
+import create from "zustand";
+import { ITrainer } from "../lib/types";
 
 type Store = {
   authTrainer: ITrainer | null;
@@ -11,7 +11,8 @@ type Store = {
 const useStore = create<Store>((set) => ({
   authTrainer: null,
   pageLoading: false,
-  setAuthTrainer: (trainer) => set((state) => ({ ...state, authTrainer: trainer })),
+  setAuthTrainer: (trainer) =>
+    set((state) => ({ ...state, authTrainer: trainer })),
   setPageLoading: (isLoading) =>
     set((state) => ({ ...state, pageLoading: isLoading })),
 }));

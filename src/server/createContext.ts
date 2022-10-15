@@ -4,14 +4,11 @@ import { NextApiRequest, NextApiResponse } from "next";
 interface IContext {
   req: NextApiRequest;
   res: NextApiResponse;
-  trainer?: Trainer
+  trainer?: Trainer;
 }
 
-export function createContext({
-  req,
-  res,
-}: IContext) {
-  return { } as unknown as IContext;
+export function createContext({ req, res }: IContext) {
+  return {} as unknown as IContext;
 }
 
 export type Context = ReturnType<typeof createContext>;

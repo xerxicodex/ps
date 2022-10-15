@@ -1,7 +1,5 @@
 import { Prisma, RoleEnumType } from "@prisma/client";
 
-const wildPokemon: Prisma.WildPokemonCreateInput[] = [ ]
+const wildPokemon: Prisma.WildPokemonCreateManyInput[] = [];
 
-
-
-export default wildPokemon
+export default wildPokemon;
