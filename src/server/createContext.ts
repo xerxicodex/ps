@@ -1,13 +1,15 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
+interface IContext {
+  req: NextApiRequest;
+  res: NextApiResponse;
+}
+
 export function createContext({
   req,
   res,
-}: {
-  req: NextApiRequest;
-  res: NextApiResponse;
-}) {
-  return null;
+}: IContext) {
+  return null as unknown as IContext;
 }
 
 export type Context = ReturnType<typeof createContext>;
