@@ -1,6 +1,8 @@
 import { Prisma, PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { trainers } from "./seeds/trainer";
+import { routes } from "./seeds/routes";
+import { seedPokemon } from "./seeds/pokemon";
 
 const prisma = new PrismaClient();
 
@@ -26,8 +28,20 @@ const seedTrainers = async () => {
   }
 };
 
+const seedRoutes = async () => {
+  const routeCount = await prisma.route.count();
+
+  if (routeCount == 0) {
+    await prisma.route.createMany({
+      data: routes,
+    });
+  }
+};
+
 async function main() {
   await seedTrainers();
+  await seedRoutes();
+  await seedPokemon(prisma);
 }
 
 main()

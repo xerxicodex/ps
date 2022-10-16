@@ -94,7 +94,7 @@ model Item {
   trainers        TrainerItem[]
   trainer_pokemon TrainerPokemon[]
   npc_pokemon     NPCPokemon[]
-  wild_pokemon    WildPokemon[]
+  route_pokemon   RoutePokemon[]
   tower_pokemon   TowerPokemon[]
   routes          RouteItem[]
 
@@ -102,7 +102,6 @@ model Item {
 }
 
 model Badge {
-
   id Int @id @default(autoincrement())
 
   name String
@@ -110,39 +109,177 @@ model Badge {
   createdAt DateTime? @default(now())
   updatedAt DateTime  @updatedAt
 
-  npcs    NPC[]
-  toiwers Tower[]
+  npcs      NPC[]
+  gyms      Gym[]
+  towers    Tower[]
+  frontiers Frontier[]
 
   @@map(name: "badges")
 }
 
-model WildPokemon {
+model Pokemon {
   id Int @id @default(autoincrement())
-
-  category RarityEnumType? @default(common)
 
   dex_id Int
 
-  color PokemonColorEnumType? @default(colorless)
+  name String?
 
-  gender PokemonGenderEnumType? @default(unknown)
+  species String?
 
-  level Int? @default(4)
+  description String? @default("Nothing is known about this pokemon")
 
-  exp Int? @default(0)
+  type_1 String? @default("ghost")
 
-  item Item? @relation(fields: [item_id], references: [id])
+  type_2 String? @default("")
 
-  item_id Int?
+  hp Int? @default(0)
+  attack Int? @default(0)
+  defense Int? @default(0)
+  special_attack Int? @default(0)
+  special_defense Int? @default(0)
+  speed Int? @default(0)
+  
+  power Int? @default(0)
 
-  encounter_chance Int? @default(0)
+  hp_ev Int? @default(0)
+  attack_ev Int? @default(0)
+  defense_ev Int? @default(0)
+  special_attack_ev Int? @default(0)
+  special_defense_ev Int? @default(0)
+  speed_ev Int? @default(0)
+
+  base_exp  Int? @default(0)
+  height  Int? @default(12)
+  weight  Int? @default(1)
+  capture_rate Int? @default(0)
+  base_happiness Int? @default(0)
+  is_baby Boolean? @default(false)
+  is_legendary Boolean? @default(false)
+  is_mythical Boolean? @default(false)
+  hatch_counter Int? @default(0)
+  has_gender_differences Boolean? @default(false)
+  forms_switchable Boolean? @default(false)
+
+  evolves_from Int?
+
+  growth_rate String? @default("fluctuating")
+  theme_color String? @default("black")
+  shape String? @default("unknown")
 
   createdAt DateTime? @default(now())
   updatedAt DateTime  @updatedAt
 
-  routes RoutePokemon[]
+  abilities PokemonAbility[]
+  moves PokemonMove[]
+  routePokemon   RoutePokemon[]
+  trainerPokemon TrainerPokemon[]
+  npcPokemon     NPCPokemon[]
+  towerPokemon   TowerPokemon[]
 
-  @@map(name: "wild_pokemon")
+  @@map(name: "pokemon")
+}
+
+model Ability {
+  id Int @id @default(autoincrement())
+
+  name String?
+
+  effect String?
+
+  createdAt DateTime? @default(now())
+  updatedAt DateTime  @updatedAt
+
+  pokemon PokemonAbility[]
+
+  @@map(name: "abilities")
+}
+
+model PokemonAbility {
+  pokemon    Pokemon @relation(fields: [pokemon_id], references: [id])
+  pokemon_id Int // relation scalar field (used in the `@relation` attribute above)
+
+  ability    Ability @relation(fields: [ability_id], references: [id])
+  ability_id Int // relation scalar field (used in the `@relation` attribute above)
+
+  slot Int
+
+  is_hidden Boolean
+
+  createdAt DateTime? @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@id([pokemon_id, ability_id])
+  @@map(name: "pokemon_abilities")
+}
+
+model Move {
+  id Int @id @default(autoincrement())
+
+  name String?
+
+  type String?
+
+  class String?
+
+  category String?
+
+  ailment String?
+
+  effect String?
+
+  power Int? @default(1000)
+
+  pp Int? @default(1)
+
+  accuracy Int? @default(100)
+
+  priority Int? @default(0)
+
+  target String?
+
+  contest_type String?
+
+  min_hits Int?
+  max_hits Int?
+  min_turns Int?
+  max_turns Int?
+  drain Int?
+  healing Int?
+  crit_rate Int?
+  ailment_chance Int?
+  flinch_chance Int?
+  stat_chance Int?
+
+  hp Int?
+  attack Int?
+  defense Int?
+  special_attack Int?
+  special_defense Int?
+  speed Int?
+
+  createdAt DateTime? @default(now())
+  updatedAt DateTime  @updatedAt
+
+  pokemon PokemonMove[]
+
+  @@map(name: "moves")
+}
+
+model PokemonMove {
+  pokemon    Pokemon @relation(fields: [pokemon_id], references: [id])
+  pokemon_id Int // relation scalar field (used in the `@relation` attribute above)
+
+  move    Move @relation(fields: [move_id], references: [id])
+  move_id Int // relation scalar field (used in the `@relation` attribute above)
+
+  level Int? @default(0)
+  method String? @default("machine")
+
+  createdAt DateTime? @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@id([pokemon_id, move_id])
+  @@map(name: "pokemon_moves")
 }
 
 model Route {
@@ -160,18 +297,31 @@ model Route {
 }
 
 model RoutePokemon {
-  pokemon    WildPokemon @relation(fields: [pokemon_id], references: [id])
+  pokemon    Pokemon @relation(fields: [pokemon_id], references: [id])
   pokemon_id Int // relation scalar field (used in the `@relation` attribute above)
 
   route    Route @relation(fields: [route_id], references: [id])
   route_id Int // relation scalar field (used in the `@relation` attribute above)
 
+  level Int? @default(5)
+
+  color PokemonColorEnumType? @default(colorless)
+
+  gender PokemonGenderEnumType? @default(unknown)
+
+  item Item? @relation(fields: [item_id], references: [id])
+
+  item_id Int?
+
   location RouteLocationEnumType? @default(grass)
+
+  encounter_chance Int? @default(0)
 
   createdAt DateTime? @default(now())
   updatedAt DateTime  @updatedAt
 
   @@id([pokemon_id, route_id])
+  @@map(name: "route_pokemon")
 }
 
 model RouteItem {
@@ -183,10 +333,13 @@ model RouteItem {
 
   location RouteLocationEnumType? @default(grass)
 
+  encounter_chance Int? @default(0)
+
   createdAt DateTime? @default(now())
   updatedAt DateTime  @updatedAt
 
   @@id([item_id, route_id])
+  @@map(name: "route_items")
 }
 
 model NPC {
@@ -206,6 +359,10 @@ model NPC {
 
   rewards NPCReward[]
 
+  gyms GymNpc[]
+
+  frontiers FrontierNpc[]
+
   @@unique([name])
   @@map(name: "npcs")
 }
@@ -215,7 +372,8 @@ model NPCPokemon {
 
   npc_id Int?
 
-  dex_id Int
+  pokemon    Pokemon @relation(fields: [pokemon_id], references: [id])
+  pokemon_id Int // relation scalar field (used in the `@relation` attribute above)
 
   slot Int? @default(1)
 
@@ -227,12 +385,12 @@ model NPCPokemon {
 
   gender PokemonGenderEnumType? @default(unknown)
 
-  ability String
+  ability String?
 
-  move_1 String
-  move_2 String
-  move_3 String
-  move_4 String
+  move_1 String?
+  move_2 String?
+  move_3 String?
+  move_4 String?
 
   createdAt DateTime? @default(now())
   updatedAt DateTime  @updatedAt
@@ -255,6 +413,75 @@ model NPCReward {
   updatedAt DateTime  @updatedAt
 
   @@id([reward_id, npc_id])
+  @@map(name: "npc_rewards")
+}
+
+model Gym {
+  id Int @id @default(autoincrement())
+
+  name String @db.VarChar(255)
+
+  difficulty DifficultyEnumType? @default(easy)
+
+  badge_id Int?
+
+  createdAt DateTime? @default(now())
+  updatedAt DateTime  @updatedAt
+
+  badge Badge? @relation(fields: [badge_id], references: [id])
+
+  npc GymNpc[]
+
+  @@unique([name])
+  @@map(name: "gyms")
+}
+
+model GymNpc {
+  gym    Gym @relation(fields: [gym_id], references: [id])
+  gym_id Int // relation scalar field (used in the `@relation` attribute above)
+
+  npc    NPC @relation(fields: [npc_id], references: [id])
+  npc_id Int // relation scalar field (used in the `@relation` attribute above)
+
+  createdAt DateTime? @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@id([gym_id, npc_id])
+  @@map(name: "gym_npcs")
+}
+
+model Frontier {
+  id Int @id @default(autoincrement())
+
+  name String @db.VarChar(255)
+
+  difficulty DifficultyEnumType? @default(easy)
+
+  badge_id Int?
+
+  createdAt DateTime? @default(now())
+  updatedAt DateTime  @updatedAt
+
+  badge Badge? @relation(fields: [badge_id], references: [id])
+
+  npc FrontierNpc[]
+
+  @@unique([name])
+  @@map(name: "frontiers")
+}
+
+model FrontierNpc {
+  frontier    Frontier @relation(fields: [frontier_id], references: [id])
+  frontier_id Int // relation scalar field (used in the `@relation` attribute above)
+
+  npc    NPC @relation(fields: [npc_id], references: [id])
+  npc_id Int // relation scalar field (used in the `@relation` attribute above)
+
+  createdAt DateTime? @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@id([frontier_id, npc_id])
+  @@map(name: "frontier_npcs")
 }
 
 model Tower {
@@ -265,6 +492,11 @@ model Tower {
   difficulty DifficultyEnumType? @default(easy)
 
   badge_id Int?
+
+  required_badge_id Int?
+  required_trainer_level Int?
+  required_team_level_min Int?
+  required_team_level_max Int?
 
   createdAt DateTime? @default(now())
   updatedAt DateTime  @updatedAt
@@ -284,7 +516,7 @@ model TowerPokemon {
 
   tower_id Int?
 
-  dex_id Int
+  pokemon_id Int
 
   level Int? @default(4)
 
@@ -294,12 +526,12 @@ model TowerPokemon {
 
   gender PokemonGenderEnumType? @default(unknown)
 
-  ability String
+  ability String?
 
-  move_1 String
-  move_2 String
-  move_3 String
-  move_4 String
+  move_1 String?
+  move_2 String?
+  move_3 String?
+  move_4 String?
 
   createdAt DateTime? @default(now())
   updatedAt DateTime  @updatedAt
@@ -307,6 +539,8 @@ model TowerPokemon {
   tower Tower? @relation(fields: [tower_id], references: [id])
 
   item Item? @relation(fields: [item_id], references: [id])
+
+  pokemon Pokemon @relation(fields: [pokemon_id], references: [id])
 
   @@map(name: "tower_pokemon")
 }
@@ -322,6 +556,7 @@ model TowerReward {
   updatedAt DateTime  @updatedAt
 
   @@id([reward_id, tower_id])
+  @@map(name: "tower_rewards")
 }
 
 model Trainer {
@@ -378,7 +613,7 @@ model TrainerPokemon {
 
   trainer_id Int
 
-  dex_id Int
+  pokemon_id Int
 
   slot Int? @default(0)
 
@@ -390,21 +625,23 @@ model TrainerPokemon {
 
   gender PokemonGenderEnumType? @default(unknown)
 
-  ability String
+  ability String?
 
-  move_1 String
-  move_2 String
-  move_3 String
-  move_4 String
+  move_1 String?
+  move_2 String?
+  move_3 String?
+  move_4 String?
 
   exp Int? @default(0)
+
+  createdAt DateTime? @default(now())
+  updatedAt DateTime  @updatedAt
 
   trainer Trainer? @relation(fields: [trainer_id], references: [id])
 
   item Item? @relation(fields: [item_id], references: [id])
 
-  createdAt DateTime? @default(now())
-  updatedAt DateTime  @updatedAt
+  pokemon Pokemon @relation(fields: [pokemon_id], references: [id])
 
   market_pokemon MarketPokemon[]
 
