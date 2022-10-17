@@ -1,4 +1,4 @@
-import { Prisma, PrismaClient } from "@prisma/client";
+import { MoveCategoryEnumType, Prisma, PrismaClient } from "@prisma/client";
 import { MainClient, PokemonClient } from 'pokenode-ts';
 import process from "process";
 import RunParallelLimit from "run-parallel-limit";
@@ -87,11 +87,14 @@ const jobs = ids.map((id) => {
 
                     if (evolves_from == 0) evolves_from = null;
 
+                    const generation: number | null = parseInt(species.generation?.url?.split("/")?.slice(-2)?.shift() ?? "0");
+
                     const data = {
                         dex_id: id,
                         name,
                         species: species.name,
                         description,
+                        generation,
 
                         type_1: pokemon.types.shift()?.type?.name,
                         type_2: pokemon.types.shift()?.type?.name,
@@ -315,7 +318,7 @@ export const seedPokemon = async (prisma: PrismaClient) => {
                             name: move.name,
                             type: move.type.name,
                             class: move.damage_class?.name,
-                            category: move.meta?.category?.name,
+                            category: MoveCategoryEnumType[(move.meta?.category?.name??"").replace(/-/gi, "_").replace(/\+/gi, "_and_") as keyof typeof MoveCategoryEnumType],
                             ailment: move.meta?.ailment?.name,
                             effect: move.effect_entries.filter(e => e.language.name === "en").shift()?.effect,
                             power: move.power,

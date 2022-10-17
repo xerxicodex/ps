@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import { trainers } from "./seeds/trainer";
 import { routes } from "./seeds/routes";
 import { seedPokemon } from "./seeds/pokemon";
+import { seedTowers } from "./seeds/towers";
 
 const prisma = new PrismaClient();
 
@@ -42,6 +43,7 @@ async function main() {
   await seedTrainers();
   await seedRoutes();
   await seedPokemon(prisma);
+  await seedTowers(prisma);
 }
 
 main()

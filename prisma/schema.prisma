@@ -59,8 +59,25 @@ enum DifficultyEnumType {
   easy
   medium
   hard
-  expert
+  very_hard
   master
+}
+
+enum MoveCategoryEnumType {
+  ohko
+  field_effect
+  force_switch
+  damage
+  damage_and_raise
+  ailment
+  swagger
+  unique
+  damage_and_lower
+  heal
+  damage_and_ailment
+  damage_and_heal
+  whole_field_effect
+  net_good_stats
 }
 
 model Reward {
@@ -126,6 +143,8 @@ model Pokemon {
 
   species String?
 
+  generation Int?
+
   description String? @default("Nothing is known about this pokemon")
 
   type_1 String? @default("ghost")
@@ -190,6 +209,9 @@ model Ability {
   updatedAt DateTime  @updatedAt
 
   pokemon PokemonAbility[]
+  towerPokemon TowerPokemon[]
+  npcPokemon NPCPokemon[]
+  trainerPokemon TrainerPokemon[]
 
   @@map(name: "abilities")
 }
@@ -221,7 +243,7 @@ model Move {
 
   class String?
 
-  category String?
+  category MoveCategoryEnumType?
 
   ailment String?
 
@@ -385,7 +407,8 @@ model NPCPokemon {
 
   gender PokemonGenderEnumType? @default(unknown)
 
-  ability String?
+  ability_id Int?
+  ability Ability? @relation(fields: [ability_id], references: [id])
 
   move_1 String?
   move_2 String?
@@ -491,6 +514,8 @@ model Tower {
 
   difficulty DifficultyEnumType? @default(easy)
 
+  exp_boost Int? @default(1)
+
   badge_id Int?
 
   required_badge_id Int?
@@ -518,6 +543,8 @@ model TowerPokemon {
 
   pokemon_id Int
 
+  floor Int? @default(1)
+
   level Int? @default(4)
 
   item_id Int?
@@ -526,7 +553,8 @@ model TowerPokemon {
 
   gender PokemonGenderEnumType? @default(unknown)
 
-  ability String?
+  ability_id Int?
+  ability Ability? @relation(fields: [ability_id], references: [id])
 
   move_1 String?
   move_2 String?
@@ -625,7 +653,8 @@ model TrainerPokemon {
 
   gender PokemonGenderEnumType? @default(unknown)
 
-  ability String?
+  ability_id Int?
+  ability Ability? @relation(fields: [ability_id], references: [id])
 
   move_1 String?
   move_2 String?

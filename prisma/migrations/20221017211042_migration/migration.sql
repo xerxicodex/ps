@@ -17,7 +17,10 @@ CREATE TYPE "RouteLocationEnumType" AS ENUM ('grass', 'water', 'tree');
 CREATE TYPE "RewardEnumType" AS ENUM ('item', 'coins', 'pokemon', 'pokemon_exp', 'trainer_exp', 'battle_points');
 
 -- CreateEnum
-CREATE TYPE "DifficultyEnumType" AS ENUM ('easy', 'medium', 'hard', 'expert', 'master');
+CREATE TYPE "DifficultyEnumType" AS ENUM ('easy', 'medium', 'hard', 'very_hard', 'master');
+
+-- CreateEnum
+CREATE TYPE "MoveCategoryEnumType" AS ENUM ('ohko', 'field_effect', 'force_switch', 'damage', 'damage_and_raise', 'ailment', 'swagger', 'unique', 'damage_and_lower', 'heal', 'damage_and_ailment', 'damage_and_heal', 'whole_field_effect', 'net_good_stats');
 
 -- CreateTable
 CREATE TABLE "rewards" (
@@ -58,6 +61,7 @@ CREATE TABLE "pokemon" (
     "dex_id" INTEGER NOT NULL,
     "name" TEXT,
     "species" TEXT,
+    "generation" INTEGER,
     "description" TEXT DEFAULT 'Nothing is known about this pokemon',
     "type_1" TEXT DEFAULT 'ghost',
     "type_2" TEXT DEFAULT '',
@@ -124,7 +128,7 @@ CREATE TABLE "moves" (
     "name" TEXT,
     "type" TEXT,
     "class" TEXT,
-    "category" TEXT,
+    "category" "MoveCategoryEnumType",
     "ailment" TEXT,
     "effect" TEXT,
     "power" INTEGER DEFAULT 1000,
@@ -227,7 +231,7 @@ CREATE TABLE "npc_pokemon" (
     "item_id" INTEGER,
     "color" "PokemonColorEnumType" DEFAULT 'colorless',
     "gender" "PokemonGenderEnumType" DEFAULT 'unknown',
-    "ability" TEXT,
+    "ability_id" INTEGER,
     "move_1" TEXT,
     "move_2" TEXT,
     "move_3" TEXT,
@@ -297,6 +301,7 @@ CREATE TABLE "towers" (
     "id" SERIAL NOT NULL,
     "name" VARCHAR(255) NOT NULL,
     "difficulty" "DifficultyEnumType" DEFAULT 'easy',
+    "exp_boost" INTEGER DEFAULT 1,
     "badge_id" INTEGER,
     "required_badge_id" INTEGER,
     "required_trainer_level" INTEGER,
@@ -313,11 +318,12 @@ CREATE TABLE "tower_pokemon" (
     "id" SERIAL NOT NULL,
     "tower_id" INTEGER,
     "pokemon_id" INTEGER NOT NULL,
+    "floor" INTEGER DEFAULT 1,
     "level" INTEGER DEFAULT 4,
     "item_id" INTEGER,
     "color" "PokemonColorEnumType" DEFAULT 'colorless',
     "gender" "PokemonGenderEnumType" DEFAULT 'unknown',
-    "ability" TEXT,
+    "ability_id" INTEGER,
     "move_1" TEXT,
     "move_2" TEXT,
     "move_3" TEXT,
@@ -377,7 +383,7 @@ CREATE TABLE "trainer_pokemon" (
     "item_id" INTEGER,
     "color" "PokemonColorEnumType" DEFAULT 'colorless',
     "gender" "PokemonGenderEnumType" DEFAULT 'unknown',
-    "ability" TEXT,
+    "ability_id" INTEGER,
     "move_1" TEXT,
     "move_2" TEXT,
     "move_3" TEXT,
@@ -461,6 +467,9 @@ ALTER TABLE "npcs" ADD CONSTRAINT "npcs_badge_id_fkey" FOREIGN KEY ("badge_id") 
 ALTER TABLE "npc_pokemon" ADD CONSTRAINT "npc_pokemon_pokemon_id_fkey" FOREIGN KEY ("pokemon_id") REFERENCES "pokemon"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "npc_pokemon" ADD CONSTRAINT "npc_pokemon_ability_id_fkey" FOREIGN KEY ("ability_id") REFERENCES "abilities"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "npc_pokemon" ADD CONSTRAINT "npc_pokemon_npc_id_fkey" FOREIGN KEY ("npc_id") REFERENCES "npcs"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -494,6 +503,9 @@ ALTER TABLE "frontier_npcs" ADD CONSTRAINT "frontier_npcs_npc_id_fkey" FOREIGN K
 ALTER TABLE "towers" ADD CONSTRAINT "towers_badge_id_fkey" FOREIGN KEY ("badge_id") REFERENCES "badges"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "tower_pokemon" ADD CONSTRAINT "tower_pokemon_ability_id_fkey" FOREIGN KEY ("ability_id") REFERENCES "abilities"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "tower_pokemon" ADD CONSTRAINT "tower_pokemon_tower_id_fkey" FOREIGN KEY ("tower_id") REFERENCES "towers"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -513,6 +525,9 @@ ALTER TABLE "trainer_items" ADD CONSTRAINT "trainer_items_trainer_id_fkey" FOREI
 
 -- AddForeignKey
 ALTER TABLE "trainer_items" ADD CONSTRAINT "trainer_items_item_id_fkey" FOREIGN KEY ("item_id") REFERENCES "items"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "trainer_pokemon" ADD CONSTRAINT "trainer_pokemon_ability_id_fkey" FOREIGN KEY ("ability_id") REFERENCES "abilities"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "trainer_pokemon" ADD CONSTRAINT "trainer_pokemon_trainer_id_fkey" FOREIGN KEY ("trainer_id") REFERENCES "trainers"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
