@@ -1,7 +1,14 @@
-import { DifficultyEnumType, Move, MoveCategoryEnumType, Pokemon, PokemonGenderEnumType, Prisma, PrismaClient, RewardEnumType } from "@prisma/client";
+import { DifficultyEnumType, Move, MoveCategoryEnumType, Pokemon, PokemonGenderEnumType, PokemonMove, Prisma, PrismaClient, RewardEnumType } from "@prisma/client";
 import Chance from 'chance';
+import { GiveRewardToTrainer } from "../../src/server/data/reward";
 
 export const seedTowers = async (prisma: PrismaClient) => {
+
+    await prisma.towerBadge.deleteMany()
+    await prisma.towerReward.deleteMany();
+    await prisma.towerPokemon.deleteMany();
+    await prisma.tower.deleteMany();
+
     const towerCount = await prisma.tower.count();
 
     if (towerCount == 0) {
@@ -18,10 +25,27 @@ export const seedTowers = async (prisma: PrismaClient) => {
 
             const legend = legends.pop();
 
+            const legendName = [legend?.name?.replace("galar", "galarian").replace("Ho-Oh", "Ho#Oh").split('-').slice(1), legend?.species].filter(x => ((x ?? "").length > 0)).join(' ').replace("#", "-");
+
             const tower = await prisma.tower.create({
                 data: {
-                    name: [`Legend of`, legend?.name?.split('-').slice(1), legend?.species].filter(x => ((x ?? "").length > 0)).join(' '),
+                    name: `Legend of ${legendName}`,
                     required_trainer_level: 100,
+                }
+            })
+
+
+            const badge = await prisma.badge.create({
+                data: {
+                    name: `Tower Legend: ${legendName}`,
+                    description: `Defeated the "${tower.name}" tower`
+                }
+            })
+
+            await prisma.towerBadge.create({
+                data: {
+                    tower_id: tower.id,
+                    badge_id: badge.id,
                 }
             })
 
@@ -41,14 +65,49 @@ export const seedTowers = async (prisma: PrismaClient) => {
 
             const themeQuery: Prisma.PokemonWhereInput = { OR: [{ type_1: legend?.type_1 }, { type_2: legend?.type_1 }, ...(legend?.type_2 ? [{ type_1: legend?.type_2 }, { type_2: legend?.type_2 }, { type_1: legend?.type_2, type_2: legend?.type_1 }, { type_1: legend?.type_1, type_2: legend?.type_2 }] : [])], AND: { is_legendary: false, is_mythical: false, NOT: { OR: [{ name: { contains: '-mega' } }, { name: { contains: '-gmax' } }, { name: { contains: "-eternamax" } }] } } };
 
-            const floorPokemon: { [key: number]: Pokemon[] } = {}
+            const _floorPokemon: { [key: number]: Pokemon[] } = {}
 
-            floorPokemon[1] = await prisma.pokemon.findMany({ where: { AND: [{ power: { lt: 250 } }, themeQuery] }, orderBy: [{ power: "desc" }, { name: "desc" }] })
-            floorPokemon[2] = await prisma.pokemon.findMany({ where: { AND: [{ power: { gte: 250, lt: 350 } }, themeQuery] }, orderBy: [{ power: "desc" }, { name: "desc" }] })
-            floorPokemon[3] = await prisma.pokemon.findMany({ where: { AND: [{ power: { gte: 350, lt: 400 } }, themeQuery] }, orderBy: [{ power: "desc" }, { name: "desc" }] })
-            floorPokemon[4] = await prisma.pokemon.findMany({ where: { AND: [{ power: { gte: 400, lt: 450 } }, themeQuery] }, orderBy: [{ power: "desc" }, { name: "desc" }] })
-            floorPokemon[5] = await prisma.pokemon.findMany({ where: { AND: [{ power: { gte: 450 } }, themeQuery] }, orderBy: [{ power: "desc" }, { name: "desc" }] })
-            floorPokemon[6] = [legend as Pokemon];
+            _floorPokemon[1] = await prisma.pokemon.findMany({ where: { AND: [{ power: { lt: 250 } }, themeQuery] }, orderBy: [{ power: "desc" }, { name: "desc" }] })
+            _floorPokemon[2] = await prisma.pokemon.findMany({ where: { AND: [{ power: { gte: 250, lt: 350 } }, themeQuery] }, orderBy: [{ power: "desc" }, { name: "desc" }] })
+            _floorPokemon[3] = await prisma.pokemon.findMany({ where: { AND: [{ power: { gte: 350, lt: 400 } }, themeQuery] }, orderBy: [{ power: "desc" }, { name: "desc" }] })
+            _floorPokemon[4] = await prisma.pokemon.findMany({ where: { AND: [{ power: { gte: 400, lt: 450 } }, themeQuery] }, orderBy: [{ power: "desc" }, { name: "desc" }] })
+            _floorPokemon[5] = await prisma.pokemon.findMany({ where: { AND: [{ power: { gte: 450 } }, themeQuery] }, orderBy: [{ power: "desc" }, { name: "desc" }] })
+            _floorPokemon[6] = [];
+
+            let index = 5;
+
+            while (index > 0) {
+                let floorBoss = _floorPokemon[index].at(0);
+
+                const set = async (fb: Pokemon) => {
+                    const evo = await prisma.pokemon.findFirst({ where: { evolves_from: fb.dex_id } });
+
+                    if (evo) {
+                        await set(evo)
+                    } else {
+                        _floorPokemon[6].push(fb)
+                    }
+                }
+
+                if (floorBoss) {
+                    await set(floorBoss);
+                }
+
+                index--;
+            }
+
+            _floorPokemon[6].sort((a, b) => (a.power ?? 0) - (b.power ?? 0) > 0 ? -1 : 1);
+
+            _floorPokemon[6].unshift(legend as Pokemon)
+
+            const floorPokemon: typeof _floorPokemon = {};
+
+            Object.keys(_floorPokemon).forEach((key) => {
+                const floor = key as unknown as number
+                if (_floorPokemon[floor].length > 0) {
+                    floorPokemon[floor] = _floorPokemon[floor];
+                }
+            });
 
             console.log(`[${legend?.name}][${legend?.type_1} | ${legend?.type_2 ?? 'NONE'}]`)
 
@@ -64,13 +123,11 @@ export const seedTowers = async (prisma: PrismaClient) => {
                 const themePokemon = floorPokemon[floor];
 
                 while (themePokemon.length > 0) {
-                    pokemonCount++;
-
                     const pokemon = themePokemon.pop()
 
                     totalPower += pokemon?.power ?? 0;
 
-                    const abilities = await prisma.pokemonAbility.findMany({ where: { pokemon_id: pokemon?.id } })
+                    const abilities = await prisma.pokemonAbility.findMany({ where: { pokemon_id: pokemon?.id }, include: { ability: true } })
 
                     const pokemonMoves = await prisma.pokemonMove.findMany({ where: { pokemon_id: pokemon?.id }, include: { move: true } })
 
@@ -80,23 +137,40 @@ export const seedTowers = async (prisma: PrismaClient) => {
                         heal: null,
                         ailment: null,
                         buff: null,
+                        stab: null,
                     };
 
                     pokemonMoves.forEach(pm => {
                         const move = pm.move;
 
                         if ((move?.power ?? 0) > 1) {
-                            if (!moves.attack) {
-                                moves.attack = move;
-                            }
 
-                            if ((move.power ?? 0) > (moves.attack?.power ?? 0)) {
-                                if (move.category == MoveCategoryEnumType.ohko) {
-                                    moves.ohko = move;
-                                } else {
+                            if ([pokemon?.type_1, pokemon?.type_2 ?? "none"].indexOf(move.type ?? "") == -1) {
+                                if (!moves.attack) {
                                     moves.attack = move;
                                 }
+
+                                if ((move.power ?? 0) > (moves.attack?.power ?? 0)) {
+                                    if (move.category == MoveCategoryEnumType.ohko) {
+                                        moves.ohko = move;
+                                    } else {
+                                        moves.attack = move;
+                                    }
+                                }
+                            } else {
+                                if (!moves.stab) {
+                                    moves.stab = move;
+                                }
+
+                                if ((move.power ?? 0) > (moves.stab?.power ?? 0)) {
+                                    if (move.category == MoveCategoryEnumType.ohko) {
+                                        moves.ohko = move;
+                                    } else {
+                                        moves.stab = move;
+                                    }
+                                }
                             }
+
                         }
 
                         if ((move?.healing ?? 0) > 0) {
@@ -137,18 +211,27 @@ export const seedTowers = async (prisma: PrismaClient) => {
 
                     })
 
+                    const _moves: string[] = [
+                        moves.buff?.name,
+                        moves.stab ? moves.stab?.name : moves.attack?.name,
+                        moves.heal?.name,
+                        moves.ohko ? Chance().pickone([moves.ailment?.name, moves.ohko?.name]) : moves.ailment?.name,
+                    ].filter(x => x) as string[]
+
                     towerPokemon.push({
                         tower_id: tower?.id ?? 0,
                         pokemon_id: pokemon?.id ?? 0,
                         floor,
-                        level: 500 * floor,
+                        level: Math.floor((500 * floor) ** (1 + (pokemonCount * 0.0009114))),
                         gender: PokemonGenderEnumType.genderless,
-                        ability_id: Chance().pickone(abilities).ability_id,
-                        move_1: moves.buff?.name,
-                        move_2: moves.attack?.name,
-                        move_3: moves.heal?.name,
-                        move_4: moves.ohko ? Chance().pickone([moves.ailment?.name, moves.ohko?.name]) : moves.attack?.name,
+                        ability: Chance().pickone(abilities).ability.name,
+                        move_1: _moves.shift() ?? null,
+                        move_2: _moves.shift() ?? null,
+                        move_3: _moves.shift() ?? null,
+                        move_4: _moves.shift() ?? null,
                     })
+
+                    pokemonCount++;
                     // console.log(`[${legend?.name}][${floor}F] -> ${pokemon?.name}  [${pokemon?.power}](${pokemon?.type_1}, ${pokemon?.type_2 ?? 'NONE'})`)
                 }
             }
@@ -172,6 +255,8 @@ export const seedTowers = async (prisma: PrismaClient) => {
             }
 
             await prisma.tower.update({ data: tower, where: { id: tower.id } })
+
+            await GiveRewardToTrainer(reward.id, 1);
         }
 
         await prisma.towerPokemon.createMany({ data: towerPokemon })

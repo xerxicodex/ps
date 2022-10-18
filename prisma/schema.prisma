@@ -121,15 +121,17 @@ model Item {
 model Badge {
   id Int @id @default(autoincrement())
 
-  name String
+  name        String
+  description String?
 
   createdAt DateTime? @default(now())
   updatedAt DateTime  @updatedAt
 
-  npcs      NPC[]
-  gyms      Gym[]
-  towers    Tower[]
-  frontiers Frontier[]
+  trainers  TrainerBadge[]
+  npcs      NPCBadge[]
+  gyms      GymBadge[]
+  towers    TowerBadge[]
+  frontiers FrontierBadge[]
 
   @@map(name: "badges")
 }
@@ -151,45 +153,45 @@ model Pokemon {
 
   type_2 String? @default("")
 
-  hp Int? @default(0)
-  attack Int? @default(0)
-  defense Int? @default(0)
-  special_attack Int? @default(0)
+  hp              Int? @default(0)
+  attack          Int? @default(0)
+  defense         Int? @default(0)
+  special_attack  Int? @default(0)
   special_defense Int? @default(0)
-  speed Int? @default(0)
-  
+  speed           Int? @default(0)
+
   power Int? @default(0)
 
-  hp_ev Int? @default(0)
-  attack_ev Int? @default(0)
-  defense_ev Int? @default(0)
-  special_attack_ev Int? @default(0)
+  hp_ev              Int? @default(0)
+  attack_ev          Int? @default(0)
+  defense_ev         Int? @default(0)
+  special_attack_ev  Int? @default(0)
   special_defense_ev Int? @default(0)
-  speed_ev Int? @default(0)
+  speed_ev           Int? @default(0)
 
-  base_exp  Int? @default(0)
-  height  Int? @default(12)
-  weight  Int? @default(1)
-  capture_rate Int? @default(0)
-  base_happiness Int? @default(0)
-  is_baby Boolean? @default(false)
-  is_legendary Boolean? @default(false)
-  is_mythical Boolean? @default(false)
-  hatch_counter Int? @default(0)
+  base_exp               Int?     @default(0)
+  height                 Int?     @default(12)
+  weight                 Int?     @default(1)
+  capture_rate           Int?     @default(0)
+  base_happiness         Int?     @default(0)
+  is_baby                Boolean? @default(false)
+  is_legendary           Boolean? @default(false)
+  is_mythical            Boolean? @default(false)
+  hatch_counter          Int?     @default(0)
   has_gender_differences Boolean? @default(false)
-  forms_switchable Boolean? @default(false)
+  forms_switchable       Boolean? @default(false)
 
   evolves_from Int?
 
   growth_rate String? @default("fluctuating")
   theme_color String? @default("black")
-  shape String? @default("unknown")
+  shape       String? @default("unknown")
 
   createdAt DateTime? @default(now())
   updatedAt DateTime  @updatedAt
 
-  abilities PokemonAbility[]
-  moves PokemonMove[]
+  abilities      PokemonAbility[]
+  moves          PokemonMove[]
   routePokemon   RoutePokemon[]
   trainerPokemon TrainerPokemon[]
   npcPokemon     NPCPokemon[]
@@ -209,9 +211,6 @@ model Ability {
   updatedAt DateTime  @updatedAt
 
   pokemon PokemonAbility[]
-  towerPokemon TowerPokemon[]
-  npcPokemon NPCPokemon[]
-  trainerPokemon TrainerPokemon[]
 
   @@map(name: "abilities")
 }
@@ -261,23 +260,23 @@ model Move {
 
   contest_type String?
 
-  min_hits Int?
-  max_hits Int?
-  min_turns Int?
-  max_turns Int?
-  drain Int?
-  healing Int?
-  crit_rate Int?
+  min_hits       Int?
+  max_hits       Int?
+  min_turns      Int?
+  max_turns      Int?
+  drain          Int?
+  healing        Int?
+  crit_rate      Int?
   ailment_chance Int?
-  flinch_chance Int?
-  stat_chance Int?
+  flinch_chance  Int?
+  stat_chance    Int?
 
-  hp Int?
-  attack Int?
-  defense Int?
-  special_attack Int?
+  hp              Int?
+  attack          Int?
+  defense         Int?
+  special_attack  Int?
   special_defense Int?
-  speed Int?
+  speed           Int?
 
   createdAt DateTime? @default(now())
   updatedAt DateTime  @updatedAt
@@ -294,7 +293,7 @@ model PokemonMove {
   move    Move @relation(fields: [move_id], references: [id])
   move_id Int // relation scalar field (used in the `@relation` attribute above)
 
-  level Int? @default(0)
+  level  Int?    @default(0)
   method String? @default("machine")
 
   createdAt DateTime? @default(now())
@@ -370,12 +369,10 @@ model NPC {
 
   coins Int? @default(0)
 
-  badge_id Int?
-
   createdAt DateTime? @default(now())
   updatedAt DateTime  @updatedAt
 
-  badge Badge? @relation(fields: [badge_id], references: [id])
+  badges NPCBadge[]
 
   pokemon NPCPokemon[]
 
@@ -387,6 +384,20 @@ model NPC {
 
   @@unique([name])
   @@map(name: "npcs")
+}
+
+model NPCBadge {
+  npc    NPC @relation(fields: [npc_id], references: [id])
+  npc_id Int // relation scalar field (used in the `@relation` attribute above)
+
+  badge    Badge @relation(fields: [badge_id], references: [id])
+  badge_id Int // relation scalar field (used in the `@relation` attribute above)
+
+  createdAt DateTime? @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@id([npc_id, badge_id])
+  @@map(name: "npc_badges")
 }
 
 model NPCPokemon {
@@ -407,8 +418,7 @@ model NPCPokemon {
 
   gender PokemonGenderEnumType? @default(unknown)
 
-  ability_id Int?
-  ability Ability? @relation(fields: [ability_id], references: [id])
+  ability String?
 
   move_1 String?
   move_2 String?
@@ -446,17 +456,29 @@ model Gym {
 
   difficulty DifficultyEnumType? @default(easy)
 
-  badge_id Int?
-
   createdAt DateTime? @default(now())
   updatedAt DateTime  @updatedAt
 
-  badge Badge? @relation(fields: [badge_id], references: [id])
+  badges GymBadge[]
 
   npc GymNpc[]
 
   @@unique([name])
   @@map(name: "gyms")
+}
+
+model GymBadge {
+  gym    Gym @relation(fields: [gym_id], references: [id])
+  gym_id Int // relation scalar field (used in the `@relation` attribute above)
+
+  badge    Badge @relation(fields: [badge_id], references: [id])
+  badge_id Int // relation scalar field (used in the `@relation` attribute above)
+
+  createdAt DateTime? @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@id([gym_id, badge_id])
+  @@map(name: "gym_badges")
 }
 
 model GymNpc {
@@ -480,17 +502,28 @@ model Frontier {
 
   difficulty DifficultyEnumType? @default(easy)
 
-  badge_id Int?
+  createdAt DateTime? @default(now())
+  updatedAt DateTime  @updatedAt
+
+  npc    FrontierNpc[]
+  badges FrontierBadge[]
+
+  @@unique([name])
+  @@map(name: "frontiers")
+}
+
+model FrontierBadge {
+  frontier    Frontier @relation(fields: [frontier_id], references: [id])
+  frontier_id Int // relation scalar field (used in the `@relation` attribute above)
+
+  badge    Badge @relation(fields: [badge_id], references: [id])
+  badge_id Int // relation scalar field (used in the `@relation` attribute above)
 
   createdAt DateTime? @default(now())
   updatedAt DateTime  @updatedAt
 
-  badge Badge? @relation(fields: [badge_id], references: [id])
-
-  npc FrontierNpc[]
-
-  @@unique([name])
-  @@map(name: "frontiers")
+  @@id([frontier_id, badge_id])
+  @@map(name: "frontier_badges")
 }
 
 model FrontierNpc {
@@ -516,17 +549,15 @@ model Tower {
 
   exp_boost Int? @default(1)
 
-  badge_id Int?
-
-  required_badge_id Int?
-  required_trainer_level Int?
+  required_badge_id       Int?
+  required_trainer_level  Int?
   required_team_level_min Int?
   required_team_level_max Int?
 
   createdAt DateTime? @default(now())
   updatedAt DateTime  @updatedAt
 
-  badge Badge? @relation(fields: [badge_id], references: [id])
+  badges TowerBadge[]
 
   pokemon TowerPokemon[]
 
@@ -534,6 +565,20 @@ model Tower {
 
   @@unique([name])
   @@map(name: "towers")
+}
+
+model TowerBadge {
+  tower    Tower @relation(fields: [tower_id], references: [id])
+  tower_id Int // relation scalar field (used in the `@relation` attribute above)
+
+  badge    Badge @relation(fields: [badge_id], references: [id])
+  badge_id Int // relation scalar field (used in the `@relation` attribute above)
+
+  createdAt DateTime? @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@id([tower_id, badge_id])
+  @@map(name: "tower_badges")
 }
 
 model TowerPokemon {
@@ -553,8 +598,7 @@ model TowerPokemon {
 
   gender PokemonGenderEnumType? @default(unknown)
 
-  ability_id Int?
-  ability Ability? @relation(fields: [ability_id], references: [id])
+  ability String?
 
   move_1 String?
   move_2 String?
@@ -574,16 +618,16 @@ model TowerPokemon {
 }
 
 model TowerReward {
-  reward    Reward @relation(fields: [reward_id], references: [id])
-  reward_id Int // relation scalar field (used in the `@relation` attribute above)
-
   tower    Tower @relation(fields: [tower_id], references: [id])
   tower_id Int // relation scalar field (used in the `@relation` attribute above)
+
+  reward    Reward @relation(fields: [reward_id], references: [id])
+  reward_id Int // relation scalar field (used in the `@relation` attribute above)
 
   createdAt DateTime? @default(now())
   updatedAt DateTime  @updatedAt
 
-  @@id([reward_id, tower_id])
+  @@id([tower_id, reward_id])
   @@map(name: "tower_rewards")
 }
 
@@ -610,17 +654,34 @@ model Trainer {
 
   pokemon TrainerPokemon[]
   items   TrainerItem[]
+  badges  TrainerBadge[]
 
   @@unique([name])
   @@map(name: "trainers")
 }
 
+model TrainerBadge {
+  trainer    Trainer @relation(fields: [trainer_id], references: [id])
+  trainer_id Int // relation scalar field (used in the `@relation` attribute above)
+
+  badge    Badge @relation(fields: [badge_id], references: [id])
+  badge_id Int // relation scalar field (used in the `@relation` attribute above)
+
+  amount Int? @default(1)
+
+  createdAt DateTime? @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@id([trainer_id, badge_id])
+  @@map(name: "trainer_badges")
+}
+
 model TrainerItem {
   id Int @id @default(autoincrement())
 
+  trainer_id Int
+  
   item_id Int
-
-  trainer_id Int?
 
   amount Int? @default(1)
 
@@ -653,8 +714,7 @@ model TrainerPokemon {
 
   gender PokemonGenderEnumType? @default(unknown)
 
-  ability_id Int?
-  ability Ability? @relation(fields: [ability_id], references: [id])
+  ability String?
 
   move_1 String?
   move_2 String?
@@ -692,19 +752,34 @@ model MarketPokemon {
   @@map(name: "market_pokemon")
 }
 
-model MarketItem {
+model Market {
   id Int @id @default(autoincrement())
 
-  item TrainerItem @relation(fields: [item_id], references: [id])
+  name String @db.VarChar(255)
 
-  item_id Int
+  createdAt DateTime? @default(now())
+  updatedAt DateTime  @updatedAt
 
-  amount Int? @default(1)
+  traineritems MarketItem[]
+
+  @@unique([name])
+  @@map(name: "markets")
+}
+
+model MarketItem {
+  market    Market @relation(fields: [market_id], references: [id])
+  market_id Int // relation scalar field (used in the `@relation` attribute above)
+
+  trainer_item    TrainerItem @relation(fields: [trainer_item_id], references: [id])
+  trainer_item_id Int // relation scalar field (used in the `@relation` attribute above)
+
+  amount Int
 
   coins Int
 
   createdAt DateTime? @default(now())
   updatedAt DateTime  @updatedAt
 
+  @@id([market_id, trainer_item_id, amount, coins])
   @@map(name: "market_items")
 }

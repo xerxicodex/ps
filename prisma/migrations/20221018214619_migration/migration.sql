@@ -49,6 +49,7 @@ CREATE TABLE "items" (
 CREATE TABLE "badges" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
+    "description" TEXT,
     "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -214,11 +215,20 @@ CREATE TABLE "npcs" (
     "id" SERIAL NOT NULL,
     "name" VARCHAR(255) NOT NULL,
     "coins" INTEGER DEFAULT 0,
-    "badge_id" INTEGER,
     "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "npcs_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "npc_badges" (
+    "npc_id" INTEGER NOT NULL,
+    "badge_id" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "npc_badges_pkey" PRIMARY KEY ("npc_id","badge_id")
 );
 
 -- CreateTable
@@ -231,7 +241,7 @@ CREATE TABLE "npc_pokemon" (
     "item_id" INTEGER,
     "color" "PokemonColorEnumType" DEFAULT 'colorless',
     "gender" "PokemonGenderEnumType" DEFAULT 'unknown',
-    "ability_id" INTEGER,
+    "ability" TEXT,
     "move_1" TEXT,
     "move_2" TEXT,
     "move_3" TEXT,
@@ -257,11 +267,20 @@ CREATE TABLE "gyms" (
     "id" SERIAL NOT NULL,
     "name" VARCHAR(255) NOT NULL,
     "difficulty" "DifficultyEnumType" DEFAULT 'easy',
-    "badge_id" INTEGER,
     "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "gyms_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "gym_badges" (
+    "gym_id" INTEGER NOT NULL,
+    "badge_id" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "gym_badges_pkey" PRIMARY KEY ("gym_id","badge_id")
 );
 
 -- CreateTable
@@ -279,11 +298,20 @@ CREATE TABLE "frontiers" (
     "id" SERIAL NOT NULL,
     "name" VARCHAR(255) NOT NULL,
     "difficulty" "DifficultyEnumType" DEFAULT 'easy',
-    "badge_id" INTEGER,
     "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "frontiers_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "frontier_badges" (
+    "frontier_id" INTEGER NOT NULL,
+    "badge_id" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "frontier_badges_pkey" PRIMARY KEY ("frontier_id","badge_id")
 );
 
 -- CreateTable
@@ -302,7 +330,6 @@ CREATE TABLE "towers" (
     "name" VARCHAR(255) NOT NULL,
     "difficulty" "DifficultyEnumType" DEFAULT 'easy',
     "exp_boost" INTEGER DEFAULT 1,
-    "badge_id" INTEGER,
     "required_badge_id" INTEGER,
     "required_trainer_level" INTEGER,
     "required_team_level_min" INTEGER,
@@ -311,6 +338,16 @@ CREATE TABLE "towers" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "towers_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "tower_badges" (
+    "tower_id" INTEGER NOT NULL,
+    "badge_id" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "tower_badges_pkey" PRIMARY KEY ("tower_id","badge_id")
 );
 
 -- CreateTable
@@ -323,7 +360,7 @@ CREATE TABLE "tower_pokemon" (
     "item_id" INTEGER,
     "color" "PokemonColorEnumType" DEFAULT 'colorless',
     "gender" "PokemonGenderEnumType" DEFAULT 'unknown',
-    "ability_id" INTEGER,
+    "ability" TEXT,
     "move_1" TEXT,
     "move_2" TEXT,
     "move_3" TEXT,
@@ -336,12 +373,12 @@ CREATE TABLE "tower_pokemon" (
 
 -- CreateTable
 CREATE TABLE "tower_rewards" (
-    "reward_id" INTEGER NOT NULL,
     "tower_id" INTEGER NOT NULL,
+    "reward_id" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "tower_rewards_pkey" PRIMARY KEY ("reward_id","tower_id")
+    CONSTRAINT "tower_rewards_pkey" PRIMARY KEY ("tower_id","reward_id")
 );
 
 -- CreateTable
@@ -362,10 +399,21 @@ CREATE TABLE "trainers" (
 );
 
 -- CreateTable
+CREATE TABLE "trainer_badges" (
+    "trainer_id" INTEGER NOT NULL,
+    "badge_id" INTEGER NOT NULL,
+    "amount" INTEGER DEFAULT 1,
+    "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "trainer_badges_pkey" PRIMARY KEY ("trainer_id","badge_id")
+);
+
+-- CreateTable
 CREATE TABLE "trainer_items" (
     "id" SERIAL NOT NULL,
+    "trainer_id" INTEGER NOT NULL,
     "item_id" INTEGER NOT NULL,
-    "trainer_id" INTEGER,
     "amount" INTEGER DEFAULT 1,
     "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -383,7 +431,7 @@ CREATE TABLE "trainer_pokemon" (
     "item_id" INTEGER,
     "color" "PokemonColorEnumType" DEFAULT 'colorless',
     "gender" "PokemonGenderEnumType" DEFAULT 'unknown',
-    "ability_id" INTEGER,
+    "ability" TEXT,
     "move_1" TEXT,
     "move_2" TEXT,
     "move_3" TEXT,
@@ -407,15 +455,25 @@ CREATE TABLE "market_pokemon" (
 );
 
 -- CreateTable
-CREATE TABLE "market_items" (
+CREATE TABLE "markets" (
     "id" SERIAL NOT NULL,
-    "item_id" INTEGER NOT NULL,
-    "amount" INTEGER DEFAULT 1,
+    "name" VARCHAR(255) NOT NULL,
+    "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "markets_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "market_items" (
+    "market_id" INTEGER NOT NULL,
+    "trainer_item_id" INTEGER NOT NULL,
+    "amount" INTEGER NOT NULL,
     "coins" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "market_items_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "market_items_pkey" PRIMARY KEY ("market_id","trainer_item_id","amount","coins")
 );
 
 -- CreateIndex
@@ -432,6 +490,9 @@ CREATE UNIQUE INDEX "towers_name_key" ON "towers"("name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "trainers_name_key" ON "trainers"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "markets_name_key" ON "markets"("name");
 
 -- AddForeignKey
 ALTER TABLE "pokemon_abilities" ADD CONSTRAINT "pokemon_abilities_pokemon_id_fkey" FOREIGN KEY ("pokemon_id") REFERENCES "pokemon"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -461,13 +522,13 @@ ALTER TABLE "route_items" ADD CONSTRAINT "route_items_item_id_fkey" FOREIGN KEY 
 ALTER TABLE "route_items" ADD CONSTRAINT "route_items_route_id_fkey" FOREIGN KEY ("route_id") REFERENCES "routes"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "npcs" ADD CONSTRAINT "npcs_badge_id_fkey" FOREIGN KEY ("badge_id") REFERENCES "badges"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "npc_badges" ADD CONSTRAINT "npc_badges_npc_id_fkey" FOREIGN KEY ("npc_id") REFERENCES "npcs"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "npc_badges" ADD CONSTRAINT "npc_badges_badge_id_fkey" FOREIGN KEY ("badge_id") REFERENCES "badges"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "npc_pokemon" ADD CONSTRAINT "npc_pokemon_pokemon_id_fkey" FOREIGN KEY ("pokemon_id") REFERENCES "pokemon"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "npc_pokemon" ADD CONSTRAINT "npc_pokemon_ability_id_fkey" FOREIGN KEY ("ability_id") REFERENCES "abilities"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "npc_pokemon" ADD CONSTRAINT "npc_pokemon_npc_id_fkey" FOREIGN KEY ("npc_id") REFERENCES "npcs"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -482,7 +543,10 @@ ALTER TABLE "npc_rewards" ADD CONSTRAINT "npc_rewards_reward_id_fkey" FOREIGN KE
 ALTER TABLE "npc_rewards" ADD CONSTRAINT "npc_rewards_npc_id_fkey" FOREIGN KEY ("npc_id") REFERENCES "npcs"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "gyms" ADD CONSTRAINT "gyms_badge_id_fkey" FOREIGN KEY ("badge_id") REFERENCES "badges"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "gym_badges" ADD CONSTRAINT "gym_badges_gym_id_fkey" FOREIGN KEY ("gym_id") REFERENCES "gyms"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "gym_badges" ADD CONSTRAINT "gym_badges_badge_id_fkey" FOREIGN KEY ("badge_id") REFERENCES "badges"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "gym_npcs" ADD CONSTRAINT "gym_npcs_gym_id_fkey" FOREIGN KEY ("gym_id") REFERENCES "gyms"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -491,7 +555,10 @@ ALTER TABLE "gym_npcs" ADD CONSTRAINT "gym_npcs_gym_id_fkey" FOREIGN KEY ("gym_i
 ALTER TABLE "gym_npcs" ADD CONSTRAINT "gym_npcs_npc_id_fkey" FOREIGN KEY ("npc_id") REFERENCES "npcs"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "frontiers" ADD CONSTRAINT "frontiers_badge_id_fkey" FOREIGN KEY ("badge_id") REFERENCES "badges"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "frontier_badges" ADD CONSTRAINT "frontier_badges_frontier_id_fkey" FOREIGN KEY ("frontier_id") REFERENCES "frontiers"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "frontier_badges" ADD CONSTRAINT "frontier_badges_badge_id_fkey" FOREIGN KEY ("badge_id") REFERENCES "badges"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "frontier_npcs" ADD CONSTRAINT "frontier_npcs_frontier_id_fkey" FOREIGN KEY ("frontier_id") REFERENCES "frontiers"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -500,10 +567,10 @@ ALTER TABLE "frontier_npcs" ADD CONSTRAINT "frontier_npcs_frontier_id_fkey" FORE
 ALTER TABLE "frontier_npcs" ADD CONSTRAINT "frontier_npcs_npc_id_fkey" FOREIGN KEY ("npc_id") REFERENCES "npcs"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "towers" ADD CONSTRAINT "towers_badge_id_fkey" FOREIGN KEY ("badge_id") REFERENCES "badges"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "tower_badges" ADD CONSTRAINT "tower_badges_tower_id_fkey" FOREIGN KEY ("tower_id") REFERENCES "towers"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "tower_pokemon" ADD CONSTRAINT "tower_pokemon_ability_id_fkey" FOREIGN KEY ("ability_id") REFERENCES "abilities"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "tower_badges" ADD CONSTRAINT "tower_badges_badge_id_fkey" FOREIGN KEY ("badge_id") REFERENCES "badges"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "tower_pokemon" ADD CONSTRAINT "tower_pokemon_tower_id_fkey" FOREIGN KEY ("tower_id") REFERENCES "towers"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -515,19 +582,22 @@ ALTER TABLE "tower_pokemon" ADD CONSTRAINT "tower_pokemon_item_id_fkey" FOREIGN 
 ALTER TABLE "tower_pokemon" ADD CONSTRAINT "tower_pokemon_pokemon_id_fkey" FOREIGN KEY ("pokemon_id") REFERENCES "pokemon"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "tower_rewards" ADD CONSTRAINT "tower_rewards_reward_id_fkey" FOREIGN KEY ("reward_id") REFERENCES "rewards"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE "tower_rewards" ADD CONSTRAINT "tower_rewards_tower_id_fkey" FOREIGN KEY ("tower_id") REFERENCES "towers"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "trainer_items" ADD CONSTRAINT "trainer_items_trainer_id_fkey" FOREIGN KEY ("trainer_id") REFERENCES "trainers"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "tower_rewards" ADD CONSTRAINT "tower_rewards_reward_id_fkey" FOREIGN KEY ("reward_id") REFERENCES "rewards"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "trainer_badges" ADD CONSTRAINT "trainer_badges_trainer_id_fkey" FOREIGN KEY ("trainer_id") REFERENCES "trainers"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "trainer_badges" ADD CONSTRAINT "trainer_badges_badge_id_fkey" FOREIGN KEY ("badge_id") REFERENCES "badges"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "trainer_items" ADD CONSTRAINT "trainer_items_trainer_id_fkey" FOREIGN KEY ("trainer_id") REFERENCES "trainers"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "trainer_items" ADD CONSTRAINT "trainer_items_item_id_fkey" FOREIGN KEY ("item_id") REFERENCES "items"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "trainer_pokemon" ADD CONSTRAINT "trainer_pokemon_ability_id_fkey" FOREIGN KEY ("ability_id") REFERENCES "abilities"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "trainer_pokemon" ADD CONSTRAINT "trainer_pokemon_trainer_id_fkey" FOREIGN KEY ("trainer_id") REFERENCES "trainers"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -542,4 +612,7 @@ ALTER TABLE "trainer_pokemon" ADD CONSTRAINT "trainer_pokemon_pokemon_id_fkey" F
 ALTER TABLE "market_pokemon" ADD CONSTRAINT "market_pokemon_trainer_pokemon_id_fkey" FOREIGN KEY ("trainer_pokemon_id") REFERENCES "trainer_pokemon"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "market_items" ADD CONSTRAINT "market_items_item_id_fkey" FOREIGN KEY ("item_id") REFERENCES "trainer_items"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "market_items" ADD CONSTRAINT "market_items_market_id_fkey" FOREIGN KEY ("market_id") REFERENCES "markets"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "market_items" ADD CONSTRAINT "market_items_trainer_item_id_fkey" FOREIGN KEY ("trainer_item_id") REFERENCES "trainer_items"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
