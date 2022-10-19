@@ -12,59 +12,59 @@ import { ToastContainer } from "react-toastify";
 import AuthMiddleware from "../client/middleware/AuthMiddleware";
 
 function MyApp({ Component, pageProps }: AppProps) {
-  return (
-    <div className="w-screen h-screen bg-slate-800 select-none">
-      <AuthMiddleware
-        requireAuth={(pageProps as any).requireAuth}
-        enableAuth={(pageProps as any).enableAuth}
-      >
-        <ToastContainer />
-        <Component {...pageProps} />
-        <ReactQueryDevtools initialIsOpen={false} />
-      </AuthMiddleware>
-    </div>
-  );
+    return (
+        <div className="w-screen h-screen bg-slate-800 select-none">
+            <AuthMiddleware
+                requireAuth={(pageProps as any).requireAuth}
+                enableAuth={(pageProps as any).enableAuth}
+            >
+                <ToastContainer />
+                <Component {...pageProps} />
+                <ReactQueryDevtools initialIsOpen={false} />
+            </AuthMiddleware>
+        </div>
+    );
 }
 
 export default withTRPC<AppRouter>({
-  config({ ctx }) {
-    const url = process.env.NEXT_PUBLIC_VERCEL_URL
-      ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
-      : (process.env.NEXT_PUBLIC_TRPC_ENDPOINT as string);
+    config({ ctx }) {
+        const url = process.env.NEXT_PUBLIC_VERCEL_URL
+            ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+            : (process.env.NEXT_PUBLIC_TRPC_ENDPOINT as string);
 
-    const links = [
-      loggerLink(),
-      httpBatchLink({
-        maxBatchSize: 10,
-        url,
-      }),
-    ];
-    return {
-      queryClientConfig: {
-        defaultOptions: {
-          queries: {
-            staleTime: 5 * 1000,
-          },
-        },
-      },
-      headers() {
-        if (ctx?.req) {
-          return {
-            ...ctx.req.headers,
-            "x-ssr": "1",
-          };
-        }
-        return {};
-      },
-      links,
-      transformer: superjson,
-      fetch(url, options) {
-        return fetch(url, {
-          ...options,
-          credentials: "include",
-        });
-      },
-    };
-  },
-  ssr: false,
+        const links = [
+            loggerLink(),
+            httpBatchLink({
+                maxBatchSize: 10,
+                url,
+            }),
+        ];
+        return {
+            queryClientConfig: {
+                defaultOptions: {
+                    queries: {
+                        staleTime: 5 * 1000,
+                    },
+                },
+            },
+            headers() {
+                if (ctx?.req) {
+                    return {
+                        ...ctx.req.headers,
+                        "x-ssr": "1",
+                    };
+                }
+                return {};
+            },
+            links,
+            transformer: superjson,
+            fetch(url, options) {
+                return fetch(url, {
+                    ...options,
+                    credentials: "include",
+                });
+            },
+        };
+    },
+    ssr: false,
 })(MyApp);

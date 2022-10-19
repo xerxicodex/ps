@@ -2,21 +2,21 @@ import { createClient } from "redis";
 
 const redisUrl = `redis://localhost:6379`;
 const redisClient = createClient({
-  url: redisUrl,
+    url: redisUrl,
 });
 
 const connectRedis = async () => {
-  try {
-    await redisClient.connect();
-    console.log("? Redis client connected...");
-    redisClient.set(
-      "tRPC",
-      "Welcome to tRPC with Next.js, Prisma and Typescript!"
-    );
-  } catch (err: any) {
-    console.log(err.message);
-    process.exit(1);
-  }
+    try {
+        await redisClient.connect();
+        console.log("? Redis client connected...");
+        redisClient.set(
+            "tRPC",
+            "Welcome to tRPC with Next.js, Prisma and Typescript!"
+        );
+    } catch (err: any) {
+        console.log(err.message);
+        process.exit(1);
+    }
 };
 
 connectRedis();

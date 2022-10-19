@@ -9,18 +9,18 @@ import connectDB from "../utils/prisma";
 connectDB();
 
 export const appRouter = createRouter()
-  .query("ping", {
-    resolve: async (ctx) => {
-      return "pong";
-    },
-  })
-  .query("hello", {
-    resolve: async (ctx) => {
-      const message = await redisClient.get("tRPC");
-      return { message };
-    },
-  })
-  .merge("auth.", authRouter)
-  .merge("trainer.", trainerRouter);
+    .query("ping", {
+        resolve: async (ctx) => {
+            return "pong";
+        },
+    })
+    .query("hello", {
+        resolve: async (ctx) => {
+            const message = await redisClient.get("tRPC");
+            return { message };
+        },
+    })
+    .merge("auth.", authRouter)
+    .merge("trainer.", trainerRouter);
 
 export type AppRouter = typeof appRouter;
