@@ -62,6 +62,7 @@ CREATE TABLE "pokemon" (
     "dex_id" INTEGER NOT NULL,
     "name" TEXT,
     "species" TEXT,
+    "shiny_locked" BOOLEAN DEFAULT false,
     "generation" INTEGER,
     "description" TEXT DEFAULT 'Nothing is known about this pokemon',
     "type_1" TEXT DEFAULT 'ghost',
@@ -475,6 +476,9 @@ CREATE TABLE "market_items" (
 
     CONSTRAINT "market_items_pkey" PRIMARY KEY ("market_id","trainer_item_id","amount","coins")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "pokemon_name_key" ON "pokemon"("name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "npcs_name_key" ON "npcs"("name");

@@ -145,6 +145,8 @@ model Pokemon {
 
   species String?
 
+  shiny_locked Boolean? @default(false)
+
   generation Int?
 
   description String? @default("Nothing is known about this pokemon")
@@ -197,6 +199,7 @@ model Pokemon {
   npcPokemon     NPCPokemon[]
   towerPokemon   TowerPokemon[]
 
+  @@unique([name])
   @@map(name: "pokemon")
 }
 

@@ -16,18 +16,23 @@ export async function GiveBadgeToTrainer(badge_id: number, trainer_id: number) {
 
     if (badge) {
         const trainer = await GetTrainerById(trainer_id);
-        
+
         if (trainer) {
             await prisma.trainerBadge.upsert({
-                where: { trainer_id_badge_id: { trainer_id: trainer.id, badge_id: badge.id } },
+                where: {
+                    trainer_id_badge_id: {
+                        trainer_id: trainer.id,
+                        badge_id: badge.id,
+                    },
+                },
                 update: {
-                    amount: { increment: 1 }
+                    amount: { increment: 1 },
                 },
                 create: {
                     trainer_id: trainer.id,
-                    badge_id: badge.id
-                }
-            })
+                    badge_id: badge.id,
+                },
+            });
         }
     }
 }

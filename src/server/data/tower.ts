@@ -27,8 +27,6 @@ export async function DefeatTowerByTrainer(
                 where: { tower },
             });
 
-            console.log("give badges", badges.length);
-
             while (badges.length > 0) {
                 const id = badges.shift()?.badge_id;
 

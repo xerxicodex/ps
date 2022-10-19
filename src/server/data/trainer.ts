@@ -1,4 +1,13 @@
-import { Prisma, PrismaClient, Trainer, TrainerPokemon } from "@prisma/client";
+import {
+    PokemonColorEnumType,
+    Prisma,
+    PrismaClient,
+    Trainer,
+    TrainerPokemon,
+} from "@prisma/client";
+import { Chance } from "chance";
+import { randomUUID } from "crypto";
+import { ParsePokemonFullName } from "../utils/pokemon";
 import { GetItemById } from "./item";
 
 const prisma = new PrismaClient();
@@ -22,7 +31,9 @@ export async function GiveTrainerExp(trainer_id: number, exp: number) {
     const trainer = await GetTrainerById(trainer_id);
 
     if (trainer) {
-        trainer.exp = (trainer.exp ?? 0) + exp;
+        trainer.exp =
+            ((trainer.exp ?? 0) + exp) *
+            parseInt(process.env.BONUS_TRAINER_EXP ?? "1");
         trainer.level = Math.floor((trainer.exp ?? 0) ** (1 / 3));
         await UpdateTrainer(trainer);
     }
@@ -74,22 +85,105 @@ export async function GiveTrainerPokemon(
     trainer_id: number,
     pokemon: Prisma.TrainerPokemonUncheckedCreateInput
 ) {
+    const trainer = await GetTrainerById(trainer_id);
+
     const roster = await GetTrainerRoster(trainer_id);
 
     if (roster.length < 6) {
         pokemon.slot = roster.length + 1;
     }
 
-    return await prisma.trainerPokemon.create({
-        data: { ...pokemon, trainer_id },
+    const _pokemon = await prisma.pokemon.findFirst({
+        where: { id: pokemon.pokemon_id },
     });
+
+    const abilities = await prisma.pokemonAbility.findMany({
+        where: { pokemon_id: _pokemon?.id, is_hidden: false },
+        include: { ability: true },
+    });
+
+    pokemon.ability = Chance().pickone(abilities).ability.name;
+
+    if (Chance().integer({ min: 1, max: 4 }) == 1) {
+        const hiddenAbilities = await prisma.pokemonAbility.findMany({
+            where: { pokemon_id: _pokemon?.id, is_hidden: true },
+            include: { ability: true },
+        });
+
+        if (hiddenAbilities.length > 0) {
+            pokemon.ability = Chance().pickone(hiddenAbilities).ability.name;
+        }
+    }
+
+    if (!_pokemon?.shiny_locked) {
+        const shinyCharm = await prisma.trainerItem.findFirst({
+            where: { item: { name: "shiny-charm" } },
+        });
+
+        let checks = shinyCharm ? 3 : 1;
+
+        checks *= parseInt(process.env.BONUS_SHINY_CHECKS ?? "1");
+
+        let is_shiny = false;
+
+        while (checks > 0) {
+            checks--;
+            is_shiny =
+                Chance("aauCANWinx" + randomUUID()).integer({
+                    min: 1,
+                    max: parseInt(process.env.SHINY_CHANCE ?? "8192"),
+                }) == 1;
+
+            if (is_shiny) {
+                checks = 0;
+            }
+        }
+
+        if (is_shiny) {
+            pokemon.color = PokemonColorEnumType.shiny;
+        }
+    }
+
+    const pokemonMoves = await prisma.pokemonMove.findMany({
+        where: { pokemon_id: _pokemon?.id },
+        include: { move: true },
+    });
+
+    const moves =
+        pokemonMoves.length > 0
+            ? Chance().pickset(
+                  pokemonMoves,
+                  Chance().integer({ min: 0, max: 4 })
+              )
+            : [];
+
+    pokemon.move_1 = moves.shift()?.move?.name ?? null;
+    pokemon.move_2 = moves.shift()?.move?.name ?? null;
+    pokemon.move_3 = moves.shift()?.move?.name ?? null;
+    pokemon.move_4 = moves.shift()?.move?.name ?? null;
+
+    const trainerPokemon = await prisma.trainerPokemon.create({
+        data: { ...pokemon, trainer_id },
+        include: {
+            pokemon: true,
+        },
+    });
+
+    if (trainerPokemon?.id) {
+        console.log(
+            `[trainer][${trainer?.id}][${
+                trainer?.name
+            }] captured ${await ParsePokemonFullName(trainerPokemon)}`
+        );
+    }
+
+    return trainerPokemon;
 }
 
 export async function GiveTrainerRewardPokemon(
     trainer_id: number,
     data: string
 ) {
-    console.log({ data });
     const pokemon = JSON.parse(data);
 
     delete pokemon.name;
@@ -133,7 +227,9 @@ export async function GiveTrainerPokemonEXP(pokemon_id: number, exp: number) {
     const pokemon = await GetTrainerPokemon(pokemon_id);
 
     if (pokemon) {
-        pokemon.exp = (pokemon.exp ?? 0) + exp;
+        pokemon.exp =
+            ((pokemon.exp ?? 0) + exp) *
+            parseInt(process.env.BONUS_POKEMON_EXP ?? "1");
         pokemon.level = Math.floor((pokemon.exp ?? 0) ** (1 / 3));
         await UpdateTrainerPokemon(pokemon);
     }

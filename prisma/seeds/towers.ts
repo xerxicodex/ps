@@ -12,6 +12,7 @@ import {
 import Chance from "chance";
 import { GiveRewardToTrainer } from "../../src/server/data/reward";
 import { DefeatTowerByTrainer } from "../../src/server/data/tower";
+import { ParsePokemonName } from "../../src/server/utils/pokemon";
 
 export const seedTowers = async (prisma: PrismaClient) => {
     await prisma.towerBadge.deleteMany();
@@ -41,21 +42,18 @@ export const seedTowers = async (prisma: PrismaClient) => {
 
             const legend = legends.pop();
 
-            const legendName = [
-                legend?.name
-                    ?.replace("galar", "galarian")
-                    .replace("Ho-Oh", "Ho#Oh")
-                    .split("-")
-                    .slice(1),
-                legend?.species,
-            ]
-                .filter((x) => (x ?? "").length > 0)
-                .join(" ")
-                .replace("#", "-");
+            const legendName = ParsePokemonName(
+                legend?.name ?? "",
+                legend?.species ?? ""
+            );
+
+            const towerName = `Legend of ${legendName}`;
+
+            console.log(`[tower][][${towerName}] Creating`);
 
             const tower = await prisma.tower.create({
                 data: {
-                    name: `Legend of ${legendName}`,
+                    name: towerName,
                     required_trainer_level: 100,
                 },
             });
@@ -168,12 +166,6 @@ export const seedTowers = async (prisma: PrismaClient) => {
                     floorPokemon[floor] = _floorPokemon[floor];
                 }
             });
-
-            console.log(
-                `[${legend?.name}][${legend?.type_1} | ${
-                    legend?.type_2 ?? "NONE"
-                }]`
-            );
 
             let floors = Object.keys(floorPokemon);
 
@@ -331,10 +323,10 @@ export const seedTowers = async (prisma: PrismaClient) => {
                               ])
                             : moves.ailment?.name,
                     ].filter((x) => x) as string[];
-                    
+
                     const level = Math.floor(
-                            (500 * floor) ** (1 + pokemonCount * 0.0009114)
-                        )
+                        (500 * floor) ** (1 + pokemonCount * 0.0009114)
+                    );
 
                     towerPokemon.push({
                         tower_id: tower?.id ?? 0,
@@ -360,7 +352,7 @@ export const seedTowers = async (prisma: PrismaClient) => {
 
             const m = 2500;
 
-            const matchup = ((m / (pokemonCount * (m / totalLevels))) / m)
+            const matchup = m / (pokemonCount * (m / totalLevels)) / m;
 
             if (matchup >= 1.5) {
                 tower.difficulty = DifficultyEnumType.master;
@@ -376,14 +368,14 @@ export const seedTowers = async (prisma: PrismaClient) => {
 
             let reward = await prisma.reward.create({
                 data: {
-                        reward: RewardEnumType.pokemon,
-                        value: JSON.stringify({
-                            name: legend?.name,
-                            pokemon_id: legend?.id,
-                            gender: PokemonGenderEnumType.unknown,
-                            level: 4,
-                        }),
-                    }
+                    reward: RewardEnumType.pokemon,
+                    value: JSON.stringify({
+                        name: legend?.name,
+                        pokemon_id: legend?.id,
+                        gender: PokemonGenderEnumType.unknown,
+                        level: 4,
+                    }),
+                },
             });
 
             await prisma.towerReward.create({
@@ -396,9 +388,9 @@ export const seedTowers = async (prisma: PrismaClient) => {
             reward = await prisma.reward.create({
                 data: {
                     reward: RewardEnumType.trainer_exp,
-                    value: `${Math.floor(100 ** (1 + (matchup * 0.35)))}`
-                }
-            })
+                    value: `${Math.floor(100 ** (1 + matchup * 0.35))}`,
+                },
+            });
 
             await prisma.towerReward.create({
                 data: {
@@ -408,6 +400,8 @@ export const seedTowers = async (prisma: PrismaClient) => {
             });
 
             await prisma.tower.update({ data: tower, where: { id: tower.id } });
+
+            console.log(`[tower][${tower?.id}][${tower.name}] Created`);
 
             await DefeatTowerByTrainer(tower.id, 1);
         }

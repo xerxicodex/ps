@@ -1,11 +1,13 @@
 import { MoveCategoryEnumType, Prisma, PrismaClient } from "@prisma/client";
-import { MainClient, PokemonClient } from "pokenode-ts";
+import { MainClient, Pokemon, PokemonClient } from "pokenode-ts";
 import process from "process";
 import RunParallelLimit from "run-parallel-limit";
 
 const pokedex = new PokemonClient({ baseURL: process.env.POKEAPI_URL });
 
 const maindex = new MainClient({ baseURL: process.env.POKEAPI_URL });
+
+const processed_pokemon_names: string | string[] = [];
 
 const _pokemon: Prisma.PokemonCreateInput[] = [];
 
@@ -23,251 +25,335 @@ const _pokemon_moves: Prisma.PokemonMoveUncheckedCreateInput[] = [];
 
 const ids: number[] = new Array(15200).fill(null).map((x, i) => i + 1);
 
-const jobs = ids.map((id) => {
+const jobs = ids.map((dex_id) => {
     return async (callback: any) => {
         try {
-            const species = await pokedex.getPokemonSpeciesById(id);
+            const species = await pokedex.getPokemonSpeciesById(dex_id);
 
             while ((species?.varieties ?? [])?.length > 0) {
+                const process = (pokemon: Pokemon) => {
+                    return new Promise((done) => {
+                        if (
+                            pokemon &&
+                            processed_pokemon_names.indexOf(pokemon.name) == -1
+                        ) {
+                            processed_pokemon_names.push(pokemon.name);
+
+                            const name = pokemon.name;
+
+                            let description = "";
+
+                            species.flavor_text_entries.forEach((f) => {
+                                if (f?.language?.name == "en") {
+                                    description = f.flavor_text;
+                                }
+                            });
+
+                            const stats: any = {};
+
+                            pokemon.stats.forEach((stat) => {
+                                const key = (stat.stat?.name ?? "")
+                                    .toLowerCase()
+                                    .replace("-", "_");
+                                stats[key] = stat.base_stat ?? 0;
+                                stats[key + "_ev"] = stat.effort ?? 0;
+                            });
+
+                            pokemon.abilities.forEach((ability) => {
+                                const key = parseInt(
+                                    ability.ability?.url
+                                        ?.split("/")
+                                        ?.slice(-2)
+                                        ?.shift() ?? "0"
+                                );
+                                if (
+                                    Object.keys(abilities).indexOf(`${key}`) ==
+                                    -1
+                                ) {
+                                    abilities[key] = [];
+                                }
+                                abilities[key].push({
+                                    pokemon_name: name,
+                                    slot: ability.slot,
+                                    is_hidden: ability.is_hidden,
+                                });
+                            });
+
+                            pokemon.moves.forEach((move) => {
+                                const key = parseInt(
+                                    move.move?.url
+                                        ?.split("/")
+                                        ?.slice(-2)
+                                        ?.shift() ?? "0"
+                                );
+                                if (
+                                    Object.keys(moves).indexOf(`${key}`) == -1
+                                ) {
+                                    moves[key] = [];
+                                }
+
+                                const detail =
+                                    move.version_group_details.shift();
+
+                                const pokemon_move = {
+                                    pokemon_name: name,
+                                    level: detail?.level_learned_at,
+                                    method: detail?.move_learn_method?.name,
+                                };
+
+                                moves[key].push(pokemon_move);
+                            });
+
+                            let evolves_from: number | null = parseInt(
+                                species.evolves_from_species?.url
+                                    ?.split("/")
+                                    ?.slice(-2)
+                                    ?.shift() ?? "0"
+                            );
+
+                            if (evolves_from == 0) evolves_from = null;
+
+                            const generation: number | null = parseInt(
+                                species.generation?.url
+                                    ?.split("/")
+                                    ?.slice(-2)
+                                    ?.shift() ?? "0"
+                            );
+
+                            const data = {
+                                dex_id: dex_id,
+                                name,
+                                species: species.name,
+                                description,
+                                generation,
+
+                                type_1: pokemon.types.shift()?.type?.name,
+                                type_2: pokemon.types.shift()?.type?.name,
+
+                                hp: stats.hp,
+                                attack: stats.attack,
+                                defense: stats.defense,
+                                special_attack: stats.special_attack,
+                                special_defense: stats.special_defense,
+                                speed: stats.speed,
+
+                                hp_ev: stats.hp_ev,
+                                attack_ev: stats.attack_ev,
+                                defense_ev: stats.defense_ev,
+                                special_attack_ev: stats.special_attack_ev,
+                                special_defense_ev: stats.special_defense_ev,
+                                speed_ev: stats.speed_ev,
+
+                                base_exp: pokemon.base_experience,
+                                height: pokemon.height,
+                                weight: pokemon.weight,
+                                capture_rate: species.capture_rate,
+                                base_happiness: species.base_happiness,
+                                is_baby: species.is_baby,
+                                is_legendary: species.is_legendary,
+                                is_mythical: species.is_mythical,
+                                hatch_counter: species.hatch_counter,
+                                has_gender_differences:
+                                    species.has_gender_differences,
+                                forms_switchable: species.forms_switchable,
+
+                                evolves_from,
+
+                                growth_rate: species.growth_rate?.name,
+                                theme_color: species.color?.name,
+                                shape: species.shape?.name,
+                                power: 0,
+                            };
+
+                            // data.base_exp = data.base_exp + Math.floor(data.base_exp * (data.capture_rate / 255));
+
+                            // if (data.type_1 && data.type_2) {
+                            //     data.base_exp = Math.floor(data.base_exp ** 5)
+                            // }
+
+                            if (data.name.indexOf("-incarnate") != -1) {
+                                data.base_exp = Math.floor(
+                                    data.base_exp * 1.02
+                                );
+                            }
+
+                            if (data.name.indexOf("-origin") != -1) {
+                                data.base_exp = Math.floor(
+                                    data.base_exp * 1.02
+                                );
+                            }
+
+                            if (data.name.indexOf("-unbound") != -1) {
+                                data.base_exp = Math.floor(
+                                    data.base_exp * 1.02
+                                );
+                            }
+
+                            if (data.name.indexOf("-primal") != -1) {
+                                data.base_exp = Math.floor(
+                                    data.base_exp * 1.02
+                                );
+                            }
+
+                            if (data.name.indexOf("-gmax") != -1) {
+                                data.base_exp = Math.floor(
+                                    data.base_exp * 1.03
+                                );
+                            }
+
+                            if (data.name.indexOf("-eternamax") != -1) {
+                                data.base_exp = Math.floor(
+                                    data.base_exp * 1.03
+                                );
+                            }
+
+                            if (data.name.indexOf("-mega") != -1) {
+                                data.base_exp = Math.floor(
+                                    data.base_exp * 1.04
+                                );
+                            }
+
+                            if (data.evolves_from) {
+                                data.base_exp = Math.floor(
+                                    data.base_exp ** 1.005
+                                );
+                            }
+
+                            if (data.is_legendary) {
+                                data.base_exp = Math.floor(
+                                    data.base_exp ** 1.01
+                                );
+                            }
+
+                            if (data.is_mythical) {
+                                data.base_exp = Math.floor(
+                                    data.base_exp ** 1.015
+                                );
+                            }
+
+                            if (
+                                data.name.indexOf("-mega") != -1 &&
+                                (data.is_legendary || data.is_mythical)
+                            ) {
+                                data.base_exp = Math.floor(
+                                    data.base_exp * 1.03
+                                );
+                            }
+
+                            if (
+                                data.name.indexOf("-gmax") != -1 &&
+                                (data.is_legendary || data.is_mythical)
+                            ) {
+                                data.base_exp = Math.floor(
+                                    data.base_exp * 1.01
+                                );
+                            }
+
+                            if (data.is_legendary || data.is_mythical) {
+                                data.base_exp = Math.floor(data.base_exp * 2);
+                            }
+
+                            if (data.name.indexOf("kyogre") != -1) {
+                                data.base_exp = Math.floor(
+                                    data.base_exp * 1.05
+                                );
+                            }
+
+                            if (data.name.indexOf("groudon") != -1) {
+                                data.base_exp = Math.floor(
+                                    data.base_exp * 1.075
+                                );
+                            }
+
+                            if (data.name.indexOf("deoxys") != -1) {
+                                data.base_exp = Math.floor(data.base_exp * 1.1);
+                            }
+
+                            if (data.name.indexOf("rayquaza") != -1) {
+                                data.base_exp = Math.floor(
+                                    data.base_exp * 1.15
+                                );
+                            }
+
+                            if (data.name.indexOf("mewtwo") != -1) {
+                                data.base_exp = Math.floor(
+                                    data.base_exp * 1.25
+                                );
+                            }
+
+                            if (data.name == "mew") {
+                                data.base_exp = Math.floor(data.base_exp * 1.5);
+                            }
+
+                            if (data.name.indexOf("arceus") != -1) {
+                                data.base_exp = Math.floor(data.base_exp * 2);
+                            }
+
+                            if (data.is_baby) {
+                                data.base_exp *= -1;
+                            }
+
+                            data.power =
+                                data.attack +
+                                data.special_attack +
+                                data.defense +
+                                data.special_defense +
+                                data.speed;
+
+                            data.base_exp += data.power;
+
+                            _pokemon.push(data);
+
+                            console.log(
+                                `[${_pokemon.length}][Pokemon #${dex_id}] ${pokemon.name} processed`
+                            );
+
+                            done(null);
+                        } else {
+                            done(null);
+                        }
+                    });
+                };
+
                 const variety = species.varieties.shift();
 
                 const pokemon = await pokedex.getPokemonByName(
                     variety?.pokemon?.name ?? ""
                 );
 
-                if (pokemon) {
-                    const name = pokemon.name;
+                const forms = pokemon.forms;
 
-                    let description = "";
+                await process(pokemon);
 
-                    species.flavor_text_entries.forEach((f) => {
-                        if (f?.language?.name == "en") {
-                            description = f.flavor_text;
-                        }
-                    });
-
-                    const stats: any = {};
-
-                    pokemon.stats.forEach((stat) => {
-                        const key = (stat.stat?.name ?? "")
-                            .toLowerCase()
-                            .replace("-", "_");
-                        stats[key] = stat.base_stat ?? 0;
-                        stats[key + "_ev"] = stat.effort ?? 0;
-                    });
-
-                    pokemon.abilities.forEach((ability) => {
-                        const key = parseInt(
-                            ability.ability?.url
-                                ?.split("/")
-                                ?.slice(-2)
-                                ?.shift() ?? "0"
-                        );
-                        if (Object.keys(abilities).indexOf(`${key}`) == -1) {
-                            abilities[key] = [];
-                        }
-                        abilities[key].push({
-                            pokemon_name: name,
-                            slot: ability.slot,
-                            is_hidden: ability.is_hidden,
-                        });
-                    });
-
-                    pokemon.moves.forEach((move) => {
-                        const key = parseInt(
-                            move.move?.url?.split("/")?.slice(-2)?.shift() ??
-                                "0"
-                        );
-                        if (Object.keys(moves).indexOf(`${key}`) == -1) {
-                            moves[key] = [];
-                        }
-
-                        const detail = move.version_group_details.shift();
-
-                        const pokemon_move = {
-                            pokemon_name: name,
-                            level: detail?.level_learned_at,
-                            method: detail?.move_learn_method?.name,
-                        };
-
-                        moves[key].push(pokemon_move);
-                    });
-
-                    let evolves_from: number | null = parseInt(
-                        species.evolves_from_species?.url
-                            ?.split("/")
-                            ?.slice(-2)
-                            ?.shift() ?? "0"
+                while (forms.length > 0) {
+                    const formId = parseInt(
+                        forms.shift()?.url?.split("/")?.slice(-2)?.shift() ??
+                            "0"
                     );
 
-                    if (evolves_from == 0) evolves_from = null;
+                    const form = await pokedex.getPokemonFormById(formId);
 
-                    const generation: number | null = parseInt(
-                        species.generation?.url
-                            ?.split("/")
-                            ?.slice(-2)
-                            ?.shift() ?? "0"
+                    const pokemonId = parseInt(
+                        form.pokemon?.url?.split("/")?.slice(-2)?.shift() ?? "0"
                     );
 
-                    const data = {
-                        dex_id: id,
-                        name,
-                        species: species.name,
-                        description,
-                        generation,
+                    if (form.form_name && form.form_name != pokemon.name) {
+                        const formPokemon = await pokedex.getPokemonById(
+                            pokemonId
+                        );
 
-                        type_1: pokemon.types.shift()?.type?.name,
-                        type_2: pokemon.types.shift()?.type?.name,
+                        formPokemon.name = form.name;
+                        formPokemon.types = form.types;
 
-                        hp: stats.hp,
-                        attack: stats.attack,
-                        defense: stats.defense,
-                        special_attack: stats.special_attack,
-                        special_defense: stats.special_defense,
-                        speed: stats.speed,
-
-                        hp_ev: stats.hp_ev,
-                        attack_ev: stats.attack_ev,
-                        defense_ev: stats.defense_ev,
-                        special_attack_ev: stats.special_attack_ev,
-                        special_defense_ev: stats.special_defense_ev,
-                        speed_ev: stats.speed_ev,
-
-                        base_exp: pokemon.base_experience,
-                        height: pokemon.height,
-                        weight: pokemon.weight,
-                        capture_rate: species.capture_rate,
-                        base_happiness: species.base_happiness,
-                        is_baby: species.is_baby,
-                        is_legendary: species.is_legendary,
-                        is_mythical: species.is_mythical,
-                        hatch_counter: species.hatch_counter,
-                        has_gender_differences: species.has_gender_differences,
-                        forms_switchable: species.forms_switchable,
-
-                        evolves_from,
-
-                        growth_rate: species.growth_rate?.name,
-                        theme_color: species.color?.name,
-                        shape: species.shape?.name,
-                        power: 0,
-                    };
-
-                    // data.base_exp = data.base_exp + Math.floor(data.base_exp * (data.capture_rate / 255));
-
-                    // if (data.type_1 && data.type_2) {
-                    //     data.base_exp = Math.floor(data.base_exp ** 5)
-                    // }
-
-                    if (data.name.indexOf("-incarnate") != -1) {
-                        data.base_exp = Math.floor(data.base_exp * 1.02);
+                        await process(formPokemon);
                     }
-
-                    if (data.name.indexOf("-origin") != -1) {
-                        data.base_exp = Math.floor(data.base_exp * 1.02);
-                    }
-
-                    if (data.name.indexOf("-unbound") != -1) {
-                        data.base_exp = Math.floor(data.base_exp * 1.02);
-                    }
-
-                    if (data.name.indexOf("-primal") != -1) {
-                        data.base_exp = Math.floor(data.base_exp * 1.02);
-                    }
-
-                    if (data.name.indexOf("-gmax") != -1) {
-                        data.base_exp = Math.floor(data.base_exp * 1.03);
-                    }
-
-                    if (data.name.indexOf("-eternamax") != -1) {
-                        data.base_exp = Math.floor(data.base_exp * 1.03);
-                    }
-
-                    if (data.name.indexOf("-mega") != -1) {
-                        data.base_exp = Math.floor(data.base_exp * 1.04);
-                    }
-
-                    if (data.evolves_from) {
-                        data.base_exp = Math.floor(data.base_exp ** 1.005);
-                    }
-
-                    if (data.is_legendary) {
-                        data.base_exp = Math.floor(data.base_exp ** 1.01);
-                    }
-
-                    if (data.is_mythical) {
-                        data.base_exp = Math.floor(data.base_exp ** 1.015);
-                    }
-
-                    if (
-                        data.name.indexOf("-mega") != -1 &&
-                        (data.is_legendary || data.is_mythical)
-                    ) {
-                        data.base_exp = Math.floor(data.base_exp * 1.03);
-                    }
-
-                    if (
-                        data.name.indexOf("-gmax") != -1 &&
-                        (data.is_legendary || data.is_mythical)
-                    ) {
-                        data.base_exp = Math.floor(data.base_exp * 1.01);
-                    }
-
-                    if (data.is_legendary || data.is_mythical) {
-                        data.base_exp = Math.floor(data.base_exp * 2);
-                    }
-
-                    if (data.name.indexOf("kyogre") != -1) {
-                        data.base_exp = Math.floor(data.base_exp * 1.05);
-                    }
-
-                    if (data.name.indexOf("groudon") != -1) {
-                        data.base_exp = Math.floor(data.base_exp * 1.075);
-                    }
-
-                    if (data.name.indexOf("deoxys") != -1) {
-                        data.base_exp = Math.floor(data.base_exp * 1.1);
-                    }
-
-                    if (data.name.indexOf("rayquaza") != -1) {
-                        data.base_exp = Math.floor(data.base_exp * 1.15);
-                    }
-
-                    if (data.name.indexOf("mewtwo") != -1) {
-                        data.base_exp = Math.floor(data.base_exp * 1.25);
-                    }
-
-                    if (data.name == "mew") {
-                        data.base_exp = Math.floor(data.base_exp * 1.5);
-                    }
-
-                    if (data.name.indexOf("arceus") != -1) {
-                        data.base_exp = Math.floor(data.base_exp * 2);
-                    }
-
-                    if (data.is_baby) {
-                        data.base_exp *= -1;
-                    }
-
-                    data.power =
-                        data.attack +
-                        data.special_attack +
-                        data.defense +
-                        data.special_defense +
-                        data.speed;
-
-                    data.base_exp += data.power;
-
-                    _pokemon.push(data);
-
-                    console.log(`Pokemon #${id} loaded (${_pokemon.length})`);
                 }
             }
 
-            callback(null, `Loaded ${id}`);
+            callback(null, `Loaded ${dex_id}`);
         } catch (error) {
-            console.log(`Skipped pokemon #${id}`);
-            callback(null, `Skipped ${id}`);
+            console.log(`Skipped pokemon #${dex_id}`);
+            callback(null, `Skipped ${dex_id}`);
         }
     };
 });
