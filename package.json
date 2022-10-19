@@ -7,7 +7,7 @@
         "build": "next build",
         "start": "next start",
         "lint": "next lint",
-        "db:seed": "npx prisma db seed",
+        "db:seed": "npx prisma generate && npx prisma db push && npx prisma db seed",
         "db:migrate": "npx prisma migrate dev --name migration --create-only && yarn prisma generate",
         "db:push": "npx prisma db push",
         "pretty": "prettier --tab-width 4 --write \"./**/*.{js,jsx,ts,tsx,json}\""

@@ -49,3 +49,7 @@ export async function DefeatTowerByTrainer(
         }
     }
 }
+
+export async function GetTowerPokemonById(id: number) {
+    return await prisma.towerPokemon.findFirst({ where: { id } });
+}

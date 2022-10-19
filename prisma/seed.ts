@@ -4,6 +4,7 @@ import { trainers } from "./seeds/trainer";
 import { routes } from "./seeds/routes";
 import { seedPokemon } from "./seeds/pokemon";
 import { seedTowers } from "./seeds/towers";
+import { seedItems } from "./seeds/items";
 
 const prisma = new PrismaClient();
 
@@ -42,6 +43,7 @@ const seedRoutes = async () => {
 async function main() {
     await seedTrainers();
     await seedRoutes();
+    await seedItems(prisma);
     await seedPokemon(prisma);
     await seedTowers(prisma);
 }

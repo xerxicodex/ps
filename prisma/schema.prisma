@@ -80,6 +80,39 @@ enum MoveCategoryEnumType {
   net_good_stats
 }
 
+enum ItemCategoryEnumType {
+  AllMachines
+  BadHeldItems
+  Choice
+  Collectibles
+  CurryIngredients
+  DataCards
+  DexCompletion
+  EffortDrop
+  EventItems
+  Evolution
+  Flutes
+  Gameplay
+  Healing
+  InaPinch
+  Jewels
+  Loot
+  Medicine
+  MegaStones
+  MiracleShooter
+  Mulch
+  Other
+  PickyHealing
+  PpRecovery
+  Revival
+  Scarves
+  SpecialBalls
+  StatusCures
+  TypeProtection
+  ZCrystals
+  TypeEnhancement
+}
+
 model Reward {
   id Int @id @default(autoincrement())
 
@@ -100,6 +133,10 @@ model Item {
   id Int @id @default(autoincrement())
 
   name String
+
+  description String?
+
+  category ItemCategoryEnumType?
 
   rarity RarityEnumType? @default(common)
 

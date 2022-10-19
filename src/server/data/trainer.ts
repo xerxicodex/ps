@@ -9,6 +9,7 @@ import { Chance } from "chance";
 import { randomUUID } from "crypto";
 import { ParsePokemonFullName } from "../utils/pokemon";
 import { GetItemById } from "./item";
+import { GetPokemonById } from "./pokemon";
 
 const prisma = new PrismaClient();
 
@@ -225,12 +226,27 @@ export async function UpdateTrainerPokemon(trainerPokemon: TrainerPokemon) {
 
 export async function GiveTrainerPokemonEXP(pokemon_id: number, exp: number) {
     const pokemon = await GetTrainerPokemon(pokemon_id);
+    const _pokemon = await GetPokemonById(pokemon?.pokemon_id ?? 0);
 
     if (pokemon) {
         pokemon.exp =
             ((pokemon.exp ?? 0) + exp) *
             parseInt(process.env.BONUS_POKEMON_EXP ?? "1");
-        pokemon.level = Math.floor((pokemon.exp ?? 0) ** (1 / 3));
+
+        const mod: any = {
+            fast: (x: number) => x ** (1 / 2.75),
+            slow: (x: number) => x ** (1 / 3.25),
+            medium: (x: number) => x ** (1 / 3),
+            "medium-slow": (x: number) => x ** (1 / 3.15),
+            "fast-then-very-slow": (x: number) => (x * 1.5 ** 10) ** (1 / 4),
+            "slow-then-very-fast": (x: number) =>
+                (x * (1 / 6.2 ** 9)) ** (1 + 1 / 4) * 0.35,
+        };
+
+        pokemon.level = Math.floor(
+            mod[_pokemon?.growth_rate ?? ""](pokemon.exp ?? 0)
+        );
+
         await UpdateTrainerPokemon(pokemon);
     }
 }
