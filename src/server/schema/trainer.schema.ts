@@ -1,3 +1,4 @@
+import { TrainerSkinEnumType } from "@prisma/client";
 import { object, string, number, TypeOf } from "zod";
 
 export const createUserSchema = object({
@@ -8,8 +9,17 @@ export const createUserSchema = object({
         .max(32, "Password must be less than 32 characters"),
     passwordConfirm: string().min(1, "Please confirm your password"),
     starter: number()
-        .min(1, "Please select a starter")
-        .max(3, "Invalid starter"),
+    .min(1, "Please select a starter")
+    .max(3, "Invalid starter"),
+    skin: string().refine((val) => {
+        const skin = TrainerSkinEnumType[
+            val.toLowerCase() as keyof typeof TrainerSkinEnumType
+        ]
+
+        console.log({ val, skin, test: (skin ? true : false) })
+
+        return (skin ? true : false)
+    }, "Please select a valid trainer skin")
 }).refine((data) => data.password === data.passwordConfirm, {
     path: ["passwordConfirm"],
     message: "Passwords do not match",

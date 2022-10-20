@@ -56,7 +56,7 @@ export default function LoginPage() {
     return (
         <div
             id="login-page"
-            className="w-screen h-screen flex justify-center items-center"
+            className="w-screen h-screen bg-slate-50 flex justify-center items-center"
         >
             <div className="bg-white shadow-md border-b-4 border-indigo-200 w-3/4 lg:w-1/3 rounded-md">
                 <div className="w-full p-4 px-8 border-b-2 bg-indigo-200 font-black uppercase">

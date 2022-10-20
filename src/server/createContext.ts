@@ -7,8 +7,8 @@ interface IContext {
     trainer?: Trainer;
 }
 
-export function createContext({ req, res }: IContext) {
-    return {} as unknown as IContext;
+export function createContext({ req, res, trainer }: IContext) {
+    return { req, res, trainer };
 }
 
 export type Context = ReturnType<typeof createContext>;

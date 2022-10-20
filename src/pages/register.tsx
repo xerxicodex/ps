@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { trpc } from "../client/utils/trpc";
 import { toast } from "react-toastify";
 import classnames from "classnames";
@@ -11,6 +11,8 @@ import {
 } from "../server/schema/trainer.schema";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { TrainerSkinEnumType } from "@prisma/client";
+import DropdownSelect from "../client/components/DropdownSelect";
 
 export default function RegisterPage() {
     const router = useRouter();
@@ -33,6 +35,10 @@ export default function RegisterPage() {
     });
 
     const [starter, setStarter] = useState({} as any);
+
+    const [trainerSkin, setTrainerSkin] = useState(
+        "benga" as TrainerSkinEnumType
+    );
 
     const starters = [
         { id: 1, name: "Bulbasaur" },
@@ -68,10 +74,15 @@ export default function RegisterPage() {
         setValue("starter", starter.id);
     }, [starter]);
 
+    useEffect(() => {
+        console.log("skin changed")
+        setValue("skin", trainerSkin);
+    }, [trainerSkin])
+
     return (
         <div
             id="register-page"
-            className="w-screen h-screen flex justify-center items-center"
+            className="w-screen h-screen bg-slate-50 flex justify-center items-center"
         >
             <div className="bg-white shadow-md border-b-4 border-indigo-200 w-3/4 lg:w-1/3 rounded-md">
                 <div className="w-full p-4 px-8 border-b-2 bg-indigo-200 font-black uppercase">
@@ -110,6 +121,32 @@ export default function RegisterPage() {
                                 autoComplete="off"
                                 placeholder="******************"
                             />
+                        </div>
+
+                        <div className="mb-6">
+                            <div className="block mb-4">
+                                <label
+                                    className="text-gray-700 text-sm font-bold"
+                                    htmlFor="starter"
+                                >
+                                    Select Trainer Skin
+                                </label>
+                                <FormInput
+                                    hidden={true}
+                                    name="skin"
+                                    type="text"
+                                    value={trainerSkin}
+                                />
+                            </div>
+                            <DropdownSelect
+                                value={trainerSkin}
+                                options={Object.keys(
+                                    TrainerSkinEnumType
+                                ).map((skin) => ({
+                                    value: skin,
+                                    text: skin,
+                                }))}
+                                onSelected={(value) => setTrainerSkin(value)}/>
                         </div>
 
                         <div className="mb-6">

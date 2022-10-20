@@ -25,6 +25,9 @@ CREATE TYPE "MoveCategoryEnumType" AS ENUM ('ohko', 'field_effect', 'force_switc
 -- CreateEnum
 CREATE TYPE "ItemCategoryEnumType" AS ENUM ('stat_boosts', 'effort_drop', 'medicine', 'other', 'in_a_pinch', 'picky_healing', 'type_protection', 'baking_only', 'collectibles', 'evolution', 'spelunking', 'held_items', 'choice', 'effort_training', 'bad_held_items', 'training', 'plates', 'species_specific', 'type_enhancement', 'event_items', 'gameplay', 'plot_advancement', 'unused', 'loot', 'all_mail', 'vitamins', 'healing', 'pp_recovery', 'revival', 'status_cures', 'mulch', 'special_balls', 'standard_balls', 'dex_completion', 'scarves', 'all_machines', 'flutes', 'apricorn_balls', 'apricorn_box', 'data_cards', 'jewels', 'miracle_shooter', 'mega_stones', 'memories', 'z_crystals', 'species_candies', 'catching_bonus', 'dynamax_crystals', 'nature_mints', 'curry_ingredients');
 
+-- CreateEnum
+CREATE TYPE "TrainerSkinEnumType" AS ENUM ('tabitha', 'adaman', 'alder', 'archie', 'benga', 'blue', 'courtney', 'cynthia', 'gary', 'geeta', 'irida', 'matt', 'maxie', 'mustard', 'peony', 'red', 'shelly');
+
 -- CreateTable
 CREATE TABLE "rewards" (
     "id" SERIAL NOT NULL,
@@ -220,6 +223,7 @@ CREATE TABLE "route_items" (
 CREATE TABLE "npcs" (
     "id" SERIAL NOT NULL,
     "name" VARCHAR(255) NOT NULL,
+    "skin" "TrainerSkinEnumType" NOT NULL,
     "coins" INTEGER DEFAULT 0,
     "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -393,6 +397,7 @@ CREATE TABLE "trainers" (
     "name" VARCHAR(255) NOT NULL,
     "role" "RoleEnumType" DEFAULT 'user',
     "starter" INTEGER DEFAULT 1,
+    "skin" "TrainerSkinEnumType" NOT NULL,
     "level" INTEGER DEFAULT 0,
     "exp" INTEGER DEFAULT 0,
     "coins" INTEGER DEFAULT 0,

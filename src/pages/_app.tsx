@@ -13,7 +13,7 @@ import AuthMiddleware from "../client/middleware/AuthMiddleware";
 
 function MyApp({ Component, pageProps }: AppProps) {
     return (
-        <div className="w-screen h-screen bg-slate-50 select-none">
+        <div className="w-screen h-screen select-none">
             <AuthMiddleware
                 requireAuth={(pageProps as any).requireAuth}
                 enableAuth={(pageProps as any).enableAuth}

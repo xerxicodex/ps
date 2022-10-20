@@ -1,4 +1,4 @@
-import type { NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 import { useEffect } from "react";
 import MainLayout from "../client/layouts/MainLayout";
 import useStore from "../client/store";
@@ -19,11 +19,33 @@ const HomePage: NextPage = () => {
         <MainLayout>
             <section className="pt-20">
                 <div className="max-w-4xl mx-auto h-[20rem] flex justify-center items-center">
-                    <p className="text-3xl font-semibold">{data?.message}</p>
+                    <p className="text-3xl font-semibold p-8">
+                        {data?.message}
+                    </p>
                 </div>
             </section>
         </MainLayout>
     );
 };
+
+
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+    console.log({ cookies: req.cookies})
+    if (!req.cookies.access_token) {
+      return {
+        redirect: {
+          destination: '/login',
+          permanent: false,
+        },
+      };
+    }
+  
+    return {
+      props: {
+        requireAuth: true,
+        enableAuth: true,
+      },
+    };
+  };
 
 export default HomePage;

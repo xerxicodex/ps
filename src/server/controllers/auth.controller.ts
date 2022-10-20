@@ -14,6 +14,8 @@ import {
 } from "../services/trainer.service";
 import redisClient from "../utils/connectRedis";
 import { signJwt, verifyJwt } from "../utils/jwt";
+import { CheckTrainerProgress } from "../data/trainer";
+import { TrainerSkinEnumType } from "@prisma/client";
 
 // [...] Cookie options
 const cookieOptions: OptionsType = {
@@ -49,6 +51,7 @@ export const registerHandler = async ({
             name: input.username,
             password: hashedPassword,
             starter: input.starter,
+            skin: input.skin.toLowerCase() as keyof typeof TrainerSkinEnumType
         });
 
         return {
@@ -111,6 +114,10 @@ export const loginHandler = async ({
             ...accessTokenCookieOptions,
             httpOnly: false,
         });
+
+        await CheckTrainerProgress(trainer.id);
+
+        console.log(req.cookies);
 
         // Send Access Token
         return {

@@ -387,10 +387,18 @@ export const seedPokemon = async (prisma: PrismaClient) => {
 
                             const ability = await pokedex.getAbilityById(id);
 
+                            let ability_name = "";
+
+                            ability.names.forEach((x) => {
+                                if (x?.language?.name == "en") {
+                                    ability_name = x.name.toLowerCase();
+                                }
+                            });
+
                             if (ability) {
                                 _abilities.push({
                                     id: ability.id,
-                                    name: ability.name,
+                                    name: ability_name,
                                     effect: ability.effect_entries
                                         .filter((e) => e.language.name === "en")
                                         .shift()?.short_effect,
@@ -421,7 +429,7 @@ export const seedPokemon = async (prisma: PrismaClient) => {
                                     }
                                 }
 
-                                console.log(`Add ability ${ability.name}`);
+                                console.log(`Add ability ${ability_name}`);
                             }
                             callback(null, `Loaded ability #${id}`);
                         };
@@ -453,10 +461,18 @@ export const seedPokemon = async (prisma: PrismaClient) => {
 
                             const move = await maindex.move.getMoveById(id);
 
+                            let move_name = "";
+
+                            move.names.forEach((x) => {
+                                if (x?.language?.name == "en") {
+                                    move_name = x.name.toLowerCase();
+                                }
+                            });
+
                             if (move) {
                                 _moves.push({
                                     id: move.id,
-                                    name: move.name,
+                                    name: move_name,
                                     type: move.type.name,
                                     class: move.damage_class?.name,
                                     category:
@@ -538,7 +554,7 @@ export const seedPokemon = async (prisma: PrismaClient) => {
                                     }
                                 }
 
-                                console.log(`Add move ${move.name}`);
+                                console.log(`Add move ${move_name}`);
                             }
 
                             callback(null, `Loaded move #${id}`);

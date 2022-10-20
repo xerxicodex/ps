@@ -16,19 +16,64 @@ export async function CheckTrainerProgress(trainer_id: number) {
     const mainPokemon = await GetTrainerMainPokemon(trainer_id);
 
     if (!mainPokemon) {
+        console.log(`[trainer][${trainer?.id}] doesn't have a main pokemon`);
+
         const starter = trainer?.starter;
 
-        const pokemon = await prisma.pokemon.findFirst({ where: { dex_id: parseInt((process.env.STARTER_DEX_IDS ?? "1, 4, 7")?.split(",").at((starter ?? 1) - 1)?.trim() ?? "0") } })
+        console.log(
+            `[trainer][${trainer?.id}] finding starter pokemon num ${starter}`
+        );
 
+        const pokemon = await prisma.pokemon.findFirst({
+            where: {
+                dex_id: parseInt(
+                    (process.env.STARTER_DEX_IDS ?? "1, 4, 7")
+                        ?.split(",")
+                        .at((starter ?? 1) - 1)
+                        ?.trim() ?? "0"
+                ),
+            },
+        });
 
         if (pokemon) {
+            console.log(
+                `[trainer][${trainer?.id}] found starter pokemon num ${starter} "${pokemon.name}"`
+            );
+
             GiveTrainerPokemon(trainer_id, {
                 trainer_id,
                 pokemon_id: pokemon.id,
-                color: PokemonColorEnumType[(Chance().pickone((process.env.DEFAULT_STARTER_COLORS ?? `none`).split(","))) as keyof typeof PokemonColorEnumType] ?? null,
-                gender: PokemonGenderEnumType[(Chance().pickone((process.env.DEFAULT_STARTER_GENDERS ?? `none`).split(","))) as keyof typeof PokemonGenderEnumType] ?? null,
-                level: parseInt(Chance().pickone((process.env.DEFAULT_STARTER_LEVELS ?? "5").split(",")))
-            })
+                color:
+                    PokemonColorEnumType[
+                        Chance().pickone(
+                            (
+                                process.env.DEFAULT_STARTER_COLORS ?? `none`
+                            ).split(",")
+                        ) as keyof typeof PokemonColorEnumType
+                    ] ?? null,
+                gender:
+                    PokemonGenderEnumType[
+                        Chance().pickone(
+                            (
+                                process.env.DEFAULT_STARTER_GENDERS ?? `none`
+                            ).split(",")
+                        ) as keyof typeof PokemonGenderEnumType
+                    ] ?? null,
+                level: parseInt(
+                    Chance().pickone(
+                        (process.env.DEFAULT_STARTER_LEVELS ?? "5").split(",")
+                    )
+                ),
+                move_1: Chance().pickone(
+                    (
+                        {
+                            grass: "hydro cannon,frenzy plant,frenzy plant,razor leaf,razor leaf,razor leaf,razor leaf,razor leaf,razor leaf,razor leaf,razor leaf",
+                            fire: "frenzy plant,blast burn,blast burn,ember,ember,ember,ember,ember,ember,ember,ember",
+                            water: "blast burn,hydro cannon,hydro cannon,water gun,water gun,water gun, water gun",
+                        }[pokemon.type_1 ?? ""] ?? ""
+                    ).split(",")
+                ),
+            });
         }
     }
 }
@@ -148,13 +193,18 @@ export async function GiveTrainerPokemon(
         }
 
         if (default_colors && default_colors.length > 0) {
-            const _color = PokemonColorEnumType[(Chance().pickone((default_colors ?? `none`).split(","))) as keyof typeof PokemonColorEnumType] ?? null
+            const _color =
+                PokemonColorEnumType[
+                    Chance().pickone(
+                        (default_colors ?? `none`).split(",")
+                    ) as keyof typeof PokemonColorEnumType
+                ] ?? null;
 
             if (_color == PokemonColorEnumType.shiny) {
-                checks = 500
+                checks = 500;
             }
         }
-        
+
         if (!_pokemon?.shiny_locked && !pokemon.color) {
             const shinyCharm = await prisma.trainerItem.findFirst({
                 where: { item: { name: "shiny-charm" } },
@@ -194,7 +244,12 @@ export async function GiveTrainerPokemon(
             default_genders = process.env.DEFAULT_MYTHICAL_POKEMON_GENDERS;
         }
 
-        pokemon.gender = PokemonGenderEnumType[(Chance().pickone((default_genders ?? `none`).split(","))) as keyof typeof PokemonGenderEnumType] ?? null
+        pokemon.gender =
+            PokemonGenderEnumType[
+                Chance().pickone(
+                    (default_genders ?? `none`).split(",")
+                ) as keyof typeof PokemonGenderEnumType
+            ] ?? null;
     }
 
     if (!pokemon.level) {
@@ -206,7 +261,9 @@ export async function GiveTrainerPokemon(
             default_levels = process.env.DEFAULT_MYTHICAL_POKEMON_LEVELS;
         }
 
-        pokemon.level = default_levels ? parseInt(Chance().pickone(default_levels?.split(","))) : null
+        pokemon.level = default_levels
+            ? parseInt(Chance().pickone(default_levels?.split(",")))
+            : null;
     }
 
     const pokemonMoves = await prisma.pokemonMove.findMany({
@@ -217,15 +274,23 @@ export async function GiveTrainerPokemon(
     const moves =
         pokemonMoves.length > 0
             ? Chance().pickset(
-                pokemonMoves,
-                Chance().integer({ min: 0, max: 4 })
-            )
+                  pokemonMoves,
+                  Chance().integer({ min: 0, max: 4 })
+              )
             : [];
 
-    pokemon.move_1 = moves.shift()?.move?.name ?? null;
-    pokemon.move_2 = moves.shift()?.move?.name ?? null;
-    pokemon.move_3 = moves.shift()?.move?.name ?? null;
-    pokemon.move_4 = moves.shift()?.move?.name ?? null;
+    pokemon.move_1 = pokemon.move_1
+        ? pokemon.move_1
+        : moves.shift()?.move?.name ?? null;
+    pokemon.move_2 = pokemon.move_2
+        ? pokemon.move_2
+        : moves.shift()?.move?.name ?? null;
+    pokemon.move_3 = pokemon.move_3
+        ? pokemon.move_3
+        : moves.shift()?.move?.name ?? null;
+    pokemon.move_4 = pokemon.move_4
+        ? pokemon.move_4
+        : moves.shift()?.move?.name ?? null;
 
     const trainerPokemon = await prisma.trainerPokemon.create({
         data: { ...pokemon, trainer_id },
@@ -236,7 +301,8 @@ export async function GiveTrainerPokemon(
 
     if (trainerPokemon?.id) {
         console.log(
-            `[trainer][${trainer?.id}][${trainer?.name
+            `[trainer][${trainer?.id}][${
+                trainer?.name
             }] captured ${await ParsePokemonFullName(trainerPokemon)}`
         );
     }

@@ -133,6 +133,28 @@ enum ItemCategoryEnumType {
   curry_ingredients
 }
 
+enum TrainerSkinEnumType {
+  tabitha
+  adaman
+  alder
+  archie
+  benga
+  blue
+  courtney
+  cynthia
+  gary
+  geeta
+  irida
+  matt
+  maxie
+  mustard
+  peony
+  red
+  shelly
+  green
+  yellow
+}
+
 model Reward {
   id Int @id @default(autoincrement())
 
@@ -427,6 +449,8 @@ model NPC {
   id   Int    @id @default(autoincrement())
   name String @db.VarChar(255)
 
+  skin TrainerSkinEnumType
+
   coins Int? @default(0)
 
   createdAt DateTime? @default(now())
@@ -698,6 +722,8 @@ model Trainer {
   role RoleEnumType? @default(user)
 
   starter Int? @default(1)
+
+  skin TrainerSkinEnumType
 
   level Int? @default(0)
 

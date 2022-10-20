@@ -21,7 +21,7 @@ export async function GetPokemonByName(name: string) {
 //             const mainPokemon = await GetTrainerMainPokemon(trainer_id);
 
 //             if (mainPokemon) {
-//                 mainPokemon.exp += 
+//                 mainPokemon.exp +=
 //             }
 //         }
 //     }
