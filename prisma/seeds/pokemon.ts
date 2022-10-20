@@ -393,7 +393,7 @@ export const seedPokemon = async (prisma: PrismaClient) => {
                                     name: ability.name,
                                     effect: ability.effect_entries
                                         .filter((e) => e.language.name === "en")
-                                        .shift()?.effect,
+                                        .shift()?.short_effect,
                                 });
 
                                 const pokemon_abilities =
@@ -469,9 +469,9 @@ export const seedPokemon = async (prisma: PrismaClient) => {
                                                 ) as keyof typeof MoveCategoryEnumType
                                         ],
                                     ailment: move.meta?.ailment?.name,
-                                    effect: move.effect_entries
+                                    effect: move.flavor_text_entries
                                         .filter((e) => e.language.name === "en")
-                                        .shift()?.effect,
+                                        .shift()?.flavor_text,
                                     power: move.power,
                                     pp: move.pp,
                                     accuracy: move.accuracy,

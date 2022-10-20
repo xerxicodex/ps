@@ -1,12 +1,11 @@
-import { Prisma, PrismaClient } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { trainers } from "./seeds/trainer";
 import { routes } from "./seeds/routes";
 import { seedPokemon } from "./seeds/pokemon";
 import { seedTowers } from "./seeds/towers";
 import { seedItems } from "./seeds/items";
-
-const prisma = new PrismaClient();
+import { prisma } from "../src/server/utils/prisma";
 
 const seedTrainers = async () => {
     const trainerCount = await prisma.trainer.count();

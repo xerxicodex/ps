@@ -18,7 +18,7 @@ const HomePage: NextPage = () => {
     return (
         <MainLayout>
             <section className="pt-20">
-                <div className="max-w-4xl mx-auto bg-white rounded-md h-[20rem] flex justify-center items-center">
+                <div className="max-w-4xl mx-auto h-[20rem] flex justify-center items-center">
                     <p className="text-3xl font-semibold">{data?.message}</p>
                 </div>
             </section>

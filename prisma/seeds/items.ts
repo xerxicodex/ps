@@ -26,36 +26,71 @@ const jobs = ids.map((item_id) => {
                     }
                 })
 
-                let description = "";
 
-                item.effect_entries.forEach((f) => {
-                    if (f?.language?.name == "en") {
-                        description = f.short_effect;
-                    }
-                })
-
-                let rarity: RarityEnumType = RarityEnumType.common;
-
-                if (item.cost >= 10000 || item.cost == 0) {
-                    rarity = RarityEnumType.mythical
-                } else if (item.cost >= 1000) {
-                    rarity = RarityEnumType.legendary
-                } else if (item.cost >= 800) {
-                    rarity = RarityEnumType.rare
-                } else if (item.cost >= 600) {
-                    rarity = RarityEnumType.uncommon
-                }
-
-                _items.push({
-                    name,
-                    description,
-                    category: ItemCategoryEnumType[
+                if (processed_item_names.indexOf(name) == -1) {
+                    let category = ItemCategoryEnumType[
                         (item.category?.name ?? "")
                             .replace(/-/gi, "_") as keyof typeof ItemCategoryEnumType
-                    ],
-                    rarity
-                })
+                    ];
 
+                    let description = "";
+
+                    if (category == ItemCategoryEnumType.all_machines) {
+                        item.effect_entries.forEach((f) => {
+                            if (f?.language?.name == "en") {
+                                description = f.effect;
+                            }
+                        })
+                    } else if (category == ItemCategoryEnumType.mega_stones) {
+                        item.effect_entries.forEach((f) => {
+                            if (f?.language?.name == "en") {
+                                description = f.effect.replace("Held: ", "");
+                            }
+                        })
+                    } else {
+                        item.flavor_text_entries.forEach((f) => {
+                            if (f?.language?.name == "en") {
+                                description = f.text;
+                            }
+                        })
+                    }
+
+                    let rarity: RarityEnumType = RarityEnumType.common;
+
+                    if (item.cost >= 10000 || item.cost == 0) {
+                        rarity = RarityEnumType.mythical
+                    } else if (item.cost >= 1000) {
+                        rarity = RarityEnumType.legendary
+                    } else if (item.cost >= 800) {
+                        rarity = RarityEnumType.rare
+                    } else if (item.cost >= 600) {
+                        rarity = RarityEnumType.uncommon
+                    }
+
+                    switch (category) {
+                        case ItemCategoryEnumType.gameplay:
+                        case ItemCategoryEnumType.training:
+                        case ItemCategoryEnumType.mega_stones:
+                        case ItemCategoryEnumType.dex_completion:
+                        case ItemCategoryEnumType.apricorn_balls:
+                        case ItemCategoryEnumType.plot_advancement:
+                            rarity = RarityEnumType.mythical;
+                            break;
+                        case ItemCategoryEnumType.vitamins:
+                        case ItemCategoryEnumType.all_machines:
+                            rarity = RarityEnumType.legendary;
+                            break;
+                    }
+
+                    _items.push({
+                        name,
+                        description,
+                        category: category,
+                        rarity
+                    })
+
+                    processed_item_names.push(name)
+                }
             }
 
             console.log(`[item][${item_id}] Loaded`)

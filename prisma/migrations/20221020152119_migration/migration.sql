@@ -22,6 +22,9 @@ CREATE TYPE "DifficultyEnumType" AS ENUM ('easy', 'medium', 'hard', 'very_hard',
 -- CreateEnum
 CREATE TYPE "MoveCategoryEnumType" AS ENUM ('ohko', 'field_effect', 'force_switch', 'damage', 'damage_and_raise', 'ailment', 'swagger', 'unique', 'damage_and_lower', 'heal', 'damage_and_ailment', 'damage_and_heal', 'whole_field_effect', 'net_good_stats');
 
+-- CreateEnum
+CREATE TYPE "ItemCategoryEnumType" AS ENUM ('stat_boosts', 'effort_drop', 'medicine', 'other', 'in_a_pinch', 'picky_healing', 'type_protection', 'baking_only', 'collectibles', 'evolution', 'spelunking', 'held_items', 'choice', 'effort_training', 'bad_held_items', 'training', 'plates', 'species_specific', 'type_enhancement', 'event_items', 'gameplay', 'plot_advancement', 'unused', 'loot', 'all_mail', 'vitamins', 'healing', 'pp_recovery', 'revival', 'status_cures', 'mulch', 'special_balls', 'standard_balls', 'dex_completion', 'scarves', 'all_machines', 'flutes', 'apricorn_balls', 'apricorn_box', 'data_cards', 'jewels', 'miracle_shooter', 'mega_stones', 'memories', 'z_crystals', 'species_candies', 'catching_bonus', 'dynamax_crystals', 'nature_mints', 'curry_ingredients');
+
 -- CreateTable
 CREATE TABLE "rewards" (
     "id" SERIAL NOT NULL,
@@ -37,6 +40,8 @@ CREATE TABLE "rewards" (
 CREATE TABLE "items" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
+    "description" TEXT,
+    "category" "ItemCategoryEnumType",
     "rarity" "RarityEnumType" DEFAULT 'common',
     "max_amount" INTEGER,
     "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,

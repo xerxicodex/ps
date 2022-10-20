@@ -372,7 +372,6 @@ export const seedTowers = async (prisma: PrismaClient) => {
                     value: JSON.stringify({
                         name: legend?.name,
                         pokemon_id: legend?.id,
-                        gender: PokemonGenderEnumType.unknown,
                         level: 4,
                     }),
                 },

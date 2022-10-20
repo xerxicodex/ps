@@ -73,9 +73,9 @@ export default function RegisterPage() {
             id="register-page"
             className="w-screen h-screen flex justify-center items-center"
         >
-            <div className="bg-white border-b-4 border-blue-500 w-3/4 lg:w-1/3 rounded-md">
-                <div className="w-full p-4 px-8 border-b-2 font-black uppercase">
-                    DXPRPG / <span className="text-gray-400">Register</span>
+            <div className="bg-white shadow-md border-b-4 border-indigo-200 w-3/4 lg:w-1/3 rounded-md">
+                <div className="w-full p-4 px-8 border-b-2 bg-indigo-200 font-black uppercase">
+                    DXPRPG / <span className="opacity-50">Register</span>
                 </div>
 
                 <FormProvider {...methods}>
@@ -133,7 +133,7 @@ export default function RegisterPage() {
                                         <div
                                             key={_starter.id}
                                             className={classnames([
-                                                "p-4 border flex justify-center items-center font-lighter",
+                                                "p-4 border-2 rounded-lg overflow-hidden flex justify-center transition items-center font-lighter",
                                                 starter.id == _starter.id
                                                     ? "bg-green-200 border-green-400"
                                                     : "cursor-pointer bg-white hover:bg-white/75 active:bg-white/50 text-gray-500",

@@ -1,12 +1,9 @@
-import { PrismaClient } from "@prisma/client";
 import { GiveBadgeToTrainer } from "./badge";
 import { GiveRewardToTrainer } from "./reward";
 import { GetTrainerById } from "./trainer";
 
-const prisma = new PrismaClient();
-
 export async function GetTowerById(id: number) {
-    return await prisma.tower.findFirst({ where: { id } });
+    return await prisma?.tower.findFirst({ where: { id } });
 }
 
 export async function GetTowerByName(name: string) {

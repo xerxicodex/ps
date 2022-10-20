@@ -39,11 +39,11 @@ const MainLayout: React.FC<PropsWithChildren> = ({ children }) => {
         <div className="w-screen h-screen">
             <FullScreenLoader hide={!loading} />
             <div className="w-full h-full flex flex-wrap z-0">
-                <div className="w-full h-[7%] bg-slate-900">
-                    <div className="flex w-full h-full items-center justify-between px-4">
+                <div className="w-full h-[7%]">
+                    <div className="flex w-full h-full items-center justify-between px-10 border-b-2">
                         <div className="flex">
                             <Link href="/">
-                                <a className="text-logo font-black text-white">
+                                <a className="text-logo font-black">
                                     NXPRPG
                                 </a>
                             </Link>

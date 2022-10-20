@@ -58,9 +58,9 @@ export default function LoginPage() {
             id="login-page"
             className="w-screen h-screen flex justify-center items-center"
         >
-            <div className="bg-white border-b-4 border-indigo-500 w-3/4 lg:w-1/3 rounded-md">
-                <div className="w-full p-4 px-8 border-b-2 font-black uppercase">
-                    DXPRPG / <span className="text-gray-400">Login</span>
+            <div className="bg-white shadow-md border-b-4 border-indigo-200 w-3/4 lg:w-1/3 rounded-md">
+                <div className="w-full p-4 px-8 border-b-2 bg-indigo-200 font-black uppercase">
+                    DXPRPG / <span className="opacity-50">Login</span>
                 </div>
 
                 <FormProvider {...methods}>

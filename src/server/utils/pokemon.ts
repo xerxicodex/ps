@@ -3,15 +3,12 @@ import {
     Pokemon,
     PokemonColorEnumType,
     PokemonGenderEnumType,
-    PrismaClient,
     RoutePokemon,
     TowerPokemon,
     TrainerPokemon,
 } from "@prisma/client";
 import { title } from "case";
 import numeral from "numeral";
-
-const prisma = new PrismaClient();
 
 export function ParsePokemonName(name: string, species: string) {
     if (name.indexOf("unown")) {

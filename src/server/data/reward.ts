@@ -1,4 +1,4 @@
-import { PrismaClient, RewardEnumType } from "@prisma/client";
+import { RewardEnumType } from "@prisma/client";
 import {
     GetTrainerById,
     GiveTrainerBattlePoints,
@@ -10,8 +10,6 @@ import {
     GiveTrainerPokemonEXP,
     GiveTrainerRewardPokemon,
 } from "./trainer";
-
-const prisma = new PrismaClient();
 
 export async function GetRewardById(id: number) {
     return await prisma.reward.findFirst({ where: { id } });
