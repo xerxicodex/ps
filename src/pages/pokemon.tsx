@@ -20,7 +20,7 @@ const HomePage: NextPage = () => {
             <section className="pt-20">
                 <div className="max-w-4xl mx-auto h-[20rem] flex justify-center items-center">
                     <p>
-                        Welcome to your profile
+                        Welcome to your pokemon
                     </p>
                 </div>
             </section>

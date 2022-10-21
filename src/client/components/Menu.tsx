@@ -69,7 +69,7 @@ const Menu = (props: MenuProps) => {
                 }[props.orientation]
             ])}
         >
-            {["Home", "Profile", "Towers", "Logout"].map((option, i) => (
+            {["Home", "Profile", "Pokemon", "Towers", "Logout"].map((option, i) => (
                 <div
                     key={i}
                     className={classNames([
