@@ -13,7 +13,7 @@ const customConfig: {
     port: 8000,
     accessTokenExpiresIn: 15,
     refreshTokenExpiresIn: 60,
-    origin: "http://localhost:3000",
+    origin: process.env.HOST ?? "http://localhost:3000",
     redisCacheExpiresIn: 60,
 
     dbUri: process.env.DATABASE_URL as string,

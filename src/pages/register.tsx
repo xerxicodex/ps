@@ -84,15 +84,15 @@ export default function RegisterPage() {
             id="register-page"
             className="w-screen h-screen bg-slate-50 flex justify-center items-center"
         >
-            <div className="bg-white shadow-md border-b-4 border-indigo-200 w-3/4 lg:w-1/3 rounded-md">
-                <div className="w-full p-4 px-8 border-b-2 bg-indigo-200 font-black uppercase">
+            <div className="bg-white shadow-md border-b-4 border-indigo-200 w-5/6 lg:w-1/3 rounded-md">
+                <div className="w-full p-4 md:px-8 border-b-2 bg-indigo-200 font-black uppercase">
                     DXPRPG / <span className="opacity-50">Register</span>
                 </div>
 
                 <FormProvider {...methods}>
                     <form
                         onSubmit={handleSubmit(onSubmitHandler)}
-                        className="p-8 pb-4"
+                        className="p-4 md:p-8 pb-4"
                     >
                         <div className="mb-6">
                             <FormInput
@@ -170,7 +170,7 @@ export default function RegisterPage() {
                                         <div
                                             key={_starter.id}
                                             className={classnames([
-                                                "p-4 border-2 rounded-lg overflow-hidden flex justify-center transition items-center font-lighter",
+                                                "p-4 text-xs md:text-default border-2 rounded-lg overflow-hidden flex justify-center transition items-center font-lighter",
                                                 starter.id == _starter.id
                                                     ? "bg-green-200 border-green-400"
                                                     : "cursor-pointer bg-white hover:bg-white/75 active:bg-white/50 text-gray-500",

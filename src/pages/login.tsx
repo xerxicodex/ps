@@ -58,15 +58,15 @@ export default function LoginPage() {
             id="login-page"
             className="w-screen h-screen bg-slate-50 flex justify-center items-center"
         >
-            <div className="bg-white shadow-md border-b-4 border-indigo-200 w-3/4 lg:w-1/3 rounded-md">
-                <div className="w-full p-4 px-8 border-b-2 bg-indigo-200 font-black uppercase">
+            <div className="bg-white shadow-md border-b-4 border-indigo-200 w-5/6 lg:w-1/3 rounded-md">
+                <div className="w-full p-4 md:px-8 border-b-2 bg-indigo-200 font-black uppercase">
                     DXPRPG / <span className="opacity-50">Login</span>
                 </div>
 
                 <FormProvider {...methods}>
                     <form
                         onSubmit={handleSubmit(onSubmitHandler)}
-                        className="p-8 pb-4"
+                        className="p-4 md:p-8 pb-4"
                     >
                         <div className="mb-6">
                             <FormInput

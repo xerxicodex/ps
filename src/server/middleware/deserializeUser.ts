@@ -11,8 +11,8 @@ export const deserializeUser = async ({
     req: NextApiRequest;
     res: NextApiResponse;
 }) => {
+    console.log("deserializeUser") 
     try {
-        console.log("deserializeUser")
         // Get the token
         let access_token;
         if (

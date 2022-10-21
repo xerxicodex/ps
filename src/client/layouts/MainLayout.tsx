@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { PropsWithChildren, useEffect, useState } from "react";
+import { PropsWithChildren, useCallback, useEffect, useState } from "react";
 import { useQueryClient } from "react-query";
 import { toast } from "react-toastify";
+import { OrientationEnumType } from "../../enums";
 import FullScreenLoader from "../components/FullScreenLoader";
 import FullScreenMenu from "../components/FullScreenMenu";
+import Menu from "../components/Menu";
 import ProfileImage from "../components/ProfileImage";
 import { HamburgerIcon } from "../icons";
 import useStore from "../store";
@@ -23,23 +25,6 @@ const MainLayout: React.FC<PropsWithChildren> = ({ children }) => {
 
     const [showMenu, setShowMenu] = useState(false);
 
-    const { mutate: logoutUser } = trpc.useMutation(["auth.logout"], {
-        onSuccess() {
-            queryClient.clear();
-            router.push("/login");
-        },
-        onError(error: any) {
-            error.response.errors.forEach((err: any) => {
-                toast(err.message, {
-                    type: "error",
-                    position: "top-right",
-                });
-                queryClient.clear();
-                router.push("/login");
-            });
-        },
-    });
-
     const logo = (
         <Link href="/">
             <a className="text-logo font-black">NXPRPG</a>
@@ -48,15 +33,22 @@ const MainLayout: React.FC<PropsWithChildren> = ({ children }) => {
 
     return (
         <div className="w-screen h-screen">
-            <FullScreenLoader hide={!loading} />
-            <FullScreenMenu
-                active={showMenu}
-                onClose={() => setShowMenu(false)}
-            />
+            {/* <FullScreenLoader hide={!loading} /> */}
+            <div className="block md:hidden">
+                <FullScreenMenu
+                    active={showMenu}
+                    onClose={() => setShowMenu(false)}
+                />
+            </div>
             <div className="w-full h-full flex flex-wrap z-0">
                 <div className="w-full h-[7%]">
-                    <div className="flex w-full h-full items-center justify-between px-4 md:px-10 border-b-2">
-                        <div className="flex">{logo}</div>
+                    <div className="flex w-full h-full items-center justify-between px-4 md:px-10 bg-slate-700 text-white md:bg-transparent md:text-inherit border-b-2">
+                        <div className="flex justify-between items-center gap-x-4">
+                            <div className="flex">{logo}</div>
+                            <div className="hidden md:block text-sm">
+                                <Menu orientation={OrientationEnumType.horizontal} />
+                            </div>
+                        </div>
 
                         <div className="hidden md:flex items-center justify-center">
                             {trainer && <ProfileImage trainer={trainer} />}

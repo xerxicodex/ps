@@ -20,7 +20,7 @@ const HomePage: NextPage = () => {
             <section className="pt-20">
                 <div className="max-w-4xl mx-auto h-[20rem] flex justify-center items-center">
                     <p>
-                        {data?.message}
+                        Welcome to towers
                     </p>
                 </div>
             </section>
