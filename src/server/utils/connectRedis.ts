@@ -11,7 +11,7 @@ const connectRedis = async () => {
         console.log("? Redis client connected...");
         redisClient.set(
             "tRPC",
-            "Welcome to tRPC with Next.js, Prisma and Typescript!"
+            "Welcome to NXPRPG a nexus pokemon RPG\nCollect, Battle & Trade your favorite pokemon"
         );
     } catch (err: any) {
         console.log(err.message);
