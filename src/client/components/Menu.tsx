@@ -77,7 +77,9 @@ const Menu = (props: MenuProps) => {
                             [OrientationEnumType.horizontal]: "",
                             [OrientationEnumType.vertical]: "w-full",
                         }[props.orientation],
-                        "cursor-pointer hover:opacity-50",
+                        router.asPath,
+                        (router.asPath.length == 1 ? "/home" : router.asPath).indexOf(`/${option.toLowerCase()}`) == 0 ? 'text-indigo-500 font-black' : '',
+                        "cursor-pointer hover:opacity-50 p-2",
                     ])}
                     onClick={() => menuClicked(option)}
                 >

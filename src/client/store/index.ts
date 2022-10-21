@@ -1,10 +1,10 @@
+import { Trainer } from "@prisma/client";
 import create from "zustand";
-import { ITrainer } from "../lib/types";
 
 type Store = {
-    authTrainer: ITrainer | null;
+    authTrainer: Trainer | null;
     pageLoading: boolean;
-    setAuthTrainer: (trainer: ITrainer) => void;
+    setAuthTrainer: (trainer: Trainer) => void;
     setPageLoading: (isLoading: boolean) => void;
 };
 

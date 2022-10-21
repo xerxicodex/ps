@@ -1,6 +1,13 @@
+import { Prisma } from "@prisma/client";
+import { TowerFindProps } from "../../client/lib/types";
 import { GiveBadgeToTrainer } from "./badge";
 import { GiveRewardToTrainer } from "./reward";
 import { GetTrainerById } from "./trainer";
+
+export async function GetTowerList(props?: Prisma.TowerFindManyArgs) {
+    return await prisma?.tower.findMany({ ...props })
+}
+
 
 export async function GetTowerById(id: number) {
     return await prisma?.tower.findFirst({ where: { id } });

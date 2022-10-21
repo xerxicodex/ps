@@ -1,3 +1,4 @@
+import { Trainer } from "@prisma/client";
 import React, { useEffect } from "react";
 import { useQueryClient } from "react-query";
 import { ITrainer } from "../lib/types";
@@ -33,7 +34,7 @@ const AuthMiddleware: React.FC<AuthMiddlewareProps> = ({
     const { isLoading, isFetching } = trpc.useQuery(["trainer.me"], {
         onSuccess: (data) => {
             store.setPageLoading(false);
-            store.setAuthTrainer(data.data.trainer as unknown as ITrainer);
+            store.setAuthTrainer(data.trainer as Trainer);
         },
         retry: 1,
         enabled: !!enableAuth,

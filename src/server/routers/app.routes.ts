@@ -4,6 +4,7 @@ import authRouter from "./auth.routes";
 import trainerRouter from "./trainer.routes";
 
 import connectDB from "../utils/prisma";
+import towerRouter from "./tower.routes";
 
 // Connect to Prisma
 connectDB();
@@ -21,6 +22,7 @@ export const appRouter = createRouter()
         },
     })
     .merge("auth.", authRouter)
-    .merge("trainer.", trainerRouter);
+    .merge("trainer.", trainerRouter)
+    .merge("tower.", towerRouter);
 
 export type AppRouter = typeof appRouter;

@@ -19,9 +19,9 @@ const HomePage: NextPage = () => {
         <MainLayout>
             <section className="pt-20">
                 <div className="max-w-4xl mx-auto h-[20rem] flex justify-center items-center">
-                    <div>
+                    <h2 className="text-center">
                         {data?.message?.split("\n").map(x => <p key={x}>{x}</p>)}
-                    </div>
+                    </h2>
                 </div>
             </section>
         </MainLayout>
