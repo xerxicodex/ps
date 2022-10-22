@@ -81,56 +81,43 @@ enum MoveCategoryEnumType {
 }
 
 enum ItemCategoryEnumType {
-  stat_boosts
-  effort_drop
+  fossil
+  gem
+  hm
+  hold_item
+  incense
+  key_item
+  mail
   medicine
-  other
-  in_a_pinch
-  picky_healing
-  type_protection
-  baking_only
-  collectibles
-  evolution
-  spelunking
-  held_items
-  choice
-  effort_training
-  bad_held_items
-  training
-  plates
-  species_specific
-  type_enhancement
-  event_items
-  gameplay
-  plot_advancement
-  unused
-  loot
-  all_mail
-  vitamins
-  healing
-  pp_recovery
-  revival
-  status_cures
+  mega_stone
+  memory
+  mint
   mulch
-  special_balls
-  standard_balls
-  dex_completion
-  scarves
-  all_machines
-  flutes
-  apricorn_balls
-  apricorn_box
-  data_cards
-  jewels
-  miracle_shooter
-  mega_stones
-  memories
+  other_item
+  partner_gift
+  petal
+  plate
+  poke_candy
+  roto
+  scarf
+  shard
+  storage
+  tm
+  tr
+  valuable_item
+  wonder_launcher
   z_crystals
-  species_candies
-  catching_bonus
-  dynamax_crystals
-  nature_mints
-  curry_ingredients
+  apricorn
+  av_candy
+  ball
+  battle_item
+  berry
+  curry_ingredient
+  etc
+  ev_item
+  evo_item
+  exp_candy
+  flute
 }
 
 enum TrainerSkinEnumType {
@@ -173,12 +160,14 @@ model Reward {
 
 model Item {
   id Int @id @default(autoincrement())
+  
+  category ItemCategoryEnumType?
 
   name String
 
-  description String?
+  alt_name String?
 
-  category ItemCategoryEnumType?
+  description String?
 
   rarity RarityEnumType? @default(common)
 

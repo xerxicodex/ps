@@ -10,13 +10,8 @@ type Data = {
     name: string;
 };
 
-export default async function handler(
-    req: NextApiRequest,
-    res: NextApiResponse<Data>
-) {
-    let { species, color } = req.query;
-
-    species = species as string;
+export async function ImagesPokemonSpeciesRoute(props: {species: string, color?: string}): Promise<Buffer> {
+    let { species, color } = props;
 
     const options: any = { color };
 
@@ -48,6 +43,19 @@ export default async function handler(
 
         cache.put(cache_key, img, 24 * 1000 * 60 * 60);
     }
+
+    return img;
+}
+
+export default async function handler(
+    req: NextApiRequest,
+    res: NextApiResponse<Data>
+) {
+    let { species, color } = req.query;
+
+    species = species as string;
+
+    const img = await ImagesPokemonSpeciesRoute({ species, color: color as string })
 
     try {
 

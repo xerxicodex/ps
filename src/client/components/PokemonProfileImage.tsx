@@ -1,5 +1,6 @@
 import { Pokemon } from "@prisma/client";
 import classNames from "classnames";
+import PokemonImage from "./PokemonImage";
 
 export type PokemonProfileImageProps = { className?: string, color: string, pokemon: Pokemon| null };
 
@@ -12,7 +13,7 @@ const PokemonProfileImage = (props: PokemonProfileImageProps) => {
 
     return (
         <div className={classNames("relative min-w-[50px] min-h-[50px] flex items-center justify-center overflow-hidden", props.className)}>
-            <div className="w-full h-full bg-contain bg-center bg-no-repeat" style={{ backgroundImage: `url(api/images/pokemon/${props?.pokemon?.name}?color=${props?.color})`}}></div>
+            <PokemonImage pokemon={props?.pokemon} color={props.color} />
         </div>
     );
 };
