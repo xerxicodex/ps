@@ -3,9 +3,6 @@ import { GetPokemonImage } from "../../../../server/utils/pokemon";
 import connectDB from "../../../../server/utils/prisma";
 import cache from "memory-cache";
 
-// Connect to Prisma
-connectDB();
-
 type Data = {
     name: string;
 };
@@ -35,6 +32,8 @@ export async function ImagesPokemonSpeciesRoute(props: {species: string, color?:
     let img = cache.get(cache_key);
 
     if (!img) {
+        connectDB();
+
         const b64 = await GetPokemonImage(species, options);
 
         var base64Data = b64.replace(/^data:image\/(png|jpeg|jpg);base64,/, '');
@@ -42,6 +41,8 @@ export async function ImagesPokemonSpeciesRoute(props: {species: string, color?:
         img = Buffer.from(base64Data, 'base64');
 
         cache.put(cache_key, img, 24 * 1000 * 60 * 60);
+
+        await prisma.$disconnect();
     }
 
     return img;

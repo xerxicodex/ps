@@ -7,7 +7,7 @@ import { Prisma } from "@prisma/client";
 import fs from 'fs';
 
 // Connect to Prisma
-connectDB();
+// connectDB();
 
 type Data = {
     name: string;
@@ -21,6 +21,8 @@ export async function ImagesItemIdRoute (props: { name?: string | null, id?: num
     let img = cache.get(cache_key);
 
     if (!img) {
+        connectDB();
+
         console.log("find item", props)
 
         let item = null;
@@ -36,6 +38,8 @@ export async function ImagesItemIdRoute (props: { name?: string | null, id?: num
         console.log("done")
 
         cache.put(cache_key, img, 24 * 1000 * 60 * 60);
+
+        await prisma.$disconnect();
     }
 
     return img;

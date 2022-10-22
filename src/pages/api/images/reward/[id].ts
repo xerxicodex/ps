@@ -7,7 +7,7 @@ import { ItemCategoryEnumType, Prisma, RewardEnumType } from "@prisma/client";
 import { ImagesItemIdRoute } from "../item/[id]";
 
 // Connect to Prisma
-connectDB();
+// connectDB();
 
 type Data = {
     name: string;
@@ -21,6 +21,8 @@ export async function ImagesRewardIdRoute(props: { id: number }) {
     let img = cache.get(cache_key);
 
     if (!img) {
+        connectDB();
+
         console.log("find reward")
 
         const reward = await prisma.reward.findFirst({ where: { id } });
@@ -66,6 +68,8 @@ export async function ImagesRewardIdRoute(props: { id: number }) {
             }
 
             cache.put(cache_key, img, 24 * 1000 * 60 * 60);
+
+            await prisma.$disconnect();
         }
     }
 
