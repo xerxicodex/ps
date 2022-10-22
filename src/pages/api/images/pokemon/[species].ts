@@ -27,7 +27,7 @@ export async function ImagesPokemonSpeciesRoute(props: {species: string, color?:
 
     console.log(options)
 
-    const cache_key = JSON.stringify([species, options]);
+    const cache_key = JSON.stringify({'pokemon': props});
 
     let img = cache.get(cache_key);
 

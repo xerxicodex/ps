@@ -386,8 +386,36 @@ export const seedTowers = async (prisma: PrismaClient) => {
 
             reward = await prisma.reward.create({
                 data: {
+                    reward: RewardEnumType.pokemon_exp,
+                    value: `${Math.floor((125 * (10 ** (7))) * matchup)}`,
+                },
+            });
+
+            await prisma.towerReward.create({
+                data: {
+                    tower_id: tower.id,
+                    reward_id: reward.id,
+                },
+            });
+
+            reward = await prisma.reward.create({
+                data: {
                     reward: RewardEnumType.trainer_exp,
                     value: `${Math.floor(100 ** (1 + matchup * 0.35))}`,
+                },
+            });
+
+            await prisma.towerReward.create({
+                data: {
+                    tower_id: tower.id,
+                    reward_id: reward.id,
+                },
+            });
+
+            reward = await prisma.reward.create({
+                data: {
+                    reward: RewardEnumType.coins,
+                    value: `${Math.floor(10 ** (1 + matchup * 2.35))}`,
                 },
             });
 

@@ -347,7 +347,13 @@ export async function GetTrainerMainPokemon(trainer_id: number) {
 }
 
 export async function UpdateTrainerPokemon(trainerPokemon: TrainerPokemon) {
-    return await prisma.trainer.update({
+    
+    if (isNaN(trainerPokemon.level ?? NaN)) {
+        trainerPokemon.level = 0;
+        trainerPokemon.exp = 0;
+    } 
+
+    return await prisma.trainerPokemon.update({
         data: trainerPokemon,
         where: { id: trainerPokemon.id },
     });

@@ -16,7 +16,7 @@ type Data = {
 export async function ImagesItemIdRoute (props: { name?: string | null, id?: number | null }) {
     const { name, id } = props;
 
-    const cache_key = JSON.stringify(["item", id]);
+    const cache_key = JSON.stringify({"item": props});
 
     let img = cache.get(cache_key);
 

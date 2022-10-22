@@ -16,7 +16,7 @@ type Data = {
 export async function ImagesRewardIdRoute(props: { id: number }) {
     const { id } = props;
 
-    const cache_key = JSON.stringify(["reward", id]);
+    const cache_key = JSON.stringify({"reward": props});
 
     let img = cache.get(cache_key);
 

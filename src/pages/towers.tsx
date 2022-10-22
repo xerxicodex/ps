@@ -1,4 +1,10 @@
-import { DifficultyEnumType, Tower, TowerPokemon } from "@prisma/client";
+import {
+    DifficultyEnumType,
+    Reward,
+    Tower,
+    TowerPokemon,
+    TowerReward,
+} from "@prisma/client";
 import { title } from "case";
 import classNames from "classnames";
 import type { GetServerSideProps, NextPage } from "next";
@@ -9,9 +15,11 @@ import FullScreenLoader from "../client/components/FullScreenLoader";
 import PokemonProfileImage, {
     PokemonProfileImageProps,
 } from "../client/components/PokemonProfileImage";
+import RewardImage from "../client/components/RewardImage";
 import MainLayout from "../client/layouts/MainLayout";
 import useStore from "../client/store";
 import { DifficultyColors } from "../client/utils/colors";
+import { RewardAmount, RewardName, RewardValue } from "../client/utils/reward";
 import { trpc } from "../client/utils/trpc";
 
 const HomePage: NextPage = () => {
@@ -223,7 +231,17 @@ const HomePage: NextPage = () => {
                                         )
                                     )}
                                 <div className="w-[100px] h-[100px] bg-gray-300 text-gray-500 outline outline-white rounded-full col-span-1 h-full flex items-center justify-center">
-                                    <div><div className="w-full text-lg font-black">+{(tower as any)?.pokemon?.length - 3}</div><div className="w-full text-xs text-center"> more</div></div>
+                                    <div>
+                                        <div className="w-full text-lg font-black">
+                                            +
+                                            {(tower as any)?.pokemon?.length -
+                                                3}
+                                        </div>
+                                        <div className="w-full text-xs text-center">
+                                            {" "}
+                                            more
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -231,15 +249,61 @@ const HomePage: NextPage = () => {
 
                     <div className="flex w-full h-4/6 gap-x-8 px-14">
                         <div className="flex w-4/6">
-                            <div className="w-full h-2/3 bg-white rounded-lg shadow overflow-hidden p-6">
-                                <div className="text-lg font-semibold uppercase opacity-50">
+                            <div className="flex flex-wrap w-full h-2/3 bg-white rounded-lg shadow overflow-hidden">
+                                <div className="w-full h-[7%] p-6 mb-6 text-lg font-semibold uppercase opacity-50">
                                     Rewards
+                                </div>
+                                <div className="w-full min-h-[93%]">
+                                    <div className="flex flex-wrap ">
+                                        {(tower as any).rewards
+                                            ?.sort(
+                                                (a: any, b: any) =>
+                                                    RewardAmount(a.reward) -
+                                                    RewardAmount(b.reward)
+                                            )
+                                            ?.map((towerReward: any) => {
+                                                // const value = RewardValue(towerReward.reward)
+                                                const name = RewardName(
+                                                    towerReward.reward
+                                                );
+
+                                                const amount = RewardAmount(
+                                                    towerReward.reward
+                                                );
+
+                                                return (
+                                                    <div className="w-full p-4 pb-0 border-t mb-4">
+                                                        <div className="flex gap-x-4 w-full items-center justify-between">
+                                                            <div className="flex gap-x-4 w-full items-center">
+                                                                <div className="w-8 h-8 bg-red-100 rounded-full">
+                                                                    <RewardImage
+                                                                        reward={
+                                                                            towerReward.reward
+                                                                        }
+                                                                    />
+                                                                </div>
+                                                                <div className="">
+                                                                    {title(
+                                                                        name
+                                                                    )}
+                                                                </div>
+                                                            </div>
+                                                            <div className="">
+                                                                {numeral(
+                                                                    amount
+                                                                ).format("0,0")}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                );
+                                            })}
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div className="grid grid-cols-1 grid-rows-6 gap-y-8 w-2/6">
-                            <div className="w-full row-span-5 bg-white rounded-lg shadow overflow-hidden p-6">
-                                <div className="text-lg font-semibold uppercase opacity-50">
+                            <div className="w-full row-span-5 bg-white rounded-lg shadow overflow-hidden">
+                                <div className="w-full h-[7%] p-6 mb-6 text-lg font-semibold uppercase opacity-50">
                                     Rankings
                                 </div>
                             </div>
