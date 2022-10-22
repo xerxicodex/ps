@@ -5,12 +5,10 @@ export interface IContext {
     req: NextApiRequest;
     res: NextApiResponse;
     trainer?: Trainer;
-    limit?: number,
-    page?: number
 }
 
-export function createContext({ req, res, trainer, limit, page }: IContext) {
-    return { req, res, trainer, limit, page };
+export function createContext({ req, res, trainer }: IContext) {
+    return { req, res, trainer };
 }
 
 export type Context = ReturnType<typeof createContext>;

@@ -73,9 +73,9 @@ const MainLayout: React.FC<PropsWithChildren> = ({ children }) => {
                     </div>
                 </div>
                 <div className="w-full h-[93%]">{children}</div>
-                <div className="hidden md:flex fixed left-0 bottom-0 right-0 h-[10%] min-h-[115px] items-center justify-end py-6 px-8">
+                {/* <div className="hidden md:flex fixed left-0 bottom-0 right-0 h-[10%] min-h-[115px] items-center justify-end py-6 px-8">
                     <div className="w-1/4 min-w-[300px] max-w-[410px] h-full bg-white rounded-lg border shadow-md mb-8"></div>
-                </div>
+                </div> */}
             </div>
         </div>
     );

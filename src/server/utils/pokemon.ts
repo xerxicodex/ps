@@ -247,6 +247,19 @@ export async function GetPokemonImage(name: string, options: any) {
         await imgProcess.tint({ r: 250, g: 175, b: 50 });
     }
 
+    const foreground = await imgProcess.toBuffer();
+    const bg = await new (Sharp as any)(foreground).tint({ r: 0, g: 0, b: 0 });
+    bgBuffer = await bg.blur(2).sharpen(5).toBuffer();
+
+    imgProcess = await new (Sharp as any)(foreground).composite([
+        { input: bgBuffer, gravity: 'center', top: 0, left: -1 },
+        { input: bgBuffer, gravity: 'center' },
+        { input: bgBuffer, gravity: 'center', top: 0, left: 1 },
+        { input: bgBuffer, gravity: 'center', top: 0, left: 2 },
+        { input: bgBuffer, gravity: 'center', top: -1, left: 0 },
+        { input: foreground, gravity: 'center' },
+    ])
+
     bitmap = (await imgProcess.sharpen(1).toBuffer()).toString('base64');
 
     const img = "data:" + "image/png" + ";base64," + bitmap;

@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { GetPokemonImage } from "../../../../server/utils/pokemon";
 import connectDB from "../../../../server/utils/prisma";
+import cache from "memory-cache";
 
 // Connect to Prisma
 connectDB();
@@ -34,20 +35,29 @@ export default async function handler(
 
     console.log(options)
 
-    const b64 = await GetPokemonImage(species, options);
+    const cache_key = JSON.stringify([species, options]);
 
-    var base64Data = b64.replace(/^data:image\/(png|jpeg|jpg);base64,/, '');
+    let img = cache.get(cache_key);
 
-    var img = Buffer.from(base64Data, 'base64');
+    if (!img) {
+        const b64 = await GetPokemonImage(species, options);
+
+        var base64Data = b64.replace(/^data:image\/(png|jpeg|jpg);base64,/, '');
+    
+        img = Buffer.from(base64Data, 'base64');
+
+        cache.put(cache_key, img, 24 * 1000 * 60 * 60);
+    }
 
     try {
-      
+
         res.writeHead(200, {
-          'Content-Type': 'image/png',
-          'Content-Length': img.length
+            'Cache-Control': 's-maxage=86400',
+            'Content-Type': 'image/png',
+            'Content-Length': img.length
         });
         res.end(img)
-    } catch(err) {
+    } catch (err) {
         console.log(err)
         res.status(404)
     }
