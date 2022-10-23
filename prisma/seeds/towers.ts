@@ -10,8 +10,7 @@ import {
     RewardEnumType,
 } from "@prisma/client";
 import Chance from "chance";
-import { GiveRewardToTrainer } from "../../src/server/data/reward";
-import { DefeatTowerByTrainer } from "../../src/server/data/tower";
+import { DefeatTowerByTrainer } from "../../src/server/services/tower.service";
 import { ParsePokemonName } from "../../src/server/utils/pokemon";
 
 export const seedTowers = async (prisma: PrismaClient) => {
@@ -429,8 +428,6 @@ export const seedTowers = async (prisma: PrismaClient) => {
             await prisma.tower.update({ data: tower, where: { id: tower.id } });
 
             console.log(`[tower][${tower?.id}][${tower.name}] Created`);
-
-            await DefeatTowerByTrainer(tower.id, 1);
         }
 
         await prisma.towerPokemon.createMany({ data: towerPokemon });

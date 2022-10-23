@@ -7,9 +7,9 @@ import customConfig from "../config/default";
 import { Context } from "../createContext";
 import { CreateUserInput, LoginUserInput } from "../schema/trainer.schema";
 import {
-    createUser,
-    findUniqueTrainer,
-    findUser,
+    CreateUser,
+    FindUniqueTrainer,
+    FindTrainer,
     signTokens,
 } from "../services/trainer.service";
 import redisClient from "../utils/connectRedis";
@@ -47,7 +47,7 @@ export const registerHandler = async ({
     try {
         const hashedPassword = await bcrypt.hash(input.password, 12);
 
-        const trainer = await createUser({
+        const trainer = await CreateUser({
             name: input.username,
             password: hashedPassword,
             starter: input.starter,
@@ -81,7 +81,7 @@ export const loginHandler = async ({
 }) => {
     try {
         // Get the  trainerfrom the collection
-        const trainer = await findUser({ name: input.username });
+        const trainer = await FindTrainer({ name: input.username });
 
         // Check if  trainerexist and password is correct
         if (
@@ -164,7 +164,7 @@ export const refreshAccessTokenHandler = async ({
         }
 
         // Check if the  trainerexist
-        const trainer = await findUniqueTrainer({ id: JSON.parse(session).id });
+        const trainer = await FindUniqueTrainer({ id: JSON.parse(session).id });
 
         if (!trainer) {
             throw new TRPCError({ code: "FORBIDDEN", message });

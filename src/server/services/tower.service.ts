@@ -1,8 +1,41 @@
-import { Prisma } from "@prisma/client";
-import { TowerFindProps } from "../../client/lib/types";
-import { GiveBadgeToTrainer } from "./badge";
-import { GiveRewardToTrainer } from "./reward";
-import { GetTrainerById } from "./trainer";
+import { Prisma, Tower } from "@prisma/client";
+import { GiveBadgeToTrainer } from "./badge.service";
+import { GiveRewardToTrainer } from "./reward.service";
+import { GetTrainerById } from "./trainer.service";
+
+export const CreateTower = async (input: Prisma.TowerCreateInput) => {
+    return (await prisma.tower.create({
+        data: input,
+    })) as Tower;
+};
+
+export const FindTower = async (
+    where: Partial<Prisma.TowerWhereInput>,
+    select?: Prisma.TowerSelect
+) => {
+    return (await prisma.tower.findFirst({
+        where,
+        select,
+    })) as Tower;
+};
+
+export const FindUniqueTower = async (
+    where: Prisma.TowerWhereUniqueInput,
+    select?: Prisma.TowerSelect
+) => {
+    return (await prisma.tower.findUnique({
+        where,
+        select,
+    })) as Tower;
+};
+
+export const UpdateTower = async (
+    where: Partial<Prisma.TowerWhereUniqueInput>,
+    data: Prisma.TowerUpdateInput,
+    select?: Prisma.TowerSelect
+) => {
+    return (await prisma.tower.update({ where, data, select })) as Tower;
+};
 
 export async function GetTowerList(props?: Prisma.TowerFindManyArgs) {
     return await prisma?.tower.findMany({ ...props })
@@ -10,11 +43,11 @@ export async function GetTowerList(props?: Prisma.TowerFindManyArgs) {
 
 
 export async function GetTowerById(id: number) {
-    return await prisma?.tower.findFirst({ where: { id } });
+    return await FindTower({ id });
 }
 
 export async function GetTowerByName(name: string) {
-    return await prisma.tower.findFirst({ where: { name } });
+    return await FindTower({ name });
 }
 
 export async function DefeatTowerByTrainer(

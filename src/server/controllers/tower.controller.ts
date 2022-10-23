@@ -1,7 +1,6 @@
 import { Prisma, Tower } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import type { Context } from "../createContext";
-import { GetTowerList, GetTowerById } from "../data/tower";
 import { createPaginator } from 'prisma-pagination'
 
 export const getTowersHandler = async ({ ctx, input }: { ctx: Context, input: any }) => {

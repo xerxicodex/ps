@@ -1,4 +1,4 @@
-import { RewardEnumType } from "@prisma/client";
+import { Prisma, Reward, RewardEnumType } from "@prisma/client";
 import {
     GetTrainerById,
     GiveTrainerBattlePoints,
@@ -6,10 +6,42 @@ import {
     GiveTrainerExp,
     GiveTrainerItem,
     GiveTrainerMainPokemonEXP,
-    GiveTrainerPokemon,
-    GiveTrainerPokemonEXP,
     GiveTrainerRewardPokemon,
-} from "./trainer";
+} from "./trainer.service";
+
+export const CreateReward = async (input: Prisma.RewardCreateInput) => {
+    return (await prisma.reward.create({
+        data: input,
+    })) as Reward;
+};
+
+export const FindReward = async (
+    where: Partial<Prisma.RewardWhereInput>,
+    select?: Prisma.RewardSelect
+) => {
+    return (await prisma.reward.findFirst({
+        where,
+        select,
+    })) as Reward;
+};
+
+export const FindUniqueReward = async (
+    where: Prisma.RewardWhereUniqueInput,
+    select?: Prisma.RewardSelect
+) => {
+    return (await prisma.reward.findUnique({
+        where,
+        select,
+    })) as Reward;
+};
+
+export const UpdateReward = async (
+    where: Partial<Prisma.RewardWhereUniqueInput>,
+    data: Prisma.RewardUpdateInput,
+    select?: Prisma.RewardSelect
+) => {
+    return (await prisma.reward.update({ where, data, select })) as Reward;
+};
 
 export async function GetRewardById(id: number) {
     return await prisma.reward.findFirst({ where: { id } });

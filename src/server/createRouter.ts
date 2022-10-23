@@ -2,7 +2,7 @@ import { router } from "@trpc/server";
 import superjson from "superjson";
 import * as trpc from "@trpc/server";
 import { Context } from "./createContext";
-import { findUniqueTrainer } from "./services/trainer.service";
+import { FindUniqueTrainer } from "./services/trainer.service";
 import redisClient from "./utils/connectRedis";
 import { verifyJwt } from "./utils/jwt";
 
@@ -51,7 +51,7 @@ export function createAuthRouter() {
         if (!session) {
             notAuthorized();
         } else {
-            const trainer = await findUniqueTrainer({ id: JSON.parse(session).id });
+            const trainer = await FindUniqueTrainer({ id: JSON.parse(session).id });
             ctx.trainer = trainer;
         }
 

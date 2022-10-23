@@ -636,8 +636,28 @@ model Tower {
 
   rewards TowerReward[]
 
+  challenges TowerChallenge[]
+
   @@unique([name])
   @@map(name: "towers")
+}
+
+model TowerChallenge {
+  tower    Tower @relation(fields: [tower_id], references: [id])
+  tower_id Int // relation scalar field (used in the `@relation` attribute above)
+
+  trainer    Trainer @relation(fields: [trainer_id], references: [id])
+  trainer_id Int // relation scalar field (used in the `@relation` attribute above)
+
+  currentFloor Int? @default(1)
+
+  startDate DateTime? @default(now())
+  endDate DateTime?
+  
+  timeTaken Int?
+
+  @@id([tower_id, trainer_id])
+  @@map(name: "tower_challenges")
 }
 
 model TowerBadge {
@@ -730,6 +750,8 @@ model Trainer {
   pokemon TrainerPokemon[]
   items   TrainerItem[]
   badges  TrainerBadge[]
+
+  towerChallenges TowerChallenge[]
 
   @@unique([name])
   @@map(name: "trainers")

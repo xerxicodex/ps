@@ -1,6 +1,6 @@
 import { TRPCError } from "@trpc/server";
 import { NextApiRequest, NextApiResponse } from "next";
-import { findUniqueTrainer } from "../services/trainer.service";
+import { FindUniqueTrainer } from "../services/trainer.service";
 import redisClient from "../utils/connectRedis";
 import { verifyJwt } from "../utils/jwt";
 
@@ -52,7 +52,7 @@ export const deserializeUser = async ({
         }
 
         // Check if  trainerstill exist
-        const trainer = await findUniqueTrainer({ id: JSON.parse(session).id });
+        const trainer = await FindUniqueTrainer({ id: JSON.parse(session).id });
 
         if (!trainer) {
             return notAuthenticated;
