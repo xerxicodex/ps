@@ -10,8 +10,10 @@ import classNames from "classnames";
 import type { GetServerSideProps, NextPage } from "next";
 import numeral from "numeral";
 import { ElementRef, useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import ComponentLoader from "../client/components/ComponentLoader";
 import FullScreenLoader from "../client/components/FullScreenLoader";
+import PokemonImage from "../client/components/PokemonImage";
 import PokemonProfileImage, {
     PokemonProfileImageProps,
 } from "../client/components/PokemonProfileImage";
@@ -21,6 +23,7 @@ import useStore from "../client/store";
 import { DifficultyColors } from "../client/utils/colors";
 import { RewardAmount, RewardName, RewardValue } from "../client/utils/reward";
 import { trpc } from "../client/utils/trpc";
+import { ParsePokemonFullName } from "../client/utils/pokemon";
 
 const HomePage: NextPage = () => {
     const store = useStore();
@@ -43,9 +46,24 @@ const HomePage: NextPage = () => {
         }
     );
 
+    const { mutate: challenge, isLoading: isChallenging } = trpc.useMutation(
+        "tower.challenge",
+        {
+            onSuccess(data) {
+                console.log("challenge", data);
+            },
+            onError(error: any) {
+                toast(error.message, {
+                    type: "error",
+                    position: "top-center",
+                });
+            },
+        }
+    );
+
     useEffect(() => {
-        store.setPageLoading(isLoading || isFetching);
-    }, [isLoading, isFetching]);
+        store.setPageLoading(isLoading || isFetching || isChallenging);
+    }, [isLoading, isFetching, isChallenging]);
 
     useEffect(() => {
         console.log("data.tower", data);
@@ -78,7 +96,16 @@ const HomePage: NextPage = () => {
 
         let top_floor = 0;
 
-        (_tower as any)?.pokemon?.forEach((p: TowerPokemon) => {
+        (_tower as any)?.pokemon?.sort(
+            (
+                a: TowerPokemon,
+                b: TowerPokemon
+            ) =>
+                (a.level ?? 0) +
+                (a.floor ?? 0) -
+                ((b.level ?? 0) +
+                    (b.floor ?? 0))
+        ).forEach((p: TowerPokemon) => {
             const floor = p.floor;
             if (floor) {
                 if (floor > top_floor) top_floor = floor;
@@ -96,7 +123,7 @@ const HomePage: NextPage = () => {
                     />
                 );
 
-                if (floors[floor].leaders.length < 3)
+                if (floors[floor].leaders.length < 7)
                     floors[floor].leaders.push({ pokemon: p, render });
                 else floors[floor].grunts.push({ render });
             }
@@ -182,11 +209,9 @@ const HomePage: NextPage = () => {
                                     </div>
                                     <div className="flex items-center px-8 justify-start w-full h-3/4">
                                         <div className="flex gap-x-4">
-                                            {parseTower(
-                                                _tower
-                                            )?.top?.leaders?.map((x: any) =>
-                                                x.render()
-                                            )}
+                                            {parseTower(_tower)
+                                                ?.top?.leaders?.reverse()?.splice(0, 3)
+                                                ?.map((x: any) => x.render())}
                                             <div className="flex items-center">
                                                 +
                                                 {(_tower as any).pokemon
@@ -200,7 +225,7 @@ const HomePage: NextPage = () => {
                         )}
                     </div>
                 </div>
-                <div className="w-[75%] bg-gray-100">
+                <div className="w-[75%] bg-gray-100 pb-12 overflow-y-auto">
                     <div className="flex items-center justify-between px-14 w-full h-1/6">
                         <div className="flex flex-wrap">
                             <div className="text-4xl font-black text-slate-600 w-full mb-2">
@@ -221,25 +246,29 @@ const HomePage: NextPage = () => {
                                 "h-4/5"
                             )}
                         >
-                            <div className="grid grid-flow-col grid-cols-6 gap-x-8 w-full h-full">
+                            <div className="flex relative -gap-x-8 w-full h-full">
                                 <div className="col-span-2"></div>
-                                {parseTower(tower)
-                                    ?.top?.leaders?.reverse()
-                                    ?.map((x: any) =>
-                                        x.render(
-                                            "w-[100px] h-[100px] bg-gray-300 outline outline-white rounded-full col-span-1 h-full p-4"
-                                        )
-                                    )}
-                                <div className="w-[100px] h-[100px] bg-gray-300 text-gray-500 outline outline-white rounded-full col-span-1 h-full flex items-center justify-center">
-                                    <div>
-                                        <div className="w-full text-lg font-black">
-                                            +
-                                            {(tower as any)?.pokemon?.length -
-                                                3}
+                                {parseTower(tower)?.top?.leaders?.map(
+                                    (x: any, i: number) => (
+                                        <div className="absolute top-8" style={{ right: (i + 2) * 2.7 + 'em'}}>
+                                            {x.render(
+                                                "w-[75px] h-[75px] bg-gray-300 outline outline-white rounded-full col-span-1 h-full p-4"
+                                            )}
                                         </div>
-                                        <div className="w-full text-xs text-center">
-                                            {" "}
-                                            more
+                                    )
+                                )}
+                                <div className="absolute top-8"style={{ right: 0 * 2.5 + 'em'}}>
+                                    <div className="w-[75px] h-[75px] col-span-1 h-full flex items-center justify-center">
+                                        <div>
+                                            <div className="w-full text-lg font-black">
+                                                +
+                                                {(tower as any)?.pokemon?.length -
+                                                    6}
+                                            </div>
+                                            <div className="w-full text-xs text-center">
+                                                {" "}
+                                                more
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -247,69 +276,134 @@ const HomePage: NextPage = () => {
                         </div>
                     </div>
 
-                    <div className="flex w-full h-4/6 gap-x-8 px-14">
-                        <div className="flex w-4/6">
-                            <div className="flex flex-wrap w-full h-2/3 bg-white rounded-lg shadow overflow-hidden">
-                                <div className="w-full h-[7%] p-6 mb-6 text-lg font-semibold uppercase opacity-50">
-                                    Rewards
-                                </div>
-                                <div className="w-full min-h-[93%]">
-                                    <div className="flex flex-wrap ">
-                                        {(tower as any).rewards
-                                            ?.sort(
-                                                (a: any, b: any) =>
-                                                    RewardAmount(a.reward) -
-                                                    RewardAmount(b.reward)
-                                            )
-                                            ?.map((towerReward: any) => {
-                                                // const value = RewardValue(towerReward.reward)
-                                                const name = RewardName(
-                                                    towerReward.reward
-                                                );
+                    <div className="w-full px-14">
+                        <div className="flex items-start gap-x-8">
+                            <div className="w-4/6">
+                                <div className="flex flex-wrap w-full h-3/6 mb-8 bg-white rounded-lg shadow overflow-hidden">
+                                    <div className="w-full h-[7%] p-6 mb-6 text-lg font-semibold uppercase opacity-50">
+                                        Rewards
+                                    </div>
+                                    <div className="w-full min-h-[93%]">
+                                        <div className="flex flex-wrap ">
+                                            {(tower as any).rewards
+                                                ?.sort(
+                                                    (a: any, b: any) =>
+                                                        RewardAmount(a.reward) -
+                                                        RewardAmount(b.reward)
+                                                )
+                                                ?.map((towerReward: any) => {
+                                                    // const value = RewardValue(towerReward.reward)
+                                                    const name = RewardName(
+                                                        towerReward.reward
+                                                    );
 
-                                                const amount = RewardAmount(
-                                                    towerReward.reward
-                                                );
+                                                    const amount = RewardAmount(
+                                                        towerReward.reward
+                                                    );
 
-                                                return (
-                                                    <div className="w-full p-4 pb-0 border-t mb-4">
-                                                        <div className="flex gap-x-4 w-full items-center justify-between">
-                                                            <div className="flex gap-x-4 w-full items-center">
-                                                                <div className="w-8 h-8 bg-red-100 rounded-full">
-                                                                    <RewardImage
-                                                                        reward={
-                                                                            towerReward.reward
-                                                                        }
-                                                                    />
+                                                    return (
+                                                        <div className="w-full p-4 pb-0 border-t mb-4">
+                                                            <div className="flex gap-x-4 w-full items-center justify-between">
+                                                                <div className="flex gap-x-4 w-full items-center">
+                                                                    <div className="w-8 h-8 bg-red-100 rounded-full">
+                                                                        <RewardImage
+                                                                            reward={
+                                                                                towerReward.reward
+                                                                            }
+                                                                        />
+                                                                    </div>
+                                                                    <div className="">
+                                                                        {title(
+                                                                            name
+                                                                        )}
+                                                                    </div>
                                                                 </div>
                                                                 <div className="">
-                                                                    {title(
-                                                                        name
+                                                                    {numeral(
+                                                                        amount
+                                                                    ).format(
+                                                                        "0,0"
                                                                     )}
                                                                 </div>
                                                             </div>
-                                                            <div className="">
-                                                                {numeral(
-                                                                    amount
-                                                                ).format("0,0")}
-                                                            </div>
                                                         </div>
-                                                    </div>
-                                                );
-                                            })}
+                                                    );
+                                                })}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="flex flex-wrap w-full mb-8 bg-white rounded-lg shadow overflow-hidden">
+                                    <div className="w-full h-[7%] p-6 mb-0 text-lg font-semibold uppercase opacity-50">
+                                        Floor Pokemon
+                                    </div>
+                                    <div className="w-full min-h-[93%]">
+                                        <div className="flex flex-wrap ">
+                                            {(tower as any).pokemon
+                                                ?.map(
+                                                    (
+                                                        towerPokemon: TowerPokemon
+                                                    ) => {
+                                                        const name =
+                                                            ParsePokemonFullName(
+                                                                towerPokemon
+                                                            );
+
+                                                        return (
+                                                            <div className="w-full p-4 pb-0 border-t mb-4">
+                                                                <div className="flex gap-x-4 w-full items-center justify-between">
+                                                                    <div className="flex gap-x-4 w-full items-center">
+                                                                        <div className="w-8 h-8 bg-red-100 rounded-full">
+                                                                            <PokemonImage
+                                                                                pokemon={
+                                                                                    (
+                                                                                        towerPokemon as any
+                                                                                    )
+                                                                                        .pokemon as Pokemon
+                                                                                }
+                                                                                color={
+                                                                                    towerPokemon.color ??
+                                                                                    ""
+                                                                                }
+                                                                            />
+                                                                        </div>
+                                                                        <div className="">
+                                                                            {title(
+                                                                                name
+                                                                            )}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="">
+                                                                        {numeral(
+                                                                            towerPokemon.floor
+                                                                        ).format(
+                                                                            "0,0"
+                                                                        )}
+                                                                        F
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        );
+                                                    }
+                                                )}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className="grid grid-cols-1 grid-rows-6 gap-y-8 w-2/6">
-                            <div className="w-full row-span-5 bg-white rounded-lg shadow overflow-hidden">
-                                <div className="w-full h-[7%] p-6 mb-6 text-lg font-semibold uppercase opacity-50">
-                                    Rankings
+                            <div className="grid grid-cols-1 grid-rows-6 gap-y-8 w-2/6">
+                                <div className="w-full row-span-5 bg-white rounded-lg shadow overflow-hidden">
+                                    <div className="w-full h-[7%] p-6 mb-6 text-lg font-semibold uppercase opacity-50">
+                                        Rankings
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="w-full row-span-1 bg-gradient-to-r from-cyan-200 to-indigo-400 hover:opacity-75 hover:shadow-lg active:scale-95 cursor-pointer rounded-lg shadow overflow-hidden p-4">
-                                <div className="flex items-center justify-center w-full h-full text-2xl text-lg font-semibold uppercase text-white">
-                                    CHALLANGE
+                                <div className="w-full row-span-1 bg-gradient-to-r from-cyan-200 to-indigo-400 hover:opacity-75 hover:shadow-lg active:scale-95 cursor-pointer rounded-lg shadow overflow-hidden p-4">
+                                    <div
+                                        onClick={() =>
+                                            challenge({ tower_id: tower.id })
+                                        }
+                                        className="flex items-center justify-center w-full h-full text-2xl text-lg font-semibold uppercase text-white"
+                                    >
+                                        CHALLANGE
+                                    </div>
                                 </div>
                             </div>
                         </div>

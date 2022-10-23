@@ -2,8 +2,9 @@ import { Prisma, Tower } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import type { Context } from "../createContext";
 import { createPaginator } from 'prisma-pagination'
+import { GetTrainerActiveTowerChallenge, TrainerChallengeTower } from "../services/trainer.service";
 
-export const getTowersHandler = async ({ ctx, input }: { ctx: Context, input: any }) => {
+export const GetTowersHandler = async ({ ctx, input }: { ctx: Context, input: any }) => {
     // const input = {};
     console.log("getTowersHandler", { input })
     try {
@@ -13,7 +14,7 @@ export const getTowersHandler = async ({ ctx, input }: { ctx: Context, input: an
         const results = await paginate<Tower, Prisma.TowerFindManyArgs>(
             prisma.tower,
             {
-                include: { pokemon: { orderBy: [{ floor: "desc" }, { level: "desc" }], include: { pokemon: true } }, rewards: { include: { reward: true } } },
+                include: { pokemon: { orderBy: [{ floor: "desc" }, { level: "desc" }, { id: 'asc' }], include: { pokemon: true } }, rewards: { include: { reward: true } } },
                 // orderBy: {
                 //     difficulty: 'asc',
                 // }
@@ -36,3 +37,35 @@ export const getTowersHandler = async ({ ctx, input }: { ctx: Context, input: an
         });
     }
 };
+
+
+export const ChallengeTowerHandler = async ({ ctx, input }: { ctx: Context, input: { tower_id: number} }) => {
+    console.log("ChallengeTowerHandler", { input })
+    try {
+        const trainer = ctx.trainer;
+
+        if (trainer) {
+            const activeChallenge = await GetTrainerActiveTowerChallenge(trainer.id);
+
+            if (!activeChallenge) {
+
+                const challenge = await TrainerChallengeTower(trainer.id, input.tower_id)
+                
+                return {
+                    status: "success",
+                    challenge,
+                };
+            } else {
+                throw("trainer has an existing challenge")
+            }
+        } else {
+            throw("trainer isn't active")
+        }
+    } catch (err: any) {
+        console.log('ChallengeTowerHandler error', err)
+        throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: err.message,
+        });
+    }
+}

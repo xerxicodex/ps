@@ -40,9 +40,9 @@ const seedRoutes = async () => {
 };
 
 async function main() {
-    // await seedTrainers();
+    await seedTrainers();
     // await seedRoutes();
-    // await seedItems(prisma);
+    await seedItems(prisma);
     await seedPokemon(prisma);
     await seedTowers(prisma);
 }

@@ -14,6 +14,7 @@ import { randomUUID } from "crypto";
 import { ParsePokemonFullName } from "../utils/pokemon";
 import { GetItemById } from "./item.service";
 import { GetPokemonById } from "./pokemon.service";
+import { DefeatTowerByTrainer, GetTowerById } from "./tower.service";
 
 
 export const CreateTrainer = async (input: Prisma.TrainerCreateInput) => {
@@ -447,5 +448,45 @@ export const GiveTrainerMainPokemonEXP = async (
 
     if (pokemon) {
         await GiveTrainerPokemonEXP(pokemon.id, exp);
+    }
+}
+
+export const GetTrainerActiveTowerChallenge = async (id: number) => {
+    return await prisma.towerChallenge.findFirst({ where: { trainer_id: id, endDate: { equals: null } } })
+}
+
+export const GetTrainerTowerChallenges = async (id: number) => {
+    return await prisma.towerChallenge.findMany({ where: { trainer_id: id } })
+}
+
+export const GetTrainerTowerChallenge = async (id: number, tower_id: number) => {
+    return await prisma.towerChallenge.findFirst({ where: { trainer_id: id, tower_id } })
+}
+
+export const TrainerChallengeTower = async (id: number, tower_id: number) => {
+    const roster = await GetTrainerRoster(id);
+    const tower = await GetTowerById(tower_id);
+    return await prisma.towerChallenge.create({ data: { trainer_id: id, tower_id, totalFloors: tower.floors, roster: JSON.stringify(roster) } })
+}
+
+export const TrainerEndTowerChallenge = async (id: number, tower_id: number) => {
+    const challenge = await GetTrainerTowerChallenge(id, tower_id);
+    
+    if (challenge) {
+        return await prisma.towerChallenge.update({ where: { id: challenge.id }, data: { endDate: new Date() } })
+    }
+}
+
+export const TrainerProgressTowerChallenge = async (id: number, tower_id: number) => {
+    let challenge = await GetTrainerTowerChallenge(id, tower_id);
+    if (challenge) {
+
+        if ((challenge.currentFloor ?? 0) >= (challenge.totalFloors ?? 0)) {
+            challenge = await TrainerEndTowerChallenge(id, tower_id) ?? null;
+            await DefeatTowerByTrainer(tower_id, id);
+            return challenge;
+        }
+
+        return await prisma.towerChallenge.update({ where: { id: challenge.id }, data: { currentFloor: { increment: 1} } })
     }
 }

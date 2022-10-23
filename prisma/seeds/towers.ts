@@ -53,9 +53,11 @@ export const seedTowers = async (prisma: PrismaClient) => {
             const tower = await prisma.tower.create({
                 data: {
                     name: towerName,
-                    required_trainer_level: 100,
+                    required_trainer_level: 1,
                 },
             });
+
+            tower.required_trainer_level = Math.floor((((((tower.id ** (1 + 0.5)) / 100) * 1000) * 1.25)) ** (1/2))
 
             const badge = await prisma.badge.create({
                 data: {
@@ -168,9 +170,9 @@ export const seedTowers = async (prisma: PrismaClient) => {
 
             let floors = Object.keys(floorPokemon);
 
-            let totalLevels = 0;
+            let max_level = 0;
 
-            let pokemonCount = 0;
+            let poemon_count = 0;
 
             while (floors.length > 0) {
                 const floor = parseInt(floors.shift() ?? "1");
@@ -324,7 +326,7 @@ export const seedTowers = async (prisma: PrismaClient) => {
                     ].filter((x) => x) as string[];
 
                     const level = Math.floor(
-                        (500 * floor) ** (1 + pokemonCount * 0.0009114)
+                        ((5 * (((1000  + ((towerPokemon.length * 0.25) * 2.5)) * (floor * ((1 + (tower.id / 3))/100))) ** (1/3))) * 100) * 0.75
                     );
 
                     towerPokemon.push({
@@ -340,26 +342,26 @@ export const seedTowers = async (prisma: PrismaClient) => {
                         move_4: _moves.shift() ?? null,
                     });
 
-                    totalLevels += level;
+                    if (floor > (tower.floors ?? 0)) {
+                        tower.floors = (tower.floors ?? 0) + 1;
+                    }
 
-                    pokemonCount++;
+                    if (level > max_level) {
+                        max_level = level;
+                    }
+
+                    poemon_count++;
                     // console.log(`[${legend?.name}][${floor}F] -> ${pokemon?.name}  [${pokemon?.power}](${pokemon?.type_1}, ${pokemon?.type_2 ?? 'NONE'})`)
                 }
             }
 
-            const _serverPowerAvg = 372;
-
-            const m = 2500;
-
-            const matchup = m / (pokemonCount * (m / totalLevels)) / m;
-
-            if (matchup >= 1.5) {
+            if (max_level >= 8000) {
                 tower.difficulty = DifficultyEnumType.master;
-            } else if (matchup >= 1) {
+            } else if (max_level >= 5000) {
                 tower.difficulty = DifficultyEnumType.very_hard;
-            } else if (matchup >= 0.75) {
+            } else if (max_level >= 3000) {
                 tower.difficulty = DifficultyEnumType.hard;
-            } else if (matchup >= 0.5) {
+            } else if (max_level >= 1500) {
                 tower.difficulty = DifficultyEnumType.medium;
             } else {
                 tower.difficulty = DifficultyEnumType.easy;
@@ -386,7 +388,7 @@ export const seedTowers = async (prisma: PrismaClient) => {
             reward = await prisma.reward.create({
                 data: {
                     reward: RewardEnumType.pokemon_exp,
-                    value: `${Math.floor((125 * (10 ** (7))) * matchup)}`,
+                    value: `${Math.floor(((500 * (max_level / 1000)) ** 3))}`,
                 },
             });
 
@@ -400,7 +402,7 @@ export const seedTowers = async (prisma: PrismaClient) => {
             reward = await prisma.reward.create({
                 data: {
                     reward: RewardEnumType.trainer_exp,
-                    value: `${Math.floor(100 ** (1 + matchup * 0.35))}`,
+                    value: `${Math.floor((max_level ** 1.25) * 0.01)}`,
                 },
             });
 
@@ -414,7 +416,7 @@ export const seedTowers = async (prisma: PrismaClient) => {
             reward = await prisma.reward.create({
                 data: {
                     reward: RewardEnumType.coins,
-                    value: `${Math.floor(10 ** (1 + matchup * 2.35))}`,
+                    value: `${Math.floor((max_level ** 1.25) * 0.1)}`,
                 },
             });
 

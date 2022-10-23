@@ -620,6 +620,8 @@ model Tower {
 
   difficulty DifficultyEnumType? @default(easy)
 
+  floors Int? @default(1)
+
   exp_boost Int? @default(1)
 
   required_badge_id       Int?
@@ -643,6 +645,8 @@ model Tower {
 }
 
 model TowerChallenge {
+  id Int @id @default(autoincrement())
+
   tower    Tower @relation(fields: [tower_id], references: [id])
   tower_id Int // relation scalar field (used in the `@relation` attribute above)
 
@@ -650,13 +654,15 @@ model TowerChallenge {
   trainer_id Int // relation scalar field (used in the `@relation` attribute above)
 
   currentFloor Int? @default(1)
+  totalFloors Int? @default(1)
+
+  roster String
 
   startDate DateTime? @default(now())
   endDate DateTime?
   
   timeTaken Int?
 
-  @@id([tower_id, trainer_id])
   @@map(name: "tower_challenges")
 }
 
