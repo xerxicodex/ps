@@ -1,7 +1,7 @@
 import { TrainerSkinEnumType } from "@prisma/client";
 import { object, string, number, TypeOf } from "zod";
 
-export const createUserSchema = object({
+export const createTrainerSchema = object({
     username: string().min(1, "Username is required").max(100),
     password: string()
         .min(1, "Password is required")
@@ -25,10 +25,10 @@ export const createUserSchema = object({
     message: "Passwords do not match",
 });
 
-export const loginUserSchema = object({
+export const loginTrainerSchema = object({
     username: string({ required_error: "Username is required" }),
     password: string({ required_error: "Password is required" }),
 });
 
-export type CreateUserInput = TypeOf<typeof createUserSchema>;
-export type LoginUserInput = TypeOf<typeof loginUserSchema>;
+export type CreateTrainerInput = TypeOf<typeof createTrainerSchema>;
+export type LoginTrainerInput = TypeOf<typeof loginTrainerSchema>;

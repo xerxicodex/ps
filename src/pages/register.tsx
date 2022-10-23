@@ -6,8 +6,8 @@ import { useForm, FormProvider, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import FormInput from "../client/components/FormInput";
 import {
-    CreateUserInput,
-    createUserSchema,
+    CreateTrainerInput,
+    createTrainerSchema,
 } from "../server/schema/trainer.schema";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -46,8 +46,8 @@ export default function RegisterPage() {
         { id: 3, name: "Squirtle" },
     ];
 
-    const methods = useForm<CreateUserInput>({
-        resolver: zodResolver(createUserSchema),
+    const methods = useForm<CreateTrainerInput>({
+        resolver: zodResolver(createTrainerSchema),
     });
 
     const {
@@ -64,7 +64,7 @@ export default function RegisterPage() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isSubmitSuccessful]);
 
-    const onSubmitHandler: SubmitHandler<CreateUserInput> = (values) => {
+    const onSubmitHandler: SubmitHandler<CreateTrainerInput> = (values) => {
         // ? Execute the Mutation
         register(values);
     };

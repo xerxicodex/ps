@@ -5,16 +5,16 @@ import { OptionsType } from "cookies-next/lib/types";
 import { getCookie, setCookie } from "cookies-next";
 import customConfig from "../config/default";
 import { Context } from "../createContext";
-import { CreateUserInput, LoginUserInput } from "../schema/trainer.schema";
+import { CreateTrainerInput, LoginTrainerInput } from "../schema/trainer.schema";
 import {
-    CreateUser,
     FindUniqueTrainer,
     FindTrainer,
     signTokens,
+    CreateTrainer,
+    CheckTrainerProgress,
 } from "../services/trainer.service";
 import redisClient from "../utils/connectRedis";
 import { signJwt, verifyJwt } from "../utils/jwt";
-import { CheckTrainerProgress } from "../data/trainer";
 import { TrainerSkinEnumType } from "@prisma/client";
 
 // [...] Cookie options
@@ -42,12 +42,12 @@ const refreshTokenCookieOptions: OptionsType = {
 export const registerHandler = async ({
     input,
 }: {
-    input: CreateUserInput;
+    input: CreateTrainerInput;
 }) => {
     try {
         const hashedPassword = await bcrypt.hash(input.password, 12);
 
-        const trainer = await CreateUser({
+        const trainer = await CreateTrainer({
             name: input.username,
             password: hashedPassword,
             starter: input.starter,
@@ -76,7 +76,7 @@ export const loginHandler = async ({
     input,
     ctx: { req, res },
 }: {
-    input: LoginUserInput;
+    input: LoginTrainerInput;
     ctx: Context;
 }) => {
     try {

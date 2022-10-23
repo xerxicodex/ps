@@ -5,15 +5,15 @@ import {
     registerHandler,
 } from "../controllers/auth.controller";
 import { createRouter } from "../createRouter";
-import { createUserSchema, loginUserSchema } from "../schema/trainer.schema";
+import { createTrainerSchema, loginTrainerSchema } from "../schema/trainer.schema";
 
 const authRouter = createRouter()
     .mutation("register", {
-        input: createUserSchema,
+        input: createTrainerSchema,
         resolve: ({ input }) => registerHandler({ input }),
     })
     .mutation("login", {
-        input: loginUserSchema,
+        input: loginTrainerSchema,
         resolve: async ({ input, ctx }) => await loginHandler({ input, ctx }),
     })
     .mutation("logout", {
