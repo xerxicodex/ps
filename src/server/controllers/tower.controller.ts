@@ -14,7 +14,7 @@ export const GetTowersHandler = async ({ ctx, input }: { ctx: Context, input: an
         const results = await paginate<Tower, Prisma.TowerFindManyArgs>(
             prisma.tower,
             {
-                include: { pokemon: { orderBy: [{ floor: "desc" }, { level: "desc" }, { id: 'asc' }], include: { pokemon: true } }, rewards: { include: { reward: true } } },
+                include: { pokemon: { orderBy: [{ floor: "desc" }, { level: "desc" }, { pokemon: { power: 'desc' } }, { pokemon: { name: 'desc' } }, { id: 'asc' }], include: { pokemon: true } }, rewards: { include: { reward: true } } },
                 // orderBy: {
                 //     difficulty: 'asc',
                 // }

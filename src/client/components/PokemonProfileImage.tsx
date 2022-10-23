@@ -12,7 +12,7 @@ const PokemonProfileImage = (props: PokemonProfileImageProps) => {
     // );
 
     return (
-        <div className={classNames("relative min-w-[50px] min-h-[50px] flex items-center justify-center overflow-hidden", props.className)}>
+        <div className={classNames("relative flex items-center justify-center overflow-hidden", props.className)}>
             <PokemonImage pokemon={props?.pokemon} color={props.color} />
         </div>
     );

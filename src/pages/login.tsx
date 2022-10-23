@@ -18,9 +18,9 @@ export default function LoginPage() {
         onSuccess(data) {
             toast("You were successfully logged in!", {
                 type: "success",
-                position: "top-center",
+                position: "bottom-center",
             });
-            router.push("/");
+            router.replace("/")
         },
         onError(error: any) {
             toast(error.message, {

@@ -9,7 +9,7 @@ import { title } from "case";
 import classNames from "classnames";
 import type { GetServerSideProps, NextPage } from "next";
 import numeral from "numeral";
-import { ElementRef, useEffect, useState } from "react";
+import { ElementRef, useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import ComponentLoader from "../client/components/ComponentLoader";
 import FullScreenLoader from "../client/components/FullScreenLoader";
@@ -68,7 +68,7 @@ const HomePage: NextPage = () => {
     useEffect(() => {
         console.log("data.tower", data);
         if (data?.towers && !tower.id) {
-            setTower(data.towers[0]);
+            selectTower(data.towers[0]);
         }
 
         if (data?.towers) {
@@ -91,52 +91,54 @@ const HomePage: NextPage = () => {
         }
     }, [moreData]);
 
-    const parseTower = (_tower: Tower) => {
-        const floors: any = {};
+    let pokemonImagesRendered = 0;
 
-        let top_floor = 0;
+    // const parseTower = (_tower: Tower) => {
+    //     const _floors: any = {};
 
-        (_tower as any)?.pokemon?.sort(
-            (
-                a: TowerPokemon,
-                b: TowerPokemon
-            ) =>
-                (a.level ?? 0) +
-                (a.floor ?? 0) -
-                ((b.level ?? 0) +
-                    (b.floor ?? 0))
-        ).forEach((p: TowerPokemon) => {
-            const floor = p.floor;
-            if (floor) {
-                if (floor > top_floor) top_floor = floor;
+    //     let top_floor = 0;
 
-                if (!floors[floor]) {
-                    floors[floor] = { leaders: [], grunts: [] };
-                }
+    //     (_tower as any)?.pokemon
+    //         ?.sort(
+    //             (a: TowerPokemon, b: TowerPokemon) =>
+    //                 ((a.level ?? 0) -
+    //                 (b.level ?? 0)) > 0 ? -1 : 1
+    //         )
+    //         .forEach((p: TowerPokemon) => {
+    //             const floor = p.floor;
+    //             if (floor) {
+    //                 if (floor > top_floor) top_floor = floor;
 
-                const render = (className?: string) => (
-                    <PokemonProfileImage
-                        key={p.id}
-                        className={className}
-                        pokemon={(p as any).pokemon}
-                        color={p.color ?? ""}
-                    />
-                );
+    //                 if (!_floors[floor]) {
+    //                     _floors[floor] = { leaders: [], grunts: [] };
+    //                 }
 
-                if (floors[floor].leaders.length < 7)
-                    floors[floor].leaders.push({ pokemon: p, render });
-                else floors[floor].grunts.push({ render });
-            }
-        });
+    //                 const render = (className?: string) => (
+    //                     <PokemonProfileImage
+    //                         key={p.id + pokemonImagesRendered}
+    //                         className={className}
+    //                         pokemon={(p as any).pokemon}
+    //                         color={p.color ?? ""}
+    //                     />
+    //                 );
 
-        floors.top = floors[top_floor];
+    //                 pokemonImagesRendered++;
 
-        return floors;
+    //                 if (_floors[floor].leaders.length < 6) {
+    //                     _floors[floor].leaders.push({ pokemon: p, render });
+    //                 } else _floors[floor].grunts.push({ pokemon: p, render });
+    //             }
+    //         });
+
+    //     _floors.top = _floors[top_floor];
+
+    //     return _floors;
+    // };
+
+    const selectTower = (tower: Tower) => {
+        setTower(tower);
+        // setFloors((x: any) => parseTower(tower))
     };
-
-    useEffect(() => {
-        setFloors(parseTower(tower));
-    }, [tower]);
 
     const handleScroll = (e: any) => {
         const bottom =
@@ -156,7 +158,7 @@ const HomePage: NextPage = () => {
                     <ComponentLoader loading={listLoading} />
                     <div
                         className={classNames(
-                            "overflow-y-auto w-[110%] pr-[10%] h-full"
+                            "overflow-y-auto w-[125%] pr-[20%] h-full"
                         )}
                         onScroll={handleScroll}
                     >
@@ -164,7 +166,7 @@ const HomePage: NextPage = () => {
                             page.map((_tower: Tower) => (
                                 <div
                                     key={_tower.id}
-                                    onClick={() => setTower(_tower)}
+                                    onClick={() => selectTower(_tower)}
                                     className={classNames(
                                         tower.id == _tower.id
                                             ? "from-blue-200/25 to-blue-400/25"
@@ -174,7 +176,7 @@ const HomePage: NextPage = () => {
                                 >
                                     <div className="flex w-full px-8 pt-4 h-1/4 justify-between">
                                         <div className="flex flex-wrap justify-start">
-                                            <div className="title w-full font-bold text-slate-500 mb-2">
+                                            <div className="title w-full overflow-elipsis nowrap font-bold text-slate-500 mb-2">
                                                 #{_tower.id} {_tower.name}
                                             </div>
                                             {/* <div
@@ -209,9 +211,21 @@ const HomePage: NextPage = () => {
                                     </div>
                                     <div className="flex items-center px-8 justify-start w-full h-3/4">
                                         <div className="flex gap-x-4">
-                                            {parseTower(_tower)
-                                                ?.top?.leaders?.reverse()?.splice(0, 3)
-                                                ?.map((x: any) => x.render())}
+                                            {(_tower as any)?.pokemon
+                                                ?.slice(0, 3)
+                                                ?.map((p: any) => (
+                                                    <PokemonProfileImage
+                                                        key={
+                                                            p.id +
+                                                            pokemonImagesRendered
+                                                        }
+                                                        className="min-w-[50px] min-h-[50px]"
+                                                        pokemon={
+                                                            (p as any).pokemon
+                                                        }
+                                                        color={p.color ?? ""}
+                                                    />
+                                                ))}
                                             <div className="flex items-center">
                                                 +
                                                 {(_tower as any).pokemon
@@ -248,22 +262,45 @@ const HomePage: NextPage = () => {
                         >
                             <div className="flex relative -gap-x-8 w-full h-full">
                                 <div className="col-span-2"></div>
-                                {parseTower(tower)?.top?.leaders?.map(
-                                    (x: any, i: number) => (
-                                        <div className="absolute top-8" style={{ right: (i + 2) * 2.7 + 'em'}}>
-                                            {x.render(
-                                                "w-[75px] h-[75px] bg-gray-300 outline outline-white rounded-full col-span-1 h-full p-4"
-                                            )}
-                                        </div>
-                                    )
-                                )}
-                                <div className="absolute top-8"style={{ right: 0 * 2.5 + 'em'}}>
+                                {[1, 2, 3, 4, 5, 6]?.map((floor: number) => {
+                                    const leader = (
+                                        tower as any
+                                    )?.pokemon?.filter(
+                                        (x: TowerPokemon) => x.floor == floor
+                                    )[0];
+                                    if (leader) {
+                                        return (
+                                            <div
+                                                key={leader.id}
+                                                className="absolute top-8"
+                                                style={{
+                                                    right:
+                                                        (floor + 2) * 2.7 +
+                                                        "em",
+                                                }}
+                                            >
+                                                <PokemonProfileImage
+                                                    key={leader.id}
+                                                    className="w-[75px] h-[75px] bg-gray-300 outline outline-white rounded-full col-span-1 h-full p-4"
+                                                    pokemon={
+                                                        (leader as any).pokemon
+                                                    }
+                                                    color={leader.color ?? ""}
+                                                />
+                                            </div>
+                                        );
+                                    }
+                                })}
+                                <div
+                                    className="absolute top-8"
+                                    style={{ right: 0 * 2.5 + "em" }}
+                                >
                                     <div className="w-[75px] h-[75px] col-span-1 h-full flex items-center justify-center">
                                         <div>
                                             <div className="w-full text-lg font-black">
                                                 +
-                                                {(tower as any)?.pokemon?.length -
-                                                    6}
+                                                {(tower as any)?.pokemon
+                                                    ?.length - 6}
                                             </div>
                                             <div className="w-full text-xs text-center">
                                                 {" "}
@@ -302,7 +339,10 @@ const HomePage: NextPage = () => {
                                                     );
 
                                                     return (
-                                                        <div className="w-full p-4 pb-0 border-t mb-4">
+                                                        <div
+                                                            key={towerReward.id}
+                                                            className="w-full p-4 pb-0 border-t mb-4"
+                                                        >
                                                             <div className="flex gap-x-4 w-full items-center justify-between">
                                                                 <div className="flex gap-x-4 w-full items-center">
                                                                     <div className="w-8 h-8 bg-red-100 rounded-full">
@@ -334,38 +374,54 @@ const HomePage: NextPage = () => {
                                 </div>
                                 <div className="flex flex-wrap w-full mb-8 bg-white rounded-lg shadow overflow-hidden">
                                     <div className="w-full h-[7%] p-6 mb-0 text-lg font-semibold uppercase opacity-50">
-                                        Floor Pokemon
+                                        Floor Masters
                                     </div>
                                     <div className="w-full min-h-[93%]">
                                         <div className="flex flex-wrap ">
-                                            {(tower as any).pokemon
-                                                ?.map(
-                                                    (
-                                                        towerPokemon: TowerPokemon
-                                                    ) => {
+                                            {[1, 2, 3, 4, 5, 6]?.map(
+                                                (floor: number) => {
+                                                    const leader = (
+                                                        tower as any
+                                                    )?.pokemon?.filter(
+                                                        (x: TowerPokemon) =>
+                                                            x.floor == floor
+                                                    )[0];
+
+                                                    if (leader) {
                                                         const name =
                                                             ParsePokemonFullName(
-                                                                towerPokemon
+                                                                leader
                                                             );
 
+                                                        console.log(
+                                                            "test",
+                                                            tower.id +
+                                                                leader.id +
+                                                                floor
+                                                        );
                                                         return (
-                                                            <div className="w-full p-4 pb-0 border-t mb-4">
+                                                            <div
+                                                                key={
+                                                                    leader.id +
+                                                                    floor
+                                                                }
+                                                                className="w-full p-4 pb-0 border-t mb-4"
+                                                            >
                                                                 <div className="flex gap-x-4 w-full items-center justify-between">
                                                                     <div className="flex gap-x-4 w-full items-center">
-                                                                        <div className="w-8 h-8 bg-red-100 rounded-full">
-                                                                            <PokemonImage
-                                                                                pokemon={
-                                                                                    (
-                                                                                        towerPokemon as any
-                                                                                    )
-                                                                                        .pokemon as Pokemon
-                                                                                }
-                                                                                color={
-                                                                                    towerPokemon.color ??
-                                                                                    ""
-                                                                                }
-                                                                            />
-                                                                        </div>
+                                                                        <PokemonProfileImage
+                                                                            pokemon={
+                                                                                (
+                                                                                    leader as any
+                                                                                )
+                                                                                    .pokemon
+                                                                            }
+                                                                            className="w-8 h-8 bg-red-100 outline outline-red-100 rounded-full"
+                                                                            color={
+                                                                                leader.color ??
+                                                                                ""
+                                                                            }
+                                                                        />
                                                                         <div className="">
                                                                             {title(
                                                                                 name
@@ -374,7 +430,7 @@ const HomePage: NextPage = () => {
                                                                     </div>
                                                                     <div className="">
                                                                         {numeral(
-                                                                            towerPokemon.floor
+                                                                            floor
                                                                         ).format(
                                                                             "0,0"
                                                                         )}
@@ -384,12 +440,13 @@ const HomePage: NextPage = () => {
                                                             </div>
                                                         );
                                                     }
-                                                )}
+                                                }
+                                            )}
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div className="grid grid-cols-1 grid-rows-6 gap-y-8 w-2/6">
+                            <div className="grid grid-cols-1 grid-rows-6 gap-y-6 w-2/6 min-h-[50vh]">
                                 <div className="w-full row-span-5 bg-white rounded-lg shadow overflow-hidden">
                                     <div className="w-full h-[7%] p-6 mb-6 text-lg font-semibold uppercase opacity-50">
                                         Rankings

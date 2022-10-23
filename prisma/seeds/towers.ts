@@ -127,9 +127,10 @@ export const seedTowers = async (prisma: PrismaClient) => {
                 where: { AND: [{ power: { gte: 450 } }, themeQuery] },
                 orderBy: [{ power: "desc" }, { name: "desc" }],
             });
-            _floorPokemon[6] = [];
 
             let index = 5;
+
+            const floorBosses: Pokemon[] = [];
 
             while (index > 0) {
                 let floorBoss = _floorPokemon[index].at(0);
@@ -142,7 +143,7 @@ export const seedTowers = async (prisma: PrismaClient) => {
                     if (evo) {
                         await set(evo);
                     } else {
-                        _floorPokemon[6].push(fb);
+                        floorBosses.push(fb);
                     }
                 };
 
@@ -153,11 +154,11 @@ export const seedTowers = async (prisma: PrismaClient) => {
                 index--;
             }
 
-            _floorPokemon[6].sort((a, b) =>
+            floorBosses.sort((a, b) =>
                 (a.power ?? 0) - (b.power ?? 0) > 0 ? -1 : 1
             );
 
-            _floorPokemon[6].unshift(legend as Pokemon);
+            _floorPokemon[6] = [ ...floorBosses, ...[legend as Pokemon] ];
 
             const floorPokemon: typeof _floorPokemon = {};
 
@@ -172,12 +173,12 @@ export const seedTowers = async (prisma: PrismaClient) => {
 
             let max_level = 0;
 
-            let poemon_count = 0;
-
             while (floors.length > 0) {
                 const floor = parseInt(floors.shift() ?? "1");
 
                 const themePokemon = floorPokemon[floor];
+
+                let floorPokemonCount = 0;
 
                 while (themePokemon.length > 0) {
                     const pokemon = themePokemon.pop();
@@ -325,9 +326,13 @@ export const seedTowers = async (prisma: PrismaClient) => {
                             : moves.ailment?.name,
                     ].filter((x) => x) as string[];
 
-                    const level = Math.floor(
+                    let level = Math.floor(
                         ((5 * (((1000  + ((towerPokemon.length * 0.25) * 2.5)) * (floor * ((1 + (tower.id / 3))/100))) ** (1/3))) * 100) * 0.75
                     );
+
+                    if (floor == 6) {
+                        level = (level + (100 * floorPokemonCount))
+                    }
 
                     towerPokemon.push({
                         tower_id: tower?.id ?? 0,
@@ -350,7 +355,7 @@ export const seedTowers = async (prisma: PrismaClient) => {
                         max_level = level;
                     }
 
-                    poemon_count++;
+                    floorPokemonCount++;
                     // console.log(`[${legend?.name}][${floor}F] -> ${pokemon?.name}  [${pokemon?.power}](${pokemon?.type_1}, ${pokemon?.type_2 ?? 'NONE'})`)
                 }
             }
