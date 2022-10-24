@@ -63,8 +63,8 @@ export function ParsePokemonName(name: string, species: string) {
     }
 
     const parsed = `${`${prefix && prefix.length > 0
-            ? `${title(prefix).split(" ").join("-")}`
-            : ""
+        ? `${title(prefix).split(" ").join("-")}`
+        : ""
         }${title(species).split(" ").join("-")}`}${form && form.length > 0 ? ` (${form})` : ""
         }`;
 
@@ -175,22 +175,41 @@ export async function GetPokemonImage(name: string, options: any) {
     let imgUrl = "";
 
     while (!found && versions.length > 0) {
+        let genders_to_try = ['mf', 'md', 'fd', 'uk', 'fo', 'mo']
+
         try {
             if (!found) {
                 options.version = versions.pop();
 
-                imgUrl = GetPokemonImageURLById(pokemon?.dex_id as number, options)
+                const run = async () => {
+                    imgUrl = GetPokemonImageURLById(pokemon?.dex_id as number, options)
 
-                console.log("get pokemon image", imgUrl)
+                    // console.log("get pokemon image", imgUrl)
+                    let res: any = {};
 
-                const res = await axios.get(imgUrl, {
-                    responseType: "text",
-                    responseEncoding: "base64",
-                })
+                    try {
+                        res = await axios.get(imgUrl, {
+                            responseType: "text",
+                            responseEncoding: "base64",
+                        })
+                    } catch(err) {}
 
-                bitmap = res.data;
+                    bitmap = res.data;
 
-                found = (bitmap ?? "").length > 0
+                    found = (bitmap ?? "").length > 0
+
+                    console.log(`\n${!found}, ${genders_to_try.length > 0}\n`)
+                    if (!found && genders_to_try.length > 0) {
+                        options.gender = genders_to_try.shift();
+                        await run();
+                    }
+                }
+
+                await run();
+
+                if(!found) {
+                    throw("can't find img")
+                }
             }
         } catch (error) {
             console.log("cant find", imgUrl)
@@ -269,10 +288,10 @@ export async function GetPokemonImage(name: string, options: any) {
 
 
 export function GetPokemonImageURLById(id: number, options: any) {
-    console.log("GetPokemonImageURLByID", { id, options }) 
+    // console.log("GetPokemonImageURLByID", { id, options })
     const color = { 'colorless': 'n', 'shiny': 'r' }[(options.color ?? 'colorless').toLowerCase() as string] ?? 'n';
 
-    let gender = { 'any': 'mf', 'male': 'md', 'female': 'fd', 'genderless': 'uk' }[(options.gender ?? 'any').toLowerCase() as string];
+    let gender = { 'any': 'mf', 'male': 'md', 'female': 'fd', 'genderless': 'uk', 'mf': 'mf', 'md': 'md', 'fd': 'fd', 'uk': 'uk', 'fo': 'fo', 'mo': 'mo' }[(options.gender ?? 'any').toLowerCase() as string];
 
     const form = { 'base': 'n', 'gigantamax': 'g' }[(options.isGigantamax ? 'gigantamax' : 'base').toLowerCase()]
 
@@ -314,7 +333,7 @@ export function GetPokemonImageURLById(id: number, options: any) {
         643, 644, 646, 647, 648, 649, 703, 716, 717, 718, 719, 720, 721, 772, 773, 774,
         781, 785, 786, 787, 788, 789, 790, 791, 792, 793, 794, 795, 796, 797, 798, 799,
         800, 801, 802, 803, 804, 805, 806, 807, 808, 809, 854, 855, 870, 880, 881, 882,
-        883, 888, 889, 890, 891, 892, 894, 895, 896, 897, 898,
+        883, 888, 889, 890, 894, 895, 896, 897, 898,
     ].indexOf(parseInt(`${id}`)) != -1;
 
     if (isGenderlessOnly) {

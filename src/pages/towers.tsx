@@ -66,7 +66,6 @@ const HomePage: NextPage = () => {
     }, [isLoading, isFetching, isChallenging]);
 
     useEffect(() => {
-        console.log("data.tower", data);
         if (data?.towers && !tower.id) {
             selectTower(data.towers[0]);
         }
@@ -146,7 +145,6 @@ const HomePage: NextPage = () => {
             e.target.clientHeight;
         if (bottom && !listLoading) {
             setPage(page + 1);
-            console.log({ page });
         }
     };
 
@@ -212,7 +210,7 @@ const HomePage: NextPage = () => {
                                     <div className="flex items-center px-8 justify-start w-full h-3/4">
                                         <div className="flex gap-x-4">
                                             {(_tower as any)?.pokemon
-                                                ?.slice(0, 3)
+                                                ?.slice(-3)
                                                 ?.map((p: any) => (
                                                     <PokemonProfileImage
                                                         key={
@@ -392,13 +390,6 @@ const HomePage: NextPage = () => {
                                                             ParsePokemonFullName(
                                                                 leader
                                                             );
-
-                                                        console.log(
-                                                            "test",
-                                                            tower.id +
-                                                                leader.id +
-                                                                floor
-                                                        );
                                                         return (
                                                             <div
                                                                 key={

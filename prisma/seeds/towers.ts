@@ -19,7 +19,7 @@ export const seedTowers = async (prisma: PrismaClient) => {
     await prisma.towerPokemon.deleteMany();
     await prisma.tower.deleteMany();
 
-    const towerCount = await prisma.tower.count();
+    let towerCount = await prisma.tower.count();
 
     if (towerCount == 0) {
         const towerPokemon: Prisma.TowerPokemonUncheckedCreateInput[] = [];
@@ -50,14 +50,17 @@ export const seedTowers = async (prisma: PrismaClient) => {
 
             console.log(`[tower][][${towerName}] Creating`);
 
+            towerCount++;
+
             const tower = await prisma.tower.create({
                 data: {
+                    id: towerCount,
                     name: towerName,
                     required_trainer_level: 1,
                 },
             });
 
-            tower.required_trainer_level = Math.floor((((((tower.id ** (1 + 0.5)) / 100) * 1000) * 1.25)) ** (1/2))
+            tower.required_trainer_level = Math.floor((((((tower.id ** (1 + 0.5)) / 100) * 1000) * 1.25)) ** (1 / 2))
 
             const badge = await prisma.badge.create({
                 data: {
@@ -77,20 +80,20 @@ export const seedTowers = async (prisma: PrismaClient) => {
                 OR: [
                     { type_1: legend?.type_1 },
                     { type_2: legend?.type_1 },
-                    ...(legend?.type_2
-                        ? [
-                              { type_1: legend?.type_2 },
-                              { type_2: legend?.type_2 },
-                              {
-                                  type_1: legend?.type_2,
-                                  type_2: legend?.type_1,
-                              },
-                              {
-                                  type_1: legend?.type_1,
-                                  type_2: legend?.type_2,
-                              },
-                          ]
-                        : []),
+                    // ...(legend?.type_2
+                    //     ? [
+                    //           { type_1: legend?.type_2 },
+                    //           { type_2: legend?.type_2 },
+                    //           {
+                    //               type_1: legend?.type_2,
+                    //               type_2: legend?.type_1,
+                    //           },
+                    //           {
+                    //               type_1: legend?.type_1,
+                    //               type_2: legend?.type_2,
+                    //           },
+                    //       ]
+                    //     : []),
                 ],
                 AND: {
                     is_legendary: false,
@@ -105,30 +108,34 @@ export const seedTowers = async (prisma: PrismaClient) => {
                 },
             };
 
-            const _floorPokemon: { [key: number]: Pokemon[] } = {};
+            const _floorPokemon: Pokemon[][] = [];
 
-            _floorPokemon[1] = await prisma.pokemon.findMany({
-                where: { AND: [{ power: { lt: 250 } }, themeQuery] },
-                orderBy: [{ power: "desc" }, { name: "desc" }],
-            });
-            _floorPokemon[2] = await prisma.pokemon.findMany({
-                where: { AND: [{ power: { gte: 250, lt: 350 } }, themeQuery] },
-                orderBy: [{ power: "desc" }, { name: "desc" }],
-            });
-            _floorPokemon[3] = await prisma.pokemon.findMany({
-                where: { AND: [{ power: { gte: 350, lt: 400 } }, themeQuery] },
-                orderBy: [{ power: "desc" }, { name: "desc" }],
-            });
-            _floorPokemon[4] = await prisma.pokemon.findMany({
-                where: { AND: [{ power: { gte: 400, lt: 450 } }, themeQuery] },
-                orderBy: [{ power: "desc" }, { name: "desc" }],
-            });
-            _floorPokemon[5] = await prisma.pokemon.findMany({
-                where: { AND: [{ power: { gte: 450 } }, themeQuery] },
-                orderBy: [{ power: "desc" }, { name: "desc" }],
-            });
+            const powerQueries = [
+                {  lt: 300 },
+                { gte: 300, lt: 400 },
+                { gte: 400, lt: 500 },
+                { gte: 500 }
+            ]
 
-            let index = 5;
+            console.log("pokemon search start")
+            while (powerQueries.length > 0) {
+                const powerQuery = powerQueries.shift();
+
+                const list = await prisma.pokemon.findMany({
+                    where: { AND: [{ power: powerQuery }, themeQuery] },
+                    orderBy: [{ power: "desc" }, { name: "desc" }],
+                });
+
+                console.log("pokemon count", powerQuery, list.length)
+                if (list.length > 0) {
+                    _floorPokemon.push(list)
+                }
+            }
+            console.log("pokemon search end", _floorPokemon.map((a) => a.length).reduce((a,b) => a + b))
+
+
+
+            let index = _floorPokemon.length - 1;
 
             const floorBosses: Pokemon[] = [];
 
@@ -158,25 +165,17 @@ export const seedTowers = async (prisma: PrismaClient) => {
                 (a.power ?? 0) - (b.power ?? 0) > 0 ? -1 : 1
             );
 
-            _floorPokemon[6] = [ ...floorBosses, ...[legend as Pokemon] ];
+            _floorPokemon.push([...[legend as Pokemon], ...floorBosses]);
 
-            const floorPokemon: typeof _floorPokemon = {};
-
-            Object.keys(_floorPokemon).forEach((key) => {
-                const floor = key as unknown as number;
-                if (_floorPokemon[floor].length > 0) {
-                    floorPokemon[floor] = _floorPokemon[floor];
-                }
-            });
-
-            let floors = Object.keys(floorPokemon);
+            const floorPokemon: any = _floorPokemon.map((fp) => fp);
 
             let max_level = 0;
 
-            while (floors.length > 0) {
-                const floor = parseInt(floors.shift() ?? "1");
+            let floor = 0;
+            while (floorPokemon.length > floor) {
+                floor++;
 
-                const themePokemon = floorPokemon[floor];
+                const themePokemon = floorPokemon[floor - 1];
 
                 let floorPokemonCount = 0;
 
@@ -291,7 +290,7 @@ export const seedTowers = async (prisma: PrismaClient) => {
                                 (moves.ailment.stat_chance ?? 0) == 100 &&
                                 (move.ailment_chance ?? 0) < 100 &&
                                 (move.ailment_chance ?? 0) >
-                                    (moves.ailment.stat_chance ?? 0)
+                                (moves.ailment.stat_chance ?? 0)
                             ) {
                                 moves.ailment = move;
                             }
@@ -320,17 +319,17 @@ export const seedTowers = async (prisma: PrismaClient) => {
                         moves.heal?.name,
                         moves.ohko
                             ? Chance().pickone([
-                                  moves.ailment?.name,
-                                  moves.ohko?.name,
-                              ])
+                                moves.ailment?.name,
+                                moves.ohko?.name,
+                            ])
                             : moves.ailment?.name,
                     ].filter((x) => x) as string[];
 
                     let level = Math.floor(
-                        ((5 * (((1000  + ((towerPokemon.length * 0.25) * 2.5)) * (floor * ((1 + (tower.id / 3))/100))) ** (1/3))) * 100) * 0.75
+                        ((5 * (((1000 + ((towerPokemon.length * 0.25) * 2.5)) * (floor * ((1 + (tower.id / 3)) / 100))) ** (1 / 3))) * 100) * 0.75
                     );
 
-                    if (floor == 6) {
+                    if (floor == floorPokemon.length) {
                         level = (level + (100 * floorPokemonCount))
                     }
 

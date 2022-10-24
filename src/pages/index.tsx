@@ -30,7 +30,6 @@ const HomePage: NextPage = () => {
 
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-    console.log({ cookies: req.cookies})
     if (!req.cookies.access_token) {
       return {
         redirect: {

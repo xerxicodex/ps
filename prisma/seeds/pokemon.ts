@@ -294,6 +294,7 @@ const jobs = ids.map((dex_id) => {
                             }
 
                             data.power =
+                                data.hp +
                                 data.attack +
                                 data.special_attack +
                                 data.defense +

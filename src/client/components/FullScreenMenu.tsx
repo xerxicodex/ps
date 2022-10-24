@@ -19,7 +19,6 @@ const FullScreenMenu = (props: IFullScreenMenu) => {
 
     useEffect(() => {
         const handleEvent = () => {
-            console.log("FullScreenMenu.animationend", props);
             if (!show && onClose) {
                 onClose();
             }
@@ -39,7 +38,6 @@ const FullScreenMenu = (props: IFullScreenMenu) => {
     }, [active]);
 
     const handleClose = useCallback(() => {
-        console.log("handleClose");
         setShow(false);
     }, [setShow]);
 

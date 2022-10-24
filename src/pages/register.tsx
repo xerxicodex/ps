@@ -70,12 +70,10 @@ export default function RegisterPage() {
     };
 
     useEffect(() => {
-        console.log("starter changed");
         setValue("starter", starter.id);
     }, [starter]);
 
     useEffect(() => {
-        console.log("skin changed")
         setValue("skin", trainerSkin);
     }, [trainerSkin])
 
