@@ -120,8 +120,20 @@ const HomePage: NextPage = () => {
             <div className="text-xl md:text-4xl font-black text-slate-600 w-full mb-2">
                 {tower?.name}
             </div>
-            <div className="title font-semibold text-slate-500">
-                Battle tower
+            <div className="title flex gap-x-2 items-center font-semibold text-slate-500">
+                <div>Battle tower</div>
+                {/* <div
+                    className={classNames(
+                        `${
+                            DifficultyColors[
+                                tower?.difficulty as keyof typeof DifficultyEnumType
+                            ]?.background
+                        }`,
+                        "rounded-lg py-1 px-2 text-white text-xs uppercase"
+                    )}
+                >
+                    {title(tower?.difficulty ?? "")}
+                </div> */}
             </div>
         </div>
     );
@@ -208,7 +220,12 @@ const HomePage: NextPage = () => {
                                             active={tower.id == _tower.id}
                                         />
                                     </div>
-                                    <div className="w-full h-full block md:hidden" onClick={() => mobileSelectTower(_tower)}>
+                                    <div
+                                        className="w-full h-full block md:hidden"
+                                        onClick={() =>
+                                            mobileSelectTower(_tower)
+                                        }
+                                    >
                                         <TowerShortCard tower={_tower} />
                                     </div>
                                 </div>
@@ -251,8 +268,8 @@ const HomePage: NextPage = () => {
                         className="absolute grid grid-flow-row-dense inset-0 bg-white overflow-hidden"
                         style={{ zIndex: 100 }}
                     >
-                        <div className="w-[125%] h-full overflow-auto pr-[25%] pb-[80px]">
-                            <div className="relative border-b p-4 px-6">
+                        <div className="w-full h-full">
+                            <div className="relative border-b p-4 px-6 h-[10%] border-b">
                                 {header}
                                 <div
                                     className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center p-2 bg-red-300 rounded-full"
@@ -261,23 +278,27 @@ const HomePage: NextPage = () => {
                                     {CloseIcon}
                                 </div>
                             </div>
-                            <div className="">
-                                <TowerRewards
-                                    headerClassName="text-sm p-3 px-6 mb-0 border-0 bg-slate-200 text-slate-700"
-                                    tower={tower}
-                                />
-                            </div>
-                            <div className="">
-                                <TowerFloorMasters
-                                    headerClassName="text-sm p-3 px-6 mb-0 border-0 bg-slate-200 text-slate-700"
-                                    tower={tower}
-                                />
-                            </div>
-                            <div className="">
-                                <TowerRankings
-                                    headerClassName="text-sm p-3 px-6 mb-0 border-0 bg-slate-200 text-slate-700"
-                                    tower={tower}
-                                />
+                            <div className="w-full h-[78%] overflow-hidden">
+                                <div className="w-[125%] h-full overflow-auto pr-[25%] pb-[80px]">
+                                    <div className="">
+                                        <TowerRewards
+                                            headerClassName="text-sm p-3 px-6 mb-0 border-0 bg-slate-200 text-slate-700"
+                                            tower={tower}
+                                        />
+                                    </div>
+                                    <div className="">
+                                        <TowerFloorMasters
+                                            headerClassName="text-sm p-3 px-6 mb-0 border-0 bg-slate-200 text-slate-700"
+                                            tower={tower}
+                                        />
+                                    </div>
+                                    <div className="">
+                                        <TowerRankings
+                                            headerClassName="text-sm p-3 px-6 mb-0 border-0 bg-slate-200 text-slate-700"
+                                            tower={tower}
+                                        />
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div className="absolute left-0 bottom-0 right-0 w-full h-[75px]">
