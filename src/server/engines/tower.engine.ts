@@ -1,7 +1,7 @@
 import { TowerChallenge, TowerPokemon, Trainer, TrainerPokemon } from "@prisma/client";
 import { randomUUID } from "crypto";
-import { BattleStream, getPlayerStreams, Teams } from "../../../lib/showdown/sim";
-import { RandomPlayerAI } from "../../../lib/showdown/sim/tools/random-player-ai";
+import { BattleStream, getPlayerStreams, Teams } from "./showdown/sim";
+import { RandomPlayerAI } from "./showdown/sim/tools/random-player-ai";
 
 export type ITowerBattle = {
     uid: string
