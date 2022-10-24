@@ -36,10 +36,8 @@ const Menu = (props: MenuProps) => {
             error.response.errors.forEach((err: any) => {
                 toast(err.message, {
                     type: "error",
-                    position: "top-right",
+                    position: "bottom-center",
                 });
-                queryClient.clear();
-                router.push("/login");
             });
         },
     });

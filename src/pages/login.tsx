@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { trpc } from "../client/utils/trpc";
 import { toast } from "react-toastify";
 import { useForm, FormProvider, SubmitHandler } from "react-hook-form";
@@ -10,9 +10,12 @@ import {
 } from "../server/schema/trainer.schema";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useQueryClient } from "react-query";
 
 export default function LoginPage() {
     const router = useRouter();
+
+    const { mutate: logoutUser } = trpc.useMutation(["auth.logout"]);
 
     const { mutate: login } = trpc.useMutation("auth.login", {
         onSuccess(data) {
@@ -29,6 +32,12 @@ export default function LoginPage() {
             });
         },
     });
+
+    // useEffect(() => {
+    //     if (loggedOut) {
+    //         login()
+    //     }
+    // }, [ loggedOut ])
 
     const methods = useForm<LoginTrainerInput>({
         resolver: zodResolver(loginTrainerSchema),
@@ -48,8 +57,9 @@ export default function LoginPage() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isSubmitSuccessful]);
 
-    const onSubmitHandler: SubmitHandler<LoginTrainerInput> = (values) => {
+    const onSubmitHandler: SubmitHandler<LoginTrainerInput> = async (values) => {
         // ? Execute the Mutation
+        await logoutUser();
         login(values);
     };
 

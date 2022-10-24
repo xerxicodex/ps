@@ -2,7 +2,8 @@ import { Prisma, Tower } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import type { Context } from "../createContext";
 import { createPaginator } from 'prisma-pagination'
-import { GetTrainerActiveTowerChallenge, TrainerChallengeTower } from "../services/trainer.service";
+import { GetTrainerActiveTowerChallenge, GetTrainerRoster, TrainerChallengeTower } from "../services/trainer.service";
+import { TowerBattleEngine } from "../engines/tower.engine";
 
 export const GetTowersHandler = async ({ ctx, input }: { ctx: Context, input: any }) => {
     // const input = {};
@@ -49,12 +50,22 @@ export const ChallengeTowerHandler = async ({ ctx, input }: { ctx: Context, inpu
 
             if (!activeChallenge) {
 
-                const challenge = await TrainerChallengeTower(trainer.id, input.tower_id)
-                
-                return {
-                    status: "success",
-                    challenge,
-                };
+                const trainerRoster = await GetTrainerRoster(trainer.id);
+
+                if (trainerRoster.length > 0) {
+                    
+                    const challenge = await TrainerChallengeTower(trainer.id, input.tower_id)
+    
+                    const battle = new TowerBattleEngine(trainer, trainerRoster, challenge);
+                    
+                    return {
+                        status: "success",
+                        battle,
+                    };
+
+                } else {
+                    throw("trainer doesn't have any roster pokemon")
+                }
             } else {
                 throw("trainer has an existing challenge")
             }

@@ -1,8 +1,6 @@
 /**
  * REPL
  *
- * Documented in logs/repl/README.md
- * https://github.com/smogon/pokemon-showdown/blob/master/logs/repl/README.md
  *
  * @author kota
  * @license MIT

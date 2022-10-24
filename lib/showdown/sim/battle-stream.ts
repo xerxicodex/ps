@@ -9,9 +9,9 @@
  * @license MIT
  */
 
-import { Streams, Utils } from '../lib';
-import { Battle } from './battle';
-import Teams from './teams';
+import {Streams, Utils} from '../lib';
+import {Teams} from './teams';
+import {Battle} from './battle';
 
 /**
  * Like string.split(delimiter), but only recognizes the first `limit`
@@ -183,7 +183,7 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 
 					input = toID(input);
 					if (/^[1-9]$/.test(input)) return side.pokemon[parseInt(input) - 1];
-					return side.pokemon.find((p: { baseSpecies: { id: string; }; species: { id: string; }; }) => p.baseSpecies.id === input || p.species.id === input);
+					return side.pokemon.find(p => p.baseSpecies.id === input || p.species.id === input);
 				};
 				let result = eval(message);
 				/* eslint-enable no-eval, @typescript-eslint/no-unused-vars */

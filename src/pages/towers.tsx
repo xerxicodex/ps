@@ -29,9 +29,12 @@ import TowerFloorMasters from "../client/components/TowerFloorMasters";
 import TowerRankings from "../client/components/TowerRankings";
 import TowerShortCard from "../client/components/TowerShortCard";
 import { CloseIcon } from "../client/icons";
+import { useRouter } from "next/router";
 
 const HomePage: NextPage = () => {
     const store = useStore();
+
+    const router = useRouter();
 
     // showFullScreenTower
     const [showFST, setShowFST] = useState(false);
@@ -52,24 +55,9 @@ const HomePage: NextPage = () => {
         }
     );
 
-    const { mutate: challenge, isLoading: isChallenging } = trpc.useMutation(
-        "tower.challenge",
-        {
-            onSuccess(data) {
-                console.log("challenge", data);
-            },
-            onError(error: any) {
-                toast(error.message, {
-                    type: "error",
-                    position: "top-center",
-                });
-            },
-        }
-    );
-
     useEffect(() => {
-        store.setPageLoading(isLoading || isFetching || isChallenging);
-    }, [isLoading, isFetching, isChallenging]);
+        store.setPageLoading(isLoading || isFetching);
+    }, [isLoading, isFetching]);
 
     useEffect(() => {
         if (data?.towers && !tower.id) {
@@ -188,7 +176,7 @@ const HomePage: NextPage = () => {
     const challengeBtn = (
         <div className="w-full h-full bg-gradient-to-r from-cyan-200 to-indigo-400 hover:opacity-75 hover:shadow-lg active:scale-95 cursor-pointer rounded-lg shadow overflow-hidden p-4">
             <div
-                onClick={() => challenge({ tower_id: tower.id })}
+                onClick={() => router.push(`battle/tower/${tower.id}`)}
                 className="flex items-center justify-center w-full h-full text-2xl text-lg font-semibold uppercase text-white"
             >
                 CHALLANGE
