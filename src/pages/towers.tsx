@@ -17,20 +17,26 @@ import PokemonImage from "../client/components/PokemonImage";
 import PokemonProfileImage, {
     PokemonProfileImageProps,
 } from "../client/components/PokemonProfileImage";
-import RewardImage from "../client/components/RewardImage";
+
 import MainLayout from "../client/layouts/MainLayout";
 import useStore from "../client/store";
 import { DifficultyColors } from "../client/utils/colors";
-import { RewardAmount, RewardName, RewardValue } from "../client/utils/reward";
+
 import { trpc } from "../client/utils/trpc";
 import { ParsePokemonFullName } from "../client/utils/pokemon";
+import TowerRewards from "../client/components/TowerRewards";
+import TowerFloorMasters from "../client/components/TowerFloorMasters";
+import TowerRankings from "../client/components/TowerRankings";
+import TowerShortCard from "../client/components/TowerShortCard";
+import { CloseIcon } from "../client/icons";
 
 const HomePage: NextPage = () => {
     const store = useStore();
 
-    const [page, setPage] = useState(1 as number);
+    // showFullScreenTower
+    const [showFST, setShowFST] = useState(false);
 
-    const [floors, setFloors] = useState({} as any);
+    const [page, setPage] = useState(1 as number);
 
     const [pages, setPages] = useState({} as { [key: number]: Tower[] });
 
@@ -90,53 +96,14 @@ const HomePage: NextPage = () => {
         }
     }, [moreData]);
 
-    let pokemonImagesRendered = 0;
-
-    // const parseTower = (_tower: Tower) => {
-    //     const _floors: any = {};
-
-    //     let top_floor = 0;
-
-    //     (_tower as any)?.pokemon
-    //         ?.sort(
-    //             (a: TowerPokemon, b: TowerPokemon) =>
-    //                 ((a.level ?? 0) -
-    //                 (b.level ?? 0)) > 0 ? -1 : 1
-    //         )
-    //         .forEach((p: TowerPokemon) => {
-    //             const floor = p.floor;
-    //             if (floor) {
-    //                 if (floor > top_floor) top_floor = floor;
-
-    //                 if (!_floors[floor]) {
-    //                     _floors[floor] = { leaders: [], grunts: [] };
-    //                 }
-
-    //                 const render = (className?: string) => (
-    //                     <PokemonProfileImage
-    //                         key={p.id + pokemonImagesRendered}
-    //                         className={className}
-    //                         pokemon={(p as any).pokemon}
-    //                         color={p.color ?? ""}
-    //                     />
-    //                 );
-
-    //                 pokemonImagesRendered++;
-
-    //                 if (_floors[floor].leaders.length < 6) {
-    //                     _floors[floor].leaders.push({ pokemon: p, render });
-    //                 } else _floors[floor].grunts.push({ pokemon: p, render });
-    //             }
-    //         });
-
-    //     _floors.top = _floors[top_floor];
-
-    //     return _floors;
-    // };
-
     const selectTower = (tower: Tower) => {
         setTower(tower);
         // setFloors((x: any) => parseTower(tower))
+    };
+
+    const mobileSelectTower = (tower: Tower) => {
+        setTower(tower);
+        setShowFST(true);
     };
 
     const handleScroll = (e: any) => {
@@ -148,11 +115,80 @@ const HomePage: NextPage = () => {
         }
     };
 
+    const header = (
+        <div className="flex flex-wrap w-full h-full">
+            <div className="text-xl md:text-4xl font-black text-slate-600 w-full mb-2">
+                {tower?.name}
+            </div>
+            <div className="title font-semibold text-slate-500">
+                Battle tower
+            </div>
+        </div>
+    );
+
+    const enemyBubbles = (
+        <div className={classNames("w-full h-full", "h-4/5")}>
+            <div className="flex relative -gap-x-8 w-full h-full">
+                <div className="col-span-2"></div>
+                {[1, 2, 3, 4, 5, 6]?.map((floor: number) => {
+                    const leader = (tower as any)?.pokemon?.filter(
+                        (x: TowerPokemon) => x.floor == floor
+                    )[0];
+                    if (leader) {
+                        return (
+                            <div
+                                key={leader.id}
+                                className="absolute top-8"
+                                style={{
+                                    right: (floor - 1 + 2) * 7 + "%",
+                                }}
+                            >
+                                <PokemonProfileImage
+                                    key={leader.id}
+                                    className="w-[75px] h-[75px] bg-gray-300 outline outline-white rounded-full col-span-1 h-full p-4"
+                                    pokemon={(leader as any).pokemon}
+                                    color={leader.color ?? ""}
+                                />
+                            </div>
+                        );
+                    }
+                })}
+                <div
+                    className="absolute top-8"
+                    style={{ right: 0 * 2.5 + "em" }}
+                >
+                    <div className="w-[75px] h-[75px] col-span-1 h-full flex items-center justify-center">
+                        <div>
+                            <div className="w-full text-lg font-black">
+                                +{(tower as any)?.pokemon?.length - 6}
+                            </div>
+                            <div className="w-full text-xs text-center">
+                                {" "}
+                                more
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+
+    const challengeBtn = (
+        <div className="w-full h-full bg-gradient-to-r from-cyan-200 to-indigo-400 hover:opacity-75 hover:shadow-lg active:scale-95 cursor-pointer rounded-lg shadow overflow-hidden p-4">
+            <div
+                onClick={() => challenge({ tower_id: tower.id })}
+                className="flex items-center justify-center w-full h-full text-2xl text-lg font-semibold uppercase text-white"
+            >
+                CHALLANGE
+            </div>
+        </div>
+    );
+
     return (
         <MainLayout>
             <FullScreenLoader loading={isLoading} />
-            <div className="w-full h-full flex">
-                <div className="relative w-[25%] border-r shadow-lg grid overflow-hidden">
+            <div className="relative w-full h-full flex">
+                <div className="relative w-full md:w-[25%] border-r shadow-lg grid overflow-hidden">
                     <ComponentLoader loading={listLoading} />
                     <div
                         className={classNames(
@@ -162,301 +198,93 @@ const HomePage: NextPage = () => {
                     >
                         {Object.values(pages).map((page) =>
                             page.map((_tower: Tower) => (
-                                <div
-                                    key={_tower.id}
-                                    onClick={() => selectTower(_tower)}
-                                    className={classNames(
-                                        tower.id == _tower.id
-                                            ? "from-blue-200/25 to-blue-400/25"
-                                            : "cursor-pointer hover:bg-gray-50",
-                                        "bg-gradient-to-r h-[150px] border-b transition-all duration-500 flex flex-wrap w-full h-full"
-                                    )}
-                                >
-                                    <div className="flex w-full px-8 pt-4 h-1/4 justify-between">
-                                        <div className="flex flex-wrap justify-start">
-                                            <div className="title w-full overflow-elipsis nowrap font-bold text-slate-500 mb-2">
-                                                #{_tower.id} {_tower.name}
-                                            </div>
-                                            {/* <div
-                                                className={classNames(
-                                                    `${
-                                                        DifficultyColors[
-                                                            _tower?.difficulty as keyof typeof DifficultyEnumType
-                                                        ]?.text
-                                                    }`,
-                                                    "rounded-lg py-1 text-xs uppercase font-semibold"
-                                                )}
-                                            >
-                                                {title(_tower?.difficulty ?? "")}
-                                            </div> */}
-                                        </div>
-                                        <div className="text-xs">
-                                            <div
-                                                className={classNames(
-                                                    `${
-                                                        DifficultyColors[
-                                                            _tower?.difficulty as keyof typeof DifficultyEnumType
-                                                        ]?.text
-                                                    }`,
-                                                    "rounded-lg py-1 text-xs uppercase font-semibold"
-                                                )}
-                                            >
-                                                {title(
-                                                    _tower?.difficulty ?? ""
-                                                )}
-                                            </div>
-                                        </div>
+                                <div className="w-full h-[150px]">
+                                    <div
+                                        className="w-full h-full hidden md:block"
+                                        onClick={() => selectTower(_tower)}
+                                    >
+                                        <TowerShortCard
+                                            tower={_tower}
+                                            active={tower.id == _tower.id}
+                                        />
                                     </div>
-                                    <div className="flex items-center px-8 justify-start w-full h-3/4">
-                                        <div className="flex gap-x-4">
-                                            {(_tower as any)?.pokemon
-                                                ?.slice(-3)
-                                                ?.map((p: any) => (
-                                                    <PokemonProfileImage
-                                                        key={
-                                                            p.id +
-                                                            pokemonImagesRendered
-                                                        }
-                                                        className="min-w-[50px] min-h-[50px]"
-                                                        pokemon={
-                                                            (p as any).pokemon
-                                                        }
-                                                        color={p.color ?? ""}
-                                                    />
-                                                ))}
-                                            <div className="flex items-center">
-                                                +
-                                                {(_tower as any).pokemon
-                                                    .length - 3}{" "}
-                                                more
-                                            </div>
-                                        </div>
+                                    <div className="w-full h-full block md:hidden" onClick={() => mobileSelectTower(_tower)}>
+                                        <TowerShortCard tower={_tower} />
                                     </div>
                                 </div>
                             ))
                         )}
                     </div>
                 </div>
-                <div className="w-[75%] bg-gray-100 pb-12 overflow-y-auto">
+                <div className="hidden md:block w-[75%] bg-gray-100 pb-12 overflow-y-auto">
                     <div className="flex items-center justify-between px-14 w-full h-1/6">
-                        <div className="flex flex-wrap">
-                            <div className="text-4xl font-black text-slate-600 w-full mb-2">
-                                {tower?.name}
-                            </div>
-                            <div className="title font-semibold text-slate-500">
-                                Battle tower
-                            </div>
-                        </div>
-
-                        <div
-                            className={classNames(
-                                // `${
-                                //     DifficultyColors[
-                                //         tower?.difficulty as keyof typeof DifficultyEnumType
-                                //     ]?.border
-                                // }`,
-                                "h-4/5"
-                            )}
-                        >
-                            <div className="flex relative -gap-x-8 w-full h-full">
-                                <div className="col-span-2"></div>
-                                {[1, 2, 3, 4, 5, 6]?.map((floor: number) => {
-                                    const leader = (
-                                        tower as any
-                                    )?.pokemon?.filter(
-                                        (x: TowerPokemon) => x.floor == floor
-                                    )[0];
-                                    if (leader) {
-                                        return (
-                                            <div
-                                                key={leader.id}
-                                                className="absolute top-8"
-                                                style={{
-                                                    right:
-                                                        (floor + 2) * 2.7 +
-                                                        "em",
-                                                }}
-                                            >
-                                                <PokemonProfileImage
-                                                    key={leader.id}
-                                                    className="w-[75px] h-[75px] bg-gray-300 outline outline-white rounded-full col-span-1 h-full p-4"
-                                                    pokemon={
-                                                        (leader as any).pokemon
-                                                    }
-                                                    color={leader.color ?? ""}
-                                                />
-                                            </div>
-                                        );
-                                    }
-                                })}
-                                <div
-                                    className="absolute top-8"
-                                    style={{ right: 0 * 2.5 + "em" }}
-                                >
-                                    <div className="w-[75px] h-[75px] col-span-1 h-full flex items-center justify-center">
-                                        <div>
-                                            <div className="w-full text-lg font-black">
-                                                +
-                                                {(tower as any)?.pokemon
-                                                    ?.length - 6}
-                                            </div>
-                                            <div className="w-full text-xs text-center">
-                                                {" "}
-                                                more
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        <div>{header}</div>
+                        <div className="w-2/5 h-full flex justify-end items-center">
+                            {enemyBubbles}
                         </div>
                     </div>
 
                     <div className="w-full px-14">
                         <div className="flex items-start gap-x-8">
                             <div className="w-4/6">
-                                <div className="flex flex-wrap w-full h-3/6 mb-8 bg-white rounded-lg shadow overflow-hidden">
-                                    <div className="w-full h-[7%] p-6 mb-6 text-lg font-semibold uppercase opacity-50">
-                                        Rewards
-                                    </div>
-                                    <div className="w-full min-h-[93%]">
-                                        <div className="flex flex-wrap ">
-                                            {(tower as any).rewards
-                                                ?.sort(
-                                                    (a: any, b: any) =>
-                                                        RewardAmount(a.reward) -
-                                                        RewardAmount(b.reward)
-                                                )
-                                                ?.map((towerReward: any) => {
-                                                    // const value = RewardValue(towerReward.reward)
-                                                    const name = RewardName(
-                                                        towerReward.reward
-                                                    );
-
-                                                    const amount = RewardAmount(
-                                                        towerReward.reward
-                                                    );
-
-                                                    return (
-                                                        <div
-                                                            key={towerReward.id}
-                                                            className="w-full p-4 pb-0 border-t mb-4"
-                                                        >
-                                                            <div className="flex gap-x-4 w-full items-center justify-between">
-                                                                <div className="flex gap-x-4 w-full items-center">
-                                                                    <div className="w-8 h-8 bg-red-100 rounded-full">
-                                                                        <RewardImage
-                                                                            reward={
-                                                                                towerReward.reward
-                                                                            }
-                                                                        />
-                                                                    </div>
-                                                                    <div className="">
-                                                                        {title(
-                                                                            name
-                                                                        )}
-                                                                    </div>
-                                                                </div>
-                                                                <div className="">
-                                                                    {numeral(
-                                                                        amount
-                                                                    ).format(
-                                                                        "0,0"
-                                                                    )}
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    );
-                                                })}
-                                        </div>
-                                    </div>
+                                <div className="hidden md:block w-full h-3/6 mb-8 bg-white rounded-lg shadow">
+                                    <TowerRewards tower={tower} />
                                 </div>
-                                <div className="flex flex-wrap w-full mb-8 bg-white rounded-lg shadow overflow-hidden">
-                                    <div className="w-full h-[7%] p-6 mb-0 text-lg font-semibold uppercase opacity-50">
-                                        Floor Masters
-                                    </div>
-                                    <div className="w-full min-h-[93%]">
-                                        <div className="flex flex-wrap ">
-                                            {[1, 2, 3, 4, 5, 6]?.map(
-                                                (floor: number) => {
-                                                    const leader = (
-                                                        tower as any
-                                                    )?.pokemon?.filter(
-                                                        (x: TowerPokemon) =>
-                                                            x.floor == floor
-                                                    )[0];
-
-                                                    if (leader) {
-                                                        const name =
-                                                            ParsePokemonFullName(
-                                                                leader
-                                                            );
-                                                        return (
-                                                            <div
-                                                                key={
-                                                                    leader.id +
-                                                                    floor
-                                                                }
-                                                                className="w-full p-4 pb-0 border-t mb-4"
-                                                            >
-                                                                <div className="flex gap-x-4 w-full items-center justify-between">
-                                                                    <div className="flex gap-x-4 w-full items-center">
-                                                                        <PokemonProfileImage
-                                                                            pokemon={
-                                                                                (
-                                                                                    leader as any
-                                                                                )
-                                                                                    .pokemon
-                                                                            }
-                                                                            className="w-8 h-8 bg-red-100 outline outline-red-100 rounded-full"
-                                                                            color={
-                                                                                leader.color ??
-                                                                                ""
-                                                                            }
-                                                                        />
-                                                                        <div className="">
-                                                                            {title(
-                                                                                name
-                                                                            )}
-                                                                        </div>
-                                                                    </div>
-                                                                    <div className="">
-                                                                        {numeral(
-                                                                            floor
-                                                                        ).format(
-                                                                            "0,0"
-                                                                        )}
-                                                                        F
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        );
-                                                    }
-                                                }
-                                            )}
-                                        </div>
-                                    </div>
+                                <div className="hidden md:block w-full mb-8 bg-white rounded-lg shadow">
+                                    <TowerFloorMasters tower={tower} />
                                 </div>
                             </div>
                             <div className="grid grid-cols-1 grid-rows-6 gap-y-6 w-2/6 min-h-[50vh]">
-                                <div className="w-full row-span-5 bg-white rounded-lg shadow overflow-hidden">
-                                    <div className="w-full h-[7%] p-6 mb-6 text-lg font-semibold uppercase opacity-50">
-                                        Rankings
-                                    </div>
+                                <div className="hidden md:block w-full row-span-5 bg-white rounded-lg shadow">
+                                    <TowerRankings tower={tower} />
                                 </div>
-                                <div className="w-full row-span-1 bg-gradient-to-r from-cyan-200 to-indigo-400 hover:opacity-75 hover:shadow-lg active:scale-95 cursor-pointer rounded-lg shadow overflow-hidden p-4">
-                                    <div
-                                        onClick={() =>
-                                            challenge({ tower_id: tower.id })
-                                        }
-                                        className="flex items-center justify-center w-full h-full text-2xl text-lg font-semibold uppercase text-white"
-                                    >
-                                        CHALLANGE
-                                    </div>
+                                <div className="w-full row-span-1">
+                                    {challengeBtn}
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                {showFST && (
+                    <div
+                        className="absolute grid grid-flow-row-dense inset-0 bg-white overflow-hidden"
+                        style={{ zIndex: 100 }}
+                    >
+                        <div className="w-[125%] h-full overflow-auto pr-[25%] pb-[80px]">
+                            <div className="relative border-b p-4 px-6">
+                                {header}
+                                <div
+                                    className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center p-2 bg-red-300 rounded-full"
+                                    onClick={() => setShowFST(false)}
+                                >
+                                    {CloseIcon}
+                                </div>
+                            </div>
+                            <div className="">
+                                <TowerRewards
+                                    headerClassName="text-sm p-3 px-6 mb-0 border-0 bg-slate-200 text-slate-700"
+                                    tower={tower}
+                                />
+                            </div>
+                            <div className="">
+                                <TowerFloorMasters
+                                    headerClassName="text-sm p-3 px-6 mb-0 border-0 bg-slate-200 text-slate-700"
+                                    tower={tower}
+                                />
+                            </div>
+                            <div className="">
+                                <TowerRankings
+                                    headerClassName="text-sm p-3 px-6 mb-0 border-0 bg-slate-200 text-slate-700"
+                                    tower={tower}
+                                />
+                            </div>
+                        </div>
+                        <div className="absolute left-0 bottom-0 right-0 w-full h-[75px]">
+                            {challengeBtn}
+                        </div>
+                    </div>
+                )}
             </div>
         </MainLayout>
     );

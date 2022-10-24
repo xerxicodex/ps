@@ -32,7 +32,7 @@ const MainLayout: React.FC<PropsWithChildren> = ({ children }) => {
     );
 
     return (
-        <div className="w-screen h-screen">
+        <div className="w-screen h-screen text-sm md:text-lg">
             <FullScreenLoader loading={loading} />
             <div className="block md:hidden">
                 <FullScreenMenu
@@ -66,7 +66,7 @@ const MainLayout: React.FC<PropsWithChildren> = ({ children }) => {
                         </div>
 
                         <div className="flex md:hidden items-center justify-between active:opacity-50">
-                            <div onClick={() => setShowMenu(true)}>
+                            <div onClick={() => setShowMenu(!showMenu)}>
                                 {HamburgerIcon}
                             </div>
                         </div>
