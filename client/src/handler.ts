@@ -11,8 +11,8 @@ import {
   StatusName,
   toID,
   TypeName,
-} from '@nxpkmn/data';
-import {Protocol, Args, KWArgs, PokemonSearchID, PokemonIdent} from '@nxpkmn/protocol';
+} from '@pkmn/data';
+import {Protocol, Args, KWArgs, PokemonSearchID, PokemonIdent} from '@pkmn/protocol';
 
 import {Battle, NULL, NA} from './battle';
 import {Side} from './side';

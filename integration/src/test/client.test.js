@@ -2,11 +2,11 @@
 
 const fs = require('fs');
 
-const {Dex} = require('@nxpkmn/sim');
-const {Generations} = require('@nxpkmn/data');
-const {Battle} = require('@nxpkmn/client');
-const {Protocol} = require('@nxpkmn/protocol');
-const {LogFormatter} = require('@nxpkmn/view');
+const {Dex} = require('@pkmn/sim');
+const {Generations} = require('@pkmn/data');
+const {Battle} = require('@pkmn/client');
+const {Protocol} = require('@pkmn/protocol');
+const {LogFormatter} = require('@pkmn/view');
 
 const {ExhaustiveRunner, UNLOGGED} = require('./client');
 

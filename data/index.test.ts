@@ -1,10 +1,10 @@
 import {Generations, StatsTable, Dex as DexT, ItemName} from './index';
 
 import {calculate, Pokemon, Move} from '@smogon/calc/adaptable';
-import {ID, ModData} from '@nxpkmn/dex-types';
-import {ModdedDex} from '@nxpkmn/mods';
-import * as dex from '@nxpkmn/dex';
-import * as sim from '@nxpkmn/sim';
+import {ID, ModData} from '@pkmn/dex-types';
+import {ModdedDex} from '@pkmn/mods';
+import * as dex from '@pkmn/dex';
+import * as sim from '@pkmn/sim';
 
 import * as fs from 'fs';
 import * as path from 'path';
@@ -664,7 +664,7 @@ describe('@smogon/calc', () => {
   });
 });
 
-// NOTE: this is not actually a @nxpkmn/data test but instead an integration test for the data layer
+// NOTE: this is not actually a @pkmn/data test but instead an integration test for the data layer
 describe('Data', () => {
   it('descriptions', () => {
     for (let gen = 1; gen <= 8; gen++) {
@@ -696,10 +696,10 @@ describe('Data', () => {
 });
 
 for (const [pkg, Dex] of Object.entries(DATA)) {
-  describe(`@nxpkmn/mods (${pkg})`, () => {
+  describe(`@pkmn/mods (${pkg})`, () => {
     it('usage', async () => {
       const modded = new ModdedDex(
-        Dex.mod('gen8bdsp' as ID, await import('@nxpkmn/mods/gen8bdsp') as ModData)
+        Dex.mod('gen8bdsp' as ID, await import('@pkmn/mods/gen8bdsp') as ModData)
       );
       expect((await (new Generations(Dex).get(8).learnsets.canLearn('Weavile', 'Knock Off'))))
         .toBe(true);
@@ -715,7 +715,7 @@ describe('Bundle', () => {
       const window = {} as { Dex: DexT; Generations: typeof Generations };
 
       // Some gymnastics required to load the learnsets data... (the bundle is not for Node)
-      const build = path.resolve(__dirname, './node_modules/@nxpkmn/dex/build');
+      const build = path.resolve(__dirname, './node_modules/@pkmn/dex/build');
       const converted = fs.readFileSync(`${build}/production.min.js`, 'utf8')
         .replace('./data/learnsets.json', `${build}/data/learnsets.json`);
 

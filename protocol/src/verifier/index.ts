@@ -8,7 +8,7 @@ import {
   StatusName,
   TypeName,
   Weather,
-} from '@nxpkmn/types';
+} from '@pkmn/types';
 
 import {Protocol, Args, KWArgs, PokemonIdent} from '../index';
 

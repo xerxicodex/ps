@@ -1,5 +1,5 @@
 {
-  "name": "@nxpkmn/streams",
+  "name": "@xerxicodex/streams",
   "version": "1.0.0",
   "main": "build/index.js",
   "types": "build/index.d.ts",
@@ -22,7 +22,7 @@
     "test": "npm run lint"
   },
   "eslintConfig": {
-    "extends": "@nxpkmn",
+    "extends": "@pkmn",
     "rules": {
       "@typescript-eslint/quotes": "off",
       "@typescript-eslint/indent": [

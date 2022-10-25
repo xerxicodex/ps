@@ -8,11 +8,11 @@ const ps = {
   RandomPlayerAI:
     require('../../../vendor/pokemon-showdown/.sim-dist/tools/random-player-ai').RandomPlayerAI,
 };
-const {Generations} = require('@nxpkmn/data');
-const pkmn = require('@nxpkmn/sim');
+const {Generations} = require('@pkmn/data');
+const pkmn = require('@pkmn/sim');
 
-const {Verifier} = require('@nxpkmn/protocol/verifier');
-const {TeamGenerators} = require('@nxpkmn/randoms');
+const {Verifier} = require('@pkmn/protocol/verifier');
+const {TeamGenerators} = require('@pkmn/randoms');
 
 pkmn.Teams.setGeneratorFactory(TeamGenerators);
 

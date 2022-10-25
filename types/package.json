@@ -1,5 +1,5 @@
 {
-  "name": "@nxpkmn/types",
+  "name": "@xerxicodex/types",
   "version": "2.1.0",
   "types": "index.d.ts",
   "description": "Type definitions common across Pokemon Showdown",

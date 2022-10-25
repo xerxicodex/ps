@@ -1,4 +1,4 @@
-import type {ModdedFormatData} from '@nxpkmn/sim';
+import type {ModdedFormatData} from '@pkmn/sim';
 
 export const Rulesets: {[k: string]: ModdedFormatData} = {
 	obtainablemoves: {

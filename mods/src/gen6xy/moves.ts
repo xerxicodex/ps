@@ -1,4 +1,4 @@
-import type {ModdedMoveData} from '@nxpkmn/sim';
+import type {ModdedMoveData} from '@pkmn/sim';
 
 export const Moves: {[k: string]: ModdedMoveData} = {
 	dragonascent: {

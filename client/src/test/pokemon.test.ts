@@ -1,5 +1,5 @@
-import {Dex} from '@nxpkmn/dex';
-import {Generations, Effect, ID, SpeciesName} from '@nxpkmn/data';
+import {Dex} from '@pkmn/dex';
+import {Generations, Effect, ID, SpeciesName} from '@pkmn/data';
 import {
   DetailedPokemon,
   PokemonDetails,
@@ -7,7 +7,7 @@ import {
   PokemonIdent,
   PokemonSearchID,
   Protocol,
-} from '@nxpkmn/protocol';
+} from '@pkmn/protocol';
 
 import {Pokemon, Side} from '../index';
 import {Battle} from '../battle';

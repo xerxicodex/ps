@@ -6,7 +6,7 @@ import {
 	Dex,
 	Format,
 	ModdedDex,
-} from '@nxpkmn/sim';
+} from '@pkmn/sim';
 
 import {RandomGen1Teams} from './gen1';
 import {RandomGen2Teams} from './gen2';

@@ -1,11 +1,11 @@
-import {Dex, Teams as DTeams, TeamValidator, RandomPlayerAI, BattleStreams, PRNG} from '@nxpkmn/sim';
-import {Protocol, Handler, ArgName, ArgType, BattleArgsKWArgType} from '@nxpkmn/protocol';
-import {Teams, Data, PokemonSet} from '@nxpkmn/sets';
-import {Battle, Side, Pokemon} from '@nxpkmn/client';
-import {TeamGenerators} from '@nxpkmn/randoms';
-import {Sprites, Icons, GraphicsGen} from '@nxpkmn/img';
-import {LogFormatter} from '@nxpkmn/view';
-import {Generations, GenerationNum} from '@nxpkmn/data';
+import {Dex, Teams as DTeams, TeamValidator, RandomPlayerAI, BattleStreams, PRNG} from '@pkmn/sim';
+import {Protocol, Handler, ArgName, ArgType, BattleArgsKWArgType} from '@pkmn/protocol';
+import {Teams, Data, PokemonSet} from '@pkmn/sets';
+import {Battle, Side, Pokemon} from '@pkmn/client';
+import {TeamGenerators} from '@pkmn/randoms';
+import {Sprites, Icons, GraphicsGen} from '@pkmn/img';
+import {LogFormatter} from '@pkmn/view';
+import {Generations, GenerationNum} from '@pkmn/data';
 
 import fs from 'fs';
 

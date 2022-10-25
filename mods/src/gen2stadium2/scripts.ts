@@ -5,7 +5,7 @@ import type {
 	Pokemon,
 	SparseBoostsTable,
 	StatIDExceptHP,
-} from '@nxpkmn/sim';
+} from '@pkmn/sim';
 
 /**
  * Stadium 2 mechanics inherit from gen 2 mechanics, but fixes some bugs.

@@ -1,7 +1,10 @@
 {
-  "name": "ps",
+  "name": "@xerxicodex/ps",
   "private": false,
-  "repository": "github:xerxicodex/ps",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xerxicodex/ps.git"
+  },
   "license": "MIT",
   "dependencies": {
     "@babel/cli": "^7.19.3",
@@ -26,7 +29,7 @@
     "@babel/plugin-transform-typescript": "^7.19.3",
     "@babel/preset-env": "^7.19.4",
     "@babel/preset-typescript": "^7.18.6",
-    "@nxpkmn/eslint-config": "^2.11.0",
+    "@pkmn/eslint-config": "^2.11.0",
     "@types/jest": "^29.2.0",
     "@types/node": "^18.11.2",
     "@typescript-eslint/eslint-plugin": "^5.40.1",
@@ -68,5 +71,14 @@
     "test": "subpkg run test",
     "test:integration": "npm test && npm -C integration test",
     "postinstall": "subpkg install && npm -C integration install"
-  }
+  },
+  "description": "<p align=\"center\">\r   <img alt=\"pkmn/ps\" width=\"192\" height=\"192\" src=\"https://pkmn.cc/pokeball.png\" />\r   <br />\r   <br />\r   <a href=\"https://github.com/pkmn/ps/actions/workflows/test.yml\">\r     <img alt=\"Test Status\" src=\"https://github.com/pkmn/ps/workflows/Tests/badge.svg\" />\r   </a>\r   <a href=\"https://github.com/pkmn/ps/blob/master/LICENSE\">\r     <img alt=\"License\" src=\"https://img.shields.io/badge/License-MIT-blue.svg\" />\r   </a>\r </p>\r <hr />",
+  "bugs": {
+    "url": "https://github.com/xerxicodex/ps/issues"
+  },
+  "homepage": "https://github.com/xerxicodex/ps#readme",
+  "version": "1.0.0",
+  "main": "bundler.js",
+  "devDependencies": {},
+  "author": ""
 }

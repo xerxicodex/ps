@@ -1,4 +1,4 @@
-import {ID} from '@nxpkmn/types';
+import {ID} from '@pkmn/types';
 
 export function toID(text: any): ID {
   if (text?.id) text = text.id;

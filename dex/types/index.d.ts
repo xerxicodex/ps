@@ -15,7 +15,7 @@ import {
   StatusName,
   Tier,
   TypeName,
-} from '@nxpkmn/types';
+} from '@pkmn/types';
 
 export type AbilityName = string & As<'AbilityName'>;
 export type ItemName = string & As<'ItemName'>;
@@ -489,7 +489,7 @@ export interface Dex {
   ): number;
 }
 
-export * from '@nxpkmn/types';
+export * from '@pkmn/types';
 
 // https://github.com/krzkaczor/ts-essentials v6.0.5
 // MIT License Copyright 2018-2019 Chris Kaczor

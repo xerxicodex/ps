@@ -1,4 +1,4 @@
-import type {ModdedSpeciesFormatsData} from '@nxpkmn/sim';
+import type {ModdedSpeciesFormatsData} from '@pkmn/sim';
 
 export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	pichuspikyeared: {

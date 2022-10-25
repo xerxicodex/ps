@@ -1,5 +1,5 @@
 {
-  "name": "@nxpkmn/dex",
+  "name": "@xerxicodex/dex",
   "version": "0.6.1",
   "main": "build/index.js",
   "types": "build/index.d.ts",
@@ -16,7 +16,7 @@
     "index.ts"
   ],
   "dependencies": {
-    "@nxpkmn/dex-types": "^0.6.1"
+    "@pkmn/dex-types": "^0.6.1"
   },
   "scripts": {
     "lint": "eslint --cache *.ts",

@@ -1,4 +1,4 @@
-import type {ModdedAbilityData} from '@nxpkmn/sim';
+import type {ModdedAbilityData} from '@pkmn/sim';
 
 export const Abilities: {[k: string]: ModdedAbilityData} = {
 	asoneglastrier: {

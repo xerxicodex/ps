@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 
-import {PokemonSet} from '@nxpkmn/types';
+import {PokemonSet} from '@pkmn/types';
 
 import {Team, Teams} from '../teams';
 import {GEN} from './data';

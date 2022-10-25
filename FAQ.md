@@ -5,7 +5,7 @@
 Yes.
 
 You should be able to judge the activity level of this project by looking at how recently a
-[package has been released](https://www.npmjs.com/package/@nxpkmn/sim), the
+[package has been released](https://www.npmjs.com/package/@xerxicodex/sim), the
 [commit activity on this repository](https://github.com/pkmn/ps/commits/master) and the activity
 from the [pkmn organization in general](https://github.com/pkmn). If at any point this package
 is no longer being maintained the documentation will be updated to reflect that (and NPM will
@@ -18,7 +18,7 @@ its codebase and whether a sufficient quantity and quality of changes have lande
 overhead of a release. If there are large breaking changes in `smogon/pokemon-showdown` or
 `smogon/pokemon-showdown-client` there may be some increased latency before a release.
 
-`nxpkmn/ps`'s [SLO](https://en.wikipedia.org/wiki/Service-level_objective) is to update at *worst*
+`pkmn/ps`'s [SLO](https://en.wikipedia.org/wiki/Service-level_objective) is to update at *worst*
 once a month, but will aim to release approximately weekly. Pokémon Showdown often runs on the
 bleeding edge -  being able to pick a commit from a larger range to cut a release from ends up
 resulting in a more stable package to build off of. If your project has a particular need for a
@@ -46,7 +46,7 @@ work involved to modularize and release a specific package has been deemed to no
 
 ## How does versioning work? Is package `X` stable?
 
-`@nxpkmn` packages are not published at all if they are not expected to be in a useful and usable
+`@pkmn` packages are not published at all if they are not expected to be in a useful and usable
 state. All packages follow [semantic versioning](https://semver.org/), though many packages have
 not yet reached the 1.0.0 mark. After packages have reached 1.0.0, all changes resulting minor or
 major version bumps will be documented in a `CHANGELOG.md` file in the directory for the package.
@@ -54,52 +54,52 @@ major version bumps will be documented in a `CHANGELOG.md` file in the directory
 The following packages are stable and only depend on other stable packages. These packages have
 reached 1.0.0 versions and changes are mostly motivated by underlying changes in Pokémon Showdown:
 
-- [`@nxpkmn/types`](types)
-- [`@nxpkmn/sets`](sets)
+- [`@xerxicodex/types`](types)
+- [`@xerxicodex/sets`](sets)
 
 The following packages are close to being considered stable - their APIs are very unlikely to change
 but they still require some bake time before reaching maturity:
 
-- [`@nxpkmn/login`](login)
+- [`@xerxicodex/login`](login)
 
 The following packages are all versioned together - a change to any one of them will result in the
-version being bumped for all of them. All except `@nxpkmn/data` rely directly on `import`-ed Pokémon
+version being bumped for all of them. All except `@xerxicodex/data` rely directly on `import`-ed Pokémon
 Showdown code/logic, and keeping the versions in lockstep is useful for being able to deduce
-compatibility at a glance. Most of the APIs are stable, with `@nxpkmn/randoms` being the most stable
-API though having the most internal volatility. `@nxpkmn/data`'s API has the most flexibility at this
+compatibility at a glance. Most of the APIs are stable, with `@xerxicodex/randoms` being the most stable
+API though having the most internal volatility. `@xerxicodex/data`'s API has the most flexibility at this
 point, but together these packages are relatively close to 1.0.0 status:
 
-- [`@nxpkmn/sim`](sim)
-- [`@nxpkmn/mods`](mods)
-- [`@nxpkmn/randoms`](randoms)
-- [`@nxpkmn/dex-types`](dex/types)
-- [`@nxpkmn/dex`](dex)
-- [`@nxpkmn/data`](data)
+- [`@xerxicodex/sim`](sim)
+- [`@xerxicodex/mods`](mods)
+- [`@xerxicodex/randoms`](randoms)
+- [`@xerxicodex/dex-types`](dex/types)
+- [`@xerxicodex/dex`](dex)
+- [`@xerxicodex/data`](data)
 
-The following packages are in the most flux - `@nxpkmn/protocol` is relatively stable, but
-`@nxpkmn/client` is undergoing heavy development to ensure it fits in well with other
-[`@nxpkmn`](https://pkmn.cc/@nxpkmn/) projects and its API is actively evolving, possibly requiring
-changes from `@nxpkmn/protocol` in the process. `@nxpkmn/view` depends heavily on `@nxpkmn/client` and
+The following packages are in the most flux - `@xerxicodex/protocol` is relatively stable, but
+`@xerxicodex/client` is undergoing heavy development to ensure it fits in well with other
+[`@pkmn`](https://pkmn.cc/@xerxicodex/) projects and its API is actively evolving, possibly requiring
+changes from `@xerxicodex/protocol` in the process. `@xerxicodex/view` depends heavily on `@xerxicodex/client` and
 also will likely have numerous additional classes and helpers added to it before becoming stable.
-`@nxpkmn/img`'s status depends heavily on the ongoing
+`@xerxicodex/img`'s status depends heavily on the ongoing
 [`smogon/sprites`](https://github.com/smogon/sprites) initiative.
 
-- [`@nxpkmn/protocol`](protocol)
-- [`@nxpkmn/client`](client)
-- [`@nxpkmn/view`](view)
-- [`@nxpkmn/img`](img)
+- [`@xerxicodex/protocol`](protocol)
+- [`@xerxicodex/client`](client)
+- [`@xerxicodex/view`](view)
+- [`@xerxicodex/img`](img)
 
-## Should I be depending on `@nxpkmn/types` and `@nxpkmn/dex-types`?
+## Should I be depending on `@xerxicodex/types` and `@xerxicodex/dex-types`?
 
 These packages exist primarily for internal purposes - **most consumers should not be depending
-directly on these packages**. [`@nxpkmn/data`](data), [`@nxpkmn/dex`](dex), and [`@nxpkmn/sim`](sim)
-re-export all of these types (though `@nxpkmn/sim`'s are weaker due to practical considerations) -
+directly on these packages**. [`@xerxicodex/data`](data), [`@xerxicodex/dex`](dex), and [`@xerxicodex/sim`](sim)
+re-export all of these types (though `@xerxicodex/sim`'s are weaker due to practical considerations) -
 simply importing from these packages is the intended usage.
 
-`typeof Dex` is the recommended way to denote the type of the `Dex` object from `@nxpkmn/dex` and
-`@nxpkmn/sim`, as once you have a `Dex` implementation chosen the actual object's type is what is
-relevant. If you have reasons to make your code data-layer agnostic, `@nxpkmn/dex-types` then becomes
-relevant, though you should probably just use `@nxpkmn/data` and let it handle abstracing over `Dex`.
+`typeof Dex` is the recommended way to denote the type of the `Dex` object from `@xerxicodex/dex` and
+`@xerxicodex/sim`, as once you have a `Dex` implementation chosen the actual object's type is what is
+relevant. If you have reasons to make your code data-layer agnostic, `@xerxicodex/dex-types` then becomes
+relevant, though you should probably just use `@xerxicodex/data` and let it handle abstracing over `Dex`.
 
 ## When should I use a package in this repository as opposed to vendoring `smogon/pokemon-showdown`?
 

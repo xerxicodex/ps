@@ -8,7 +8,7 @@ try {
 }
 
 const packages = [];
-for (const dep of ['@nxpkmn/sim', '@nxpkmn/data']) {
+for (const dep of ['@pkmn/sim', '@pkmn/data']) {
   try {
     require.resolve(dep);
   } catch (err) {
@@ -27,8 +27,8 @@ if (packages.length) {
 
 const readline = require('readline');
 
-const {Dex} = require('@nxpkmn/sim');
-const {Generation} = require('@nxpkmn/data');
+const {Dex} = require('@pkmn/sim');
+const {Generation} = require('@pkmn/data');
 
 const {Verifier} = require('./build/verifier');
 

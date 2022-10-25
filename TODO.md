@@ -1,21 +1,21 @@
 # TODO
 
-## `@nxpkmn/sim`
+## `@xerxicodex/sim`
 
 - Pokémon Showdown's underlying data definitions (eg. `MoveData`) could use a lot of cleanup and
   consolidation (better grouping, naming, etc)
-- In an ideal world, `@nxpkmn/sim` could be made to depend on `@nxpkmn/dex`. The main blockers are:
+- In an ideal world, `@xerxicodex/sim` could be made to depend on `@xerxicodex/dex`. The main blockers are:
   - `TeamValidator` needs to be able able to handle an `async getLearnsets` API (requires changes
   to Pokémon Showdown to avoid forking more files)
   - the `import` script needs to decompose Pokémon Showdown's 'data' files to write out just the
-  handler logic which can be recombined with the data from `@nxpkmn/dex` on demand.
+  handler logic which can be recombined with the data from `@xerxicodex/dex` on demand.
 
-## `@nxpkmn/sets`
+## `@xerxicodex/sets`
 
 - consider rewriting based on
   [Pokémon Showdown](https://github.com/smogon/pokemon-showdown-client/blob/master/src/panel-teamdropdown.tsx)
 
-## `@nxpkmn/img`
+## `@xerxicodex/img`
 
 - redo API to use better identifiers than `gen2g` (`gen: 2` = `release: 'Crystal'` > `'gen2'`)
 - handle full ordered preference array (not just `gen2g`, full array of preferences)
@@ -24,18 +24,18 @@
   (should be symlinked), have `smogon/sprites` build a mapping file that can be used to
   avoid redundant lookups
 
-## `@nxpkmn/login`
+## `@xerxicodex/login`
 
 - upkeep example with cookies
 
-## `@nxpkmn/client`
+## `@xerxicodex/client`
 
-- handle discrepancies with `@nxpkmn/sim` (for `@nxpkmn/epoke` state transforms)
+- handle discrepancies with `@xerxicodex/sim` (for `@xerxicodex/epoke` state transforms)
   - change `type`/`addedType` etc handling to match server?
 
-## `@nxpkmn/view`
+## `@xerxicodex/view`
 
 - demonstration of how to recreate Pokémon Showdown's `AnimatedBattle` hooks on top of
-  `@nxpkmn/client` (`BattleSceneStub` equivalent, but use `Partial` instead of null object pattern)
+  `@xerxicodex/client` (`BattleSceneStub` equivalent, but use `Partial` instead of null object pattern)
 - logic for displaying the Pokémon Showdown protocol *(how should arbitrary HTML be handled? Fully
   escaped? Or embed an HTML sanitizer?)*

@@ -1,1 +1,1 @@
-export * from "@nxpkmn/streams";
+export * from "@pkmn/streams";

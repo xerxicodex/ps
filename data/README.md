@@ -1,45 +1,45 @@
-# `@nxpkmn/data`
+# `@xerxicodex/data`
 
 ![Test Status](https://github.com/pkmn/ps/workflows/Tests/badge.svg)
 ![License](https://img.shields.io/badge/License-MIT-blue.svg)
-[![npm version](https://img.shields.io/npm/v/@nxpkmn/data.svg)](https://www.npmjs.com/package/@nxpkmn/data)
+[![npm version](https://img.shields.io/npm/v/@xerxicodex/data.svg)](https://www.npmjs.com/package/@xerxicodex/data)
 
 > "what Pokémon Showdown's data layer will look like ~2 years from now"
 
-A higher level data API wrapper compatible with [`@nxpkmn/sim`](../sim) and [`@nxpkmn/dex`](../dex).
+A higher level data API wrapper compatible with [`@xerxicodex/sim`](../sim) and [`@xerxicodex/dex`](../dex).
 
 ## Installation
 
 ```sh
-$ npm install @nxpkmn/data
+$ npm install @xerxicodex/data
 ```
 
-Alternatively, as [detailed below](#browser), if you are using `@nxpkmn/data` in the browser and want
+Alternatively, as [detailed below](#browser), if you are using `@xerxicodex/data` in the browser and want
 a convenient way to get started, simply depend on a transpiled and minified version via
 [unpkg](https://unpkg.com/):
 
 ```html
-<script src="https://unpkg.com/@nxpkmn/dex"></script>
-<script src="https://unpkg.com/@nxpkmn/data"></script>
+<script src="https://unpkg.com/@xerxicodex/dex"></script>
+<script src="https://unpkg.com/@xerxicodex/data"></script>
 ```
 
-*In this example, [`@nxpkmn/dex`](../dex) is included as well, because `@nxpkmn/data` requires a `Dex`
+*In this example, [`@xerxicodex/dex`](../dex) is included as well, because `@xerxicodex/data` requires a `Dex`
 implementation to be useful.*
 
 ## Usage
 
 This package can be used to wrap an implementation of the Pokémon Showdown
-[`@nxpkmn/dex-types`](../dex/types) to provide an alternative data layer API. This package is not
+[`@xerxicodex/dex-types`](../dex/types) to provide an alternative data layer API. This package is not
 generally useful without a runtime dependency - you must bring your own data layer. **You almost
-certainly should be using `@nxpkmn/dex` instead of `@nxpkmn/sim` unless you know what you are doing**.
+certainly should be using `@xerxicodex/dex` instead of `@xerxicodex/sim` unless you know what you are doing**.
 
 ```ts
-import * as dex from '@nxpkmn/dex';
-import * as sim from '@nxpkmn/sim';
-import {Dex} from '@nxpkmn/dex-types';
-import {Generations} from '@nxpkmn/data';
+import * as dex from '@xerxicodex/dex';
+import * as sim from '@xerxicodex/sim';
+import {Dex} from '@xerxicodex/dex-types';
+import {Generations} from '@xerxicodex/data';
 
-// dex.Dex implements the @nxpkmn/dex-types's Dex directly, so this just works without complaints
+// dex.Dex implements the @xerxicodex/dex-types's Dex directly, so this just works without complaints
 const dexGens = new Generations(dex.Dex);
 
 // All of the types from sim.Dex don't actually line up perfectly, but casting sidesteps that
@@ -66,12 +66,12 @@ a couple of Pokémon Showdown quirks. While this interface is far from the
 - the 'sub-API' fields of `Generation` all have a `get` method and can be iterated over (save for
   `Generation#effects`). Post
   [pokemon-showdown@13189fdb](https://github.com/smogon/pokemon-showdown/commit/13189fdb)
-  this is now supported by `Dex` as well, though `@nxpkmn/data` is more efficient as it uses iterators
+  this is now supported by `Dex` as well, though `@xerxicodex/data` is more efficient as it uses iterators
   as opposed to instantiating the entire (unfiltered) lists to then be iterated over via `all()`.
 - a stats API including calculation logic is provided via `Generation#stats` (as opposed to
   `Dex#stats` which just provides some lists of names).
 - a usable `Learnsets` API which allows you to easily determine which moves a Pokémon can legally
-  learn (though validating combinations of moves or other features requires `@nxpkmn/sim`'s
+  learn (though validating combinations of moves or other features requires `@xerxicodex/sim`'s
   `TeamValidator` - something as seemingly simple as determing Galar move legality cannot be
   generally solved without the full power of the `TeamValidator`).
 
@@ -85,8 +85,8 @@ is built on top of works - for efficiency reasons its only worthwhile to clean u
 are actually relevant to the generation in question.
 
 ```ts
-import {Dex} from '@nxpkmn/dex';
-import {Generations} from '@nxpkmn/data';
+import {Dex} from '@xerxicodex/dex';
+import {Generations} from '@xerxicodex/data';
 
 const gens = new Generations(Dex);
 assert(gens.get(1).types.get('Ghost').effectiveness['Psychic'] === 0);
@@ -105,7 +105,7 @@ Please see the [unit tests](index.test.ts) for more comprehensive usage examples
 Pokémon Showdown includes a lot of [nonstandard
 information](https://github.com/smogon/pokemon-showdown/blob/master/sim/NONSTANDARD.md) in its data
 files and expects developers to check the data returned by each API to ensure it is satisfactory for
-your use case. Checking at every callsite is error prone and redundant - with `@nxpkmn/data`, the
+your use case. Checking at every callsite is error prone and redundant - with `@xerxicodex/data`, the
 filter function is configured up front on the `Generations` instance and is applied automatically on
 every API.
 
@@ -160,28 +160,28 @@ applied at the object-level, **field-level existence still must be handled manua
 
 `Generations` can be used with `Dex` objects that have been modified by the `Dex.mod` API, though it
 first requires that the modded `Dex` be wrapped by the `ModdedDex` abstraction provided by
-[`@nxpkmn/mods`](../mods):
+[`@xerxicodex/mods`](../mods):
 
 ```ts
-import {Dex, ID, ModData} from '@nxpkmn/dex';
-import {ModdexDex} from '@nxpkmn/mods';
+import {Dex, ID, ModData} from '@xerxicodex/dex';
+import {ModdexDex} from '@xerxicodex/mods';
 
-const dex = Dex.mod('gen8bdsp' as ID, await import('@nxpkmn/mods/gen8bdsp') as ModData);
+const dex = Dex.mod('gen8bdsp' as ID, await import('@xerxicodex/mods/gen8bdsp') as ModData);
 const gens = new Generations(new ModdedDex(dex));
 ```
 
 Wrapping a modded `Dex` in `ModdedDex` is already the recommended practice to allow for better
-typechecking, but in the case of `@nxpkmn/data` the wrapper is required as `Generations` calls
+typechecking, but in the case of `@xerxicodex/data` the wrapper is required as `Generations` calls
 `Dex.forGen` under the hood which will default to an unmodded `Dex` (`ModdedDex` overrides
 `Dex.forGen` to return the modded `Dex` for the generation that was modded).
 
 ### Browser
 
-The recommended way of using `@nxpkmn/data` in a web browser is to **configure your bundler**
+The recommended way of using `@xerxicodex/data` in a web browser is to **configure your bundler**
 ([Webpack](https://webpack.js.org/), [Rollup](https://rollupjs.org/),
 [Parcel](https://parceljs.org/), etc) to minimize it and package it with the rest of your
 application. If you do not use a bundler, a convenience `production.min.js` is included in the
-package. You simply need to depend on `./node_modules/@nxpkmn/data/build/production.min.js` in a
+package. You simply need to depend on `./node_modules/@xerxicodex/data/build/production.min.js` in a
 `script` tag (which is what the unpkg shortcut above is doing), after which **`Generations` will be
 accessible as a global.**
 

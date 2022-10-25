@@ -1,5 +1,5 @@
 {
-  "name": "@nxpkmn/view",
+  "name": "@xerxicodex/view",
   "version": "0.4.3",
   "main": "build/index.js",
   "types": "build/index.d.ts",
@@ -19,8 +19,8 @@
     "!src/test"
   ],
   "dependencies": {
-    "@nxpkmn/protocol": "^0.4.3",
-    "@nxpkmn/types": "^2.1.0"
+    "@pkmn/protocol": "^0.4.3",
+    "@pkmn/types": "^2.1.0"
   },
   "scripts": {
     "lint": "eslint --cache src --ext ts",

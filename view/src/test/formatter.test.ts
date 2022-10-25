@@ -1,5 +1,5 @@
-import {PokemonDetails, PokemonIdent, Protocol} from '@nxpkmn/protocol';
-import {SideID} from '@nxpkmn/types';
+import {PokemonDetails, PokemonIdent, Protocol} from '@pkmn/protocol';
+import {SideID} from '@pkmn/types';
 
 import {LogFormatter} from '../formatter';
 

@@ -15,9 +15,9 @@ import {
   StatusName,
   TypeName,
   Weather,
-} from '@nxpkmn/types';
+} from '@pkmn/types';
 
-export {ID} from '@nxpkmn/types';
+export {ID} from '@pkmn/types';
 
 export namespace Protocol {
   export type PositionLetter = 'a' | 'b' | 'c';

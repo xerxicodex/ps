@@ -1,5 +1,5 @@
 {
-  "name": "@nxpkmn/protocol",
+  "name": "@xerxicodex/protocol",
   "version": "0.4.3",
   "main": "build/index.js",
   "types": "build/index.d.ts",
@@ -25,11 +25,11 @@
     "!src/*.test.*"
   ],
   "dependencies": {
-    "@nxpkmn/types": "^2.1.0"
+    "@pkmn/types": "^2.1.0"
   },
   "devDependencies": {
-    "@nxpkmn/dex": "^0.6.1",
-    "@nxpkmn/data": "^0.6.1"
+    "@pkmn/dex": "^0.6.1",
+    "@pkmn/data": "^0.6.1"
   },
   "scripts": {
     "lint": "eslint --cache src --ext ts",
@@ -50,7 +50,7 @@
     ]
   },
   "eslintConfig": {
-    "extends": "@nxpkmn",
+    "extends": "@pkmn",
     "rules": {
       "no-redeclare": "off"
     }

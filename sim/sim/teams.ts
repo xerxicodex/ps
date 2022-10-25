@@ -1,5 +1,5 @@
-import * as pkmn from '@nxpkmn/sets';
-export {PokemonSet} from '@nxpkmn/sets';
+import * as pkmn from '@pkmn/sets';
+export {PokemonSet} from '@pkmn/sets';
 import {PRNG, PRNGSeed} from './prng';
 import {Format, PlayerOptions} from './exported-global-types';
 

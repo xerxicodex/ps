@@ -10,7 +10,7 @@ import {
 	RandomTeamsTypes,
 	Species,
 	StatID,
-} from '@nxpkmn/sim';
+} from '@pkmn/sim';
 
 export class RandomGen3Teams extends RandomGen4Teams {
 	battleHasDitto: boolean;

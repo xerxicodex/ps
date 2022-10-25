@@ -24,7 +24,7 @@
 ## 2.0.0
 
 - Pokémon Showdown changed its `Dex` interface, impacting the `Data` interface optionally used by
-  `@nxpkmn/sets`.
+  `@xerxicodex/sets`.
 - The packed wire format has changed to no longer use IDs and instead uses a less lossy scheme for
   names.
 

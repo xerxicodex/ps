@@ -1,5 +1,5 @@
 {
-  "name": "@nxpkmn/client",
+  "name": "@xerxicodex/client",
   "version": "0.4.3",
   "main": "build/index.js",
   "types": "build/index.d.ts",
@@ -15,11 +15,11 @@
     "!src/test"
   ],
   "dependencies": {
-    "@nxpkmn/data": "^0.6.1",
-    "@nxpkmn/protocol": "^0.4.3"
+    "@pkmn/data": "^0.6.1",
+    "@pkmn/protocol": "^0.4.3"
   },
   "devDependencies": {
-    "@nxpkmn/dex": "^0.6.1"
+    "@pkmn/dex": "^0.6.1"
   },
   "scripts": {
     "lint": "eslint --cache src --ext ts",

@@ -2,14 +2,14 @@
 
 const assert = require('assert').strict;
 
-const sim = require('@nxpkmn/sim');
-const client = require('@nxpkmn/client');
-const view = require('@nxpkmn/view');
+const sim = require('@pkmn/sim');
+const client = require('@pkmn/client');
+const view = require('@pkmn/view');
 
-const {Generations} = require('@nxpkmn/data');
-const {Protocol} = require('@nxpkmn/protocol');
-const {Verifier} = require('@nxpkmn/protocol/verifier');
-const {ExhaustiveRunner} = require('@nxpkmn/sim/tools');
+const {Generations} = require('@pkmn/data');
+const {Protocol} = require('@pkmn/protocol');
+const {Verifier} = require('@pkmn/protocol/verifier');
+const {ExhaustiveRunner} = require('@pkmn/sim/tools');
 
 // smogon/pokemon-showdown-client expects to be run in a Browser window and like
 // smogon/pokemon-showdown, tramples all over the global namespace. As such, both projects cannot

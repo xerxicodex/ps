@@ -9,7 +9,7 @@ import {
 	Species,
 	StatID,
 	StatsTable,
-} from '@nxpkmn/sim';
+} from '@pkmn/sim';
 
 interface HackmonsCupEntry {
 	types: string[];

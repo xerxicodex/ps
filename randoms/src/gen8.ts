@@ -19,7 +19,7 @@ import {
 	StatsTable,
 	Tags,
 	toID,
-} from '@nxpkmn/sim';
+} from '@pkmn/sim';
 
 export interface TeamData {
 	typeCount: {[k: string]: number};

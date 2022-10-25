@@ -1,4 +1,4 @@
-import type {ModdedConditionData} from '@nxpkmn/sim';
+import type {ModdedConditionData} from '@pkmn/sim';
 
 export const Conditions: {[k: string]: ModdedConditionData} = {
 	brn: {

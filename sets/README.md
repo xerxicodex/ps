@@ -1,23 +1,23 @@
-# `@nxpkmn/sets`
+# `@xerxicodex/sets`
 
 ![Test Status](https://github.com/pkmn/ps/workflows/Tests/badge.svg)
 ![License](https://img.shields.io/badge/License-MIT-blue.svg)
-[![npm version](https://img.shields.io/npm/v/@nxpkmn/sets.svg)](https://www.npmjs.com/package/@nxpkmn/sets)
+[![npm version](https://img.shields.io/npm/v/@xerxicodex/sets.svg)](https://www.npmjs.com/package/@xerxicodex/sets)
 
 Parsing logic for [Pokémon Showdown](https://pokemonshowdown.com)'s sets export format.
 
 ## Installation
 
 ```sh
-$ npm install @nxpkmn/sets
+$ npm install @xerxicodex/sets
 ```
 
-Alternatively, as [detailed below](#browser), if you are using `@nxpkmn/sets` in the browser and want
+Alternatively, as [detailed below](#browser), if you are using `@xerxicodex/sets` in the browser and want
 a convenient way to get started, simply depend on a transpiled and minified version via
 [unpkg](https://unpkg.com/):
 
 ```html
-<script src="https://unpkg.com/@nxpkmn/sets"></script>
+<script src="https://unpkg.com/@xerxicodex/sets"></script>
 ```
 
 ## Usage
@@ -25,7 +25,7 @@ a convenient way to get started, simply depend on a transpiled and minified vers
 This package can be used to parse sets and teams **without any dependencies**:
 
 ```ts
-import {Sets} from '@nxpkmn/sets';
+import {Sets} from '@xerxicodex/sets';
 
 const set = Sets.importSet(
 `Tangrowth @ Assault Vest
@@ -52,8 +52,8 @@ compatible with the `Dex` type from
 codebase:
 
 ```ts
-import {Dex} from '@nxpkmn/dex';
-import {Sets} from '@nxpkmn/sets';
+import {Dex} from '@xerxicodex/dex';
+import {Sets} from '@xerxicodex/sets';
 
 const set = Sets.unpack(
   'Tangrowth||AssaultVest|H|GigaDrain,KnockOff,PowerWhip' +
@@ -64,11 +64,11 @@ const set = Sets.unpack(
 
 ### Browser
 
-The recommended way of using `@nxpkmn/sets` in a web browser is to **configure your bundler**
+The recommended way of using `@xerxicodex/sets` in a web browser is to **configure your bundler**
 ([Webpack](https://webpack.js.org/), [Rollup](https://rollupjs.org/),
 [Parcel](https://parceljs.org/), etc) to minimize it and package it with the rest of your
 application. If you do not use a bundler, a convenience `production.min.js` is included in the
-package. You simply need to depend on `./node_modules/@nxpkmn/sets/build/production.min.js` in a
+package. You simply need to depend on `./node_modules/@xerxicodex/sets/build/production.min.js` in a
 `script` tag (which is what the unpkg shortcut above is doing), after which **`PokemonSets` and
 `PokemonTeams` will be accessible as globals.**
 

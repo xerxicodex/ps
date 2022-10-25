@@ -1,4 +1,4 @@
-import type {ActiveMove, Battle, ModdedConditionData, Pokemon} from '@nxpkmn/sim';
+import type {ActiveMove, Battle, ModdedConditionData, Pokemon} from '@pkmn/sim';
 
 /**
  * Since Stadium 2 ignores stat drops while recalculating stats due to boosting moves, haze,

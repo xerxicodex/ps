@@ -1,8 +1,8 @@
-# `@nxpkmn/protocol`
+# `@xerxicodex/protocol`
 
 ![Test Status](https://github.com/pkmn/ps/workflows/Tests/badge.svg)
 ![License](https://img.shields.io/badge/License-MIT-blue.svg)
-[![npm version](https://img.shields.io/npm/v/@nxpkmn/protocol.svg)](https://www.npmjs.com/package/@nxpkmn/protocol)
+[![npm version](https://img.shields.io/npm/v/@xerxicodex/protocol.svg)](https://www.npmjs.com/package/@xerxicodex/protocol)
 
 Parsing logic for [Pokémon Showdown](https://pokemonshowdown.com)'s
 [PROTOCOL](https://github.com/smogon/pokemon-showdown/blob/master/PROTOCOL.md) and
@@ -14,15 +14,15 @@ respresentations for ease of use.
 ## Installation
 
 ```sh
-$ npm install @nxpkmn/protocol
+$ npm install @xerxicodex/protocol
 ```
 
-Alternatively, as [detailed below](#browser), if you are using `@nxpkmn/protocol` in the browser and
+Alternatively, as [detailed below](#browser), if you are using `@xerxicodex/protocol` in the browser and
 want a convenient way to get started, simply depend on a transpiled and minified version via
 [unpkg](https://unpkg.com/):
 
 ```html
-<script src="https://unpkg.com/@nxpkmn/protocol"></script>
+<script src="https://unpkg.com/@xerxicodex/protocol"></script>
 ```
 
 ## Usage
@@ -31,12 +31,12 @@ want a convenient way to get started, simply depend on a transpiled and minified
 
 `Protocol.parse` can be used to turn protocol messages into objects which can then be dispatched to
 a `Protocol.Handler`. The `Args` and `KWArgs` can be parsed further using the various helper methods
-available on the `Protocol` class. [`@nxpkmn/client`](../client)'s
+available on the `Protocol` class. [`@xerxicodex/client`](../client)'s
 [`Handler`](../client/src/handler.ts) exists as a detailed example of what a `Protocol.Handler`
 implementation might look like.
 
 ```ts
-import {Protocol, Args, KWArgs} from '@nxpkmn/protocol';
+import {Protocol, Args, KWArgs} from '@xerxicodex/protocol';
 
 class BoostHandler implements Protocol.Handler {
   '|-boost|'(args: Args['|-boost|'], kwArgs: KWArgs['|-boost|']) {
@@ -56,7 +56,7 @@ required to exhaustively implement the Pokémon Showdown protocol.
 
 #### `Verifier`
 
-`@nxpkmn/protocol` also provides protocol-verification logic, primarily useful for testing.
+`@xerxicodex/protocol` also provides protocol-verification logic, primarily useful for testing.
 `Verifier.verify` can be used to verify a data chunk received from the Pokémon Showdown server
 (`Verifier.verifyLine` can be used to verify individual lines). The `Verifier` only performs basic
 strutural/shape verification (eg. the protocol is well-formed) as opposed to fine grained
@@ -64,13 +64,13 @@ domain-specific verification (ie. it will verify an `ID` is received, but does n
 `ID` refers to a known object etc).
 
 ```ts
-import {Verifier} from '@nxpkmn/protocol/verifier'
+import {Verifier} from '@xerxicodex/protocol/verifier'
 
 console.log(Verifier.verify(protocol));
 ```
 
 The TypeScript compiler may require special configuration to be able to directly import a
-subdirectory of the main `@nxpkmn/protocol` package - see the
+subdirectory of the main `@xerxicodex/protocol` package - see the
 [`tsconfig.json` documentation](https://www.typescriptlang.org/tsconfig) on
 [`baseUrl`](https://www.typescriptlang.org/tsconfig#baseUrl) and
 [`paths`](https://www.typescriptlang.org/tsconfig#paths).
@@ -80,7 +80,7 @@ subdirectory of the main `@nxpkmn/protocol` package - see the
  "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@nxpkmn/protocol/*": ["node_modules/@nxpkmn/protocol/build/*"]
+      "@xerxicodex/protocol/*": ["node_modules/@xerxicodex/protocol/build/*"]
     }
   }
 }
@@ -91,11 +91,11 @@ verify protocol lines read from standard input.
 
 ### Browser
 
-The recommended way of using `@nxpkmn/protocol` in a web browser is to **configure your bundler**
+The recommended way of using `@xerxicodex/protocol` in a web browser is to **configure your bundler**
 ([Webpack](https://webpack.js.org/), [Rollup](https://rollupjs.org/),
 [Parcel](https://parceljs.org/), etc) to minimize it and package it with the rest of your
 application. If you do not use a bundler, a convenience `production.min.js` is included in the
-package. You simply need to depend on `./node_modules/@nxpkmn/protocol/build/production.min.js` in a
+package. You simply need to depend on `./node_modules/@xerxicodex/protocol/build/production.min.js` in a
 `script` tag (which is what the unpkg shortcut above is doing), after which **`Protocol` will be
 accessible as a global.**
 

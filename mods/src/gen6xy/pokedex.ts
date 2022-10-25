@@ -1,4 +1,4 @@
-import type {ModdedSpeciesData} from '@nxpkmn/sim';
+import type {ModdedSpeciesData} from '@pkmn/sim';
 
 export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	pikachu: {

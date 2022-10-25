@@ -1,5 +1,5 @@
 {
-  "name": "@nxpkmn/login",
+  "name": "@xerxicodex/login",
   "version": "0.0.4",
   "main": "build/index.js",
   "types": "build/index.d.ts",

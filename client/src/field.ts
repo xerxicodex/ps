@@ -1,4 +1,4 @@
-import {ID, toID} from '@nxpkmn/data';
+import {ID, toID} from '@pkmn/data';
 
 import {Battle} from './battle';
 import {Pokemon} from './pokemon';

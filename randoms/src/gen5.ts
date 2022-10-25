@@ -12,7 +12,7 @@ import {
 	Species,
 	StatID,
 	toID,
-} from '@nxpkmn/sim';
+} from '@pkmn/sim';
 
 export class RandomGen5Teams extends RandomGen6Teams {
 	constructor(dex: ModdedDex, format: Format, prng: PRNG | PRNGSeed | null) {
