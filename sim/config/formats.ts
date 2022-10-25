@@ -296,7 +296,7 @@ export const Formats: FormatList = [
 		debug: true,
 		battle: {trunc: Math.trunc},
 		// no restrictions, for serious (other than team preview)
-		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 999999', 'Default Level = 100'],
 	},
 
 	// Sw/Sh Doubles
@@ -486,7 +486,7 @@ export const Formats: FormatList = [
 		battle: {trunc: Math.trunc},
 		debug: true,
 		// no restrictions, for serious (other than team preview)
-		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 999999', 'Default Level = 100'],
 	},
 
 	// National Dex
@@ -2979,7 +2979,7 @@ export const Formats: FormatList = [
 		debug: true,
 		battle: {trunc: Math.trunc},
 		// no restrictions, for serious (other than team preview)
-		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 999999', 'Default Level = 100'],
 	},
 
 	// US/UM Doubles
@@ -3096,7 +3096,7 @@ export const Formats: FormatList = [
 		battle: {trunc: Math.trunc},
 		debug: true,
 		// no restrictions, for serious (other than team preview)
-		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 999999', 'Default Level = 100'],
 	},
 
 	// OR/AS Singles
@@ -3274,7 +3274,7 @@ export const Formats: FormatList = [
 		debug: true,
 		battle: {trunc: Math.trunc},
 		// no restrictions, for serious (other than team preview)
-		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 999999', 'Default Level = 100'],
 	},
 
 	// OR/AS Doubles/Triples
@@ -3360,7 +3360,7 @@ export const Formats: FormatList = [
 		battle: {trunc: Math.trunc},
 		debug: true,
 		// no restrictions, for serious (other than team preview)
-		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 999999', 'Default Level = 100'],
 	},
 	{
 		name: "[Gen 6] Battle Spot Triples",
@@ -3383,7 +3383,7 @@ export const Formats: FormatList = [
 		battle: {trunc: Math.trunc},
 		debug: true,
 		// no restrictions, for serious (other than team preview)
-		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 999999', 'Default Level = 100'],
 	},
 
 	// B2/W2 Singles
@@ -3512,7 +3512,7 @@ export const Formats: FormatList = [
 		debug: true,
 		battle: {trunc: Math.trunc},
 		// no restrictions, for serious (other than team preview)
-		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 999999', 'Default Level = 100'],
 	},
 
 	// B2/W2 Doubles
@@ -3572,7 +3572,7 @@ export const Formats: FormatList = [
 		debug: true,
 		battle: {trunc: Math.trunc},
 		// no restrictions, for serious (other than team preview)
-		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 999999', 'Default Level = 100'],
 	},
 	{
 		name: "[Gen 5] Triples Custom Game",
@@ -3710,7 +3710,7 @@ export const Formats: FormatList = [
 		debug: true,
 		battle: {trunc: Math.trunc},
 		// no restrictions
-		ruleset: ['Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		ruleset: ['Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 999999', 'Default Level = 100'],
 	},
 
 	// DPP Doubles
@@ -3759,7 +3759,7 @@ export const Formats: FormatList = [
 		debug: true,
 		battle: {trunc: Math.trunc},
 		// no restrictions
-		ruleset: ['Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		ruleset: ['Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 999999', 'Default Level = 100'],
 	},
 
 	// Past Generations
@@ -3842,7 +3842,7 @@ export const Formats: FormatList = [
 		searchShow: false,
 		debug: true,
 		battle: {trunc: Math.trunc},
-		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 999999', 'Default Level = 100'],
 	},
 	{
 		name: "[Gen 3] Doubles Custom Game",
@@ -3851,7 +3851,7 @@ export const Formats: FormatList = [
 		gameType: 'doubles',
 		searchShow: false,
 		debug: true,
-		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 999999', 'Default Level = 100'],
 	},
 	{
 		name: "[Gen 2] Ubers",
@@ -3931,7 +3931,7 @@ export const Formats: FormatList = [
 		searchShow: false,
 		debug: true,
 		battle: {trunc: Math.trunc},
-		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 999999', 'Default Level = 100'],
 	},
 	{
 		name: "[Gen 1] Ubers",
@@ -4035,6 +4035,6 @@ export const Formats: FormatList = [
 		searchShow: false,
 		debug: true,
 		battle: {trunc: Math.trunc},
-		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 999999', 'Default Level = 100'],
 	},
 ];
