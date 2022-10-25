@@ -1,4 +1,4 @@
-import type {ActiveMove, BoostID, ModdedBattleScriptsData, StatIDExceptHP} from '@pkmn/sim';
+import type {ActiveMove, BoostID, ModdedBattleScriptsData, StatIDExceptHP} from '@nxpkmn/sim';
 
 /**
  * Stadium mechanics inherit from gen 1 mechanics, but fixes some stuff.

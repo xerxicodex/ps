@@ -1,21 +1,21 @@
-# `@xerxicodex/view`
+# `@nxpkmn/view`
 
 ![Test Status](https://github.com/pkmn/ps/workflows/Tests/badge.svg)
 ![License](https://img.shields.io/badge/License-MIT-blue.svg)
-[![npm version](https://img.shields.io/npm/v/@xerxicodex/view.svg)](https://www.npmjs.com/package/@xerxicodex/view)
+[![npm version](https://img.shields.io/npm/v/@nxpkmn/view.svg)](https://www.npmjs.com/package/@nxpkmn/view)
 
 A library for building [Pokémon Showdown](https://pokemonshowdown.com) client UIs.
 
 ## Installation
 
 ```sh
-$ npm install @xerxicodex/view
+$ npm install @nxpkmn/view
 ```
 
 ## Usage
 
-`@xerxicodex/view` provides a collection of view-related helpers and wrappers which build upon the
-`@xerxicodex/client` and extend its functionality in ways which are relevant for building client UIs.
+`@nxpkmn/view` provides a collection of view-related helpers and wrappers which build upon the
+`@nxpkmn/client` and extend its functionality in ways which are relevant for building client UIs.
 
 This package is expected to grow in scope, as several primitives have yet to be completed (eg.
 `AnimatedBattle`). Currently, this package offers a [`LogFormatter`](#LogFormatter) for
@@ -30,11 +30,11 @@ test](../integration/src/ui/index.ts) for an example of the latter). The formatt
 text from the perspective of either side.
 
 ```ts
-import {Dex} from '@xerxicodex/dex';
-import {Generations} from ('@xerxicodex/data');
-import {Battle} from '@xerxicodex/client';
-import {Protocol} from '@xerxicodex/protocol';
-import {LogFormatter} from '@xerxicodex/view';
+import {Dex} from '@nxpkmn/dex';
+import {Generations} from ('@nxpkmn/data');
+import {Battle} from '@nxpkmn/client';
+import {Protocol} from '@nxpkmn/protocol';
+import {LogFormatter} from '@nxpkmn/view';
 
 const gens = new Generations(Dex);
 const battle = new Battle(gens);
@@ -53,7 +53,7 @@ requires certain state about the battle that is more difficult to track to comph
 the proper output for every scenario. Instead, the `LogFormatter` can be instantiated with a
 '`Tracker`' which handles tracking the full state, though importantly, `LogFormatter` operates on
 the pre-updated state and thus must be called **before** its `Tracker`.
-[`@xerxicodex/client`](../client)'s [`Battle`](../client/src/battle.ts) is currently the only
+[`@nxpkmn/client`](../client)'s [`Battle`](../client/src/battle.ts) is currently the only
 implementation of a `Tracker`.
 
 The [`format-battle`](format-battle) script productionizes the above example and is comparable to
@@ -69,8 +69,8 @@ the wrong sorts of responses being issued for the various request types, and con
 allow for flexibly specifying choices in a more human-friendly and intuitive way.
 
 ```ts
-import {ChoiceBuilder} from '@xerxicodex/view';
-import {Protocol} from '@xerxicodex/protocol';
+import {ChoiceBuilder} from '@nxpkmn/view';
+import {Protocol} from '@nxpkmn/protocol';
 
 const request = Protocol.parseRequest(str);
 const builder = new ChoiceBuilder(request);
@@ -81,7 +81,7 @@ const choice = builder.toString();
 
 ### Browser
 
-The recommended way of using `@xerxicodex/view` in a web browser is to **configure your bundler**
+The recommended way of using `@nxpkmn/view` in a web browser is to **configure your bundler**
 ([Webpack](https://webpack.js.org/), [Rollup](https://rollupjs.org/),
 [Parcel](https://parceljs.org/), etc) to minimize it and package it with the rest of your
 application.

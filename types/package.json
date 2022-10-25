@@ -1,9 +1,12 @@
 {
-  "name": "@xerxicodex/types",
+  "name": "@nxpkmn/types",
   "version": "2.1.0",
   "types": "index.d.ts",
   "description": "Type definitions common across Pokemon Showdown",
-  "repository": "github:xerxicodex/ps",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xerxicodex/ps.git"
+  },
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -15,5 +18,11 @@
     "compile": "tsc -p .",
     "build": "npm run compile",
     "test": "npm run build"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/xerxicodex/ps/issues"
+  },
+  "homepage": "https://github.com/xerxicodex/ps#readme",
+  "main": "index.js",
+  "author": ""
 }

@@ -1,10 +1,13 @@
 {
-  "name": "@xerxicodex/randoms",
+  "name": "@nxpkmn/randoms",
   "version": "0.6.1",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "description": "Random team generation logic for Pokémon Showdown's Random Battle formats",
-  "repository": "github:xerxicodex/ps",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xerxicodex/ps.git"
+  },
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -16,7 +19,7 @@
     "!src/test"
   ],
   "dependencies": {
-    "@pkmn/sim": "^0.6.1"
+    "@nxpkmn/sim": "https://gitpkg.now.sh/xerxicodex/ps/sim"
   },
   "scripts": {
     "lint": "eslint --cache src --ext ts",
@@ -55,5 +58,11 @@
       "no-mixed-spaces-and-tabs": "off",
       "max-len": "off"
     }
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/xerxicodex/ps/issues"
+  },
+  "homepage": "https://github.com/xerxicodex/ps#readme",
+  "devDependencies": {},
+  "author": ""
 }

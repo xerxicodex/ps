@@ -1,8 +1,8 @@
-# `@xerxicodex/streams`
+# `@nxpkmn/streams`
 
 ![Test Status](https://github.com/pkmn/ps/workflows/Tests/badge.svg)
 ![License](https://img.shields.io/badge/License-MIT-blue.svg)
-[![npm version](https://img.shields.io/npm/v/@xerxicodex/streams.svg)](https://www.npmjs.com/package/@xerxicodex/streams)
+[![npm version](https://img.shields.io/npm/v/@nxpkmn/streams.svg)](https://www.npmjs.com/package/@nxpkmn/streams)
 
 This package has been automatically extracted from the [Pokémon
 Showdown](https://github.com/smogon/pokemon-showdown) codebase. Documentation for the API of the

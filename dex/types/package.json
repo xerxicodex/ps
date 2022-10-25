@@ -1,9 +1,12 @@
 {
-  "name": "@xerxicodex/dex-types",
+  "name": "@nxpkmn/dex-types",
   "version": "0.6.1",
   "types": "index.d.ts",
-  "description": "Common Pokémon Showdown Dex types shared by @pkmn/dex and @pkmn/sim",
-  "repository": "github:xerxicodex/ps",
+  "description": "Common Pokémon Showdown Dex types shared by @nxpkmn/dex and @nxpkmn/sim",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xerxicodex/ps.git"
+  },
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -12,7 +15,7 @@
     "index.d.ts"
   ],
   "dependencies": {
-    "@pkmn/types": "^2.1.0"
+    "@nxpkmn/types": "https://gitpkg.now.sh/xerxicodex/ps/types"
   },
   "scripts": {
     "lint": "eslint --cache --ext *.ts",
@@ -20,5 +23,12 @@
     "compile": "tsc -p .",
     "build": "npm run compile",
     "test": "npm run compile"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/xerxicodex/ps/issues"
+  },
+  "homepage": "https://github.com/xerxicodex/ps#readme",
+  "main": "index.js",
+  "devDependencies": {},
+  "author": ""
 }

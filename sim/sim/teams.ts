@@ -1,11 +1,11 @@
-import * as pkmn from '@pkmn/sets';
-export {PokemonSet} from '@pkmn/sets';
+import * as pkmn from '@nxpkmn/sets';
+export {PokemonSet} from '@nxpkmn/sets';
 import {PRNG, PRNGSeed} from './prng';
 import {Format, PlayerOptions} from './exported-global-types';
 
 interface TeamGenerator {
 	prng: PRNG;
-	getTeam(options?: PlayerOptions): pkmn.PokemonSet[];
+	getTeam(options?: PlayerOptions): PokemonSet[];
 	setSeed(prng?: PRNG | PRNGSeed): void;
 }
 
@@ -17,19 +17,19 @@ interface TeamGeneratorFactory {
 var teamGeneratorFactory: TeamGeneratorFactory | undefined;
 
 export const Teams = new class Teams {
-	pack(team: pkmn.PokemonSet[] | null): string {
+	pack(team: PokemonSet[] | null): string {
 		return new pkmn.Team(team || []).pack();
 	}
 
-	unpack(buf: string): pkmn.PokemonSet[] | null {
-		return pkmn.Teams.unpackTeam(buf)?.team as pkmn.PokemonSet[] || null;
+	unpack(buf: string): PokemonSet[] | null {
+		return pkmn.Teams.unpackTeam(buf)?.team as PokemonSet[] || null;
 	}
 
-	export(team: pkmn.PokemonSet[], options?: {hideStats?: boolean}) {
+	export(team: PokemonSet[], options?: {hideStats?: boolean}) {
 		return new pkmn.Team(team).export();
 	}
 
-	exportSet(set: pkmn.PokemonSet, {hideStats}: {hideStats?: boolean} = {}) {
+	exportSet(set: PokemonSet, {hideStats}: {hideStats?: boolean} = {}) {
 		return pkmn.Sets.exportSet(set);
 	}
 
@@ -46,7 +46,7 @@ export const Teams = new class Teams {
 		return this;
 	}
 
-	generate(format: Format | string, options: PlayerOptions | null = null): pkmn.PokemonSet[] {
+	generate(format: Format | string, options: PlayerOptions | null = null): PokemonSet[] {
 		return this.getGenerator(format, options?.seed).getTeam(options || undefined);
 	}
 };

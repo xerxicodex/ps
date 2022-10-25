@@ -15,7 +15,7 @@ import {
   StatusName,
   toID,
   TypeName,
-} from '@pkmn/data';
+} from '@nxpkmn/data';
 import {
   DetailedPokemon,
   EffectName,
@@ -26,7 +26,7 @@ import {
   PokemonIdent,
   PokemonSearchID,
   Protocol,
-} from '@pkmn/protocol';
+} from '@nxpkmn/protocol';
 
 import {NA} from './battle';
 import {Side} from './side';

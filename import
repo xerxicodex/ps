@@ -3,8 +3,8 @@
 
 // This script syncs the vendored submodules of smogon/pokemon-showdown and
 // smogon/pokemon-showdown-client and highlights 'interesting' changes before performing several
-// manipulations on the former to generate portions of the @pkmn/sim, @pkmn/mods, @pkmn/randoms and
-// @pkmn/dex packages. Each of these packages involve some amount of handwritten code (which may be
+// manipulations on the former to generate portions of the @nxpkmn/sim, @nxpkmn/mods, @nxpkmn/randoms and
+// @nxpkmn/dex packages. Each of these packages involve some amount of handwritten code (which may be
 // broken or become out of sync after running this script) in addition to code generated completely
 // from Pokémon Showdown, and many of the other packages in this repository which have been 'hard'
 // forked from Pokémon Showdown will possibly require manual intervention and updates after an
@@ -226,7 +226,7 @@ const RANDOMS_IMPORTS = {
       'AnyObject', 'PlayerOptions', 'PRNG', 'PRNGSeed', 'PokemonSet', 'StatsTable', 'StatID',
       'Format', 'Species', 'RandomTeamsTypes', 'toID', 'ModdedDex', 'Move', 'BasicEffect',
       'Dex', 'Tags', 'Item', 'Ability', 'Nature',
-    ], '@pkmn/sim'],
+    ], '@nxpkmn/sim'],
   ],
   'data/mods/gen7/random-teams.ts': [
     [['MoveCounter', 'RandomTeams', 'TeamData'], './gen8'],
@@ -234,7 +234,7 @@ const RANDOMS_IMPORTS = {
     [[
       'ModdedDex', 'AnyObject', 'PlayerOptions', 'PRNG', 'PRNGSeed', 'StatID',
       'Format', 'Species', 'RandomTeamsTypes', 'toID', 'Move', 'StatsTable', 'SparseStatsTable',
-    ], '@pkmn/sim'],
+    ], '@nxpkmn/sim'],
   ],
   'data/mods/gen6/random-teams.ts': [
     [['RandomGen7Teams', 'BattleFactorySpecies'], './gen7'],
@@ -243,7 +243,7 @@ const RANDOMS_IMPORTS = {
     [[
       'ModdedDex', 'AnyObject', 'PlayerOptions', 'PRNG', 'PRNGSeed', 'Move',
       'Format', 'Species', 'RandomTeamsTypes', 'toID', 'StatID',
-    ], '@pkmn/sim'],
+    ], '@nxpkmn/sim'],
   ],
   'data/mods/gen5/random-teams.ts': [
     [['MoveCounter'], './gen8'],
@@ -252,7 +252,7 @@ const RANDOMS_IMPORTS = {
     [[
       'Species', 'StatID', 'SparseStatsTable', 'RandomTeamsTypes', 'toID',
       'ModdedDex', 'Format', 'PRNG', 'PRNGSeed', 'Move',
-    ], '@pkmn/sim'],
+    ], '@nxpkmn/sim'],
   ],
   'data/mods/gen4/random-teams.ts': [
     [['MoveCounter'], './gen8'],
@@ -261,7 +261,7 @@ const RANDOMS_IMPORTS = {
     [[
       'Species', 'RandomTeamsTypes', 'toID', 'SparseStatsTable', 'StatID',
       'ModdedDex', 'Format', 'PRNG', 'PRNGSeed', 'Move',
-    ], '@pkmn/sim'],
+    ], '@nxpkmn/sim'],
   ],
   'data/mods/gen3/random-teams.ts': [
     [['MoveCounter'], './gen8'],
@@ -269,14 +269,14 @@ const RANDOMS_IMPORTS = {
     [['Utils'], './utils'],
     [[
       'ModdedDex', 'PRNG', 'PRNGSeed', 'Format', 'Species', 'RandomTeamsTypes', 'Move', 'StatID',
-    ], '@pkmn/sim'],
+    ], '@nxpkmn/sim'],
   ],
   'data/mods/gen2/random-teams.ts': [
     [['MoveCounter'], './gen8'],
     [['RandomGen3Teams'], './gen3'],
     [[
       'ModdedDex', 'PRNG', 'PRNGSeed', 'Format', 'Species', 'RandomTeamsTypes', 'Move',
-    ], '@pkmn/sim'],
+    ], '@nxpkmn/sim'],
   ],
   'data/mods/gen1/random-teams.ts': [
     [['MoveCounter'], './gen8'],
@@ -284,7 +284,7 @@ const RANDOMS_IMPORTS = {
     [['Utils'], './utils'],
     [[
       'ID', 'Species', 'RandomTeamsTypes', 'Move', 'StatsTable', 'StatID', 'PokemonSet',
-    ], '@pkmn/sim'],
+    ], '@nxpkmn/sim'],
   ],
 };
 
@@ -621,7 +621,7 @@ const changes = async (where, last, now, repo) => ({
     // double fuck you zarle, AnyObject is a dreadful hack to begin with, feel ashamed
     fs.writeFileSync(path.resolve(streams, 'index.ts'),
       `interface AnyObject {[k: string]: any}\n${index}`);
-    fs.writeFileSync(path.resolve(sim, 'lib/streams.ts'), `export * from "@pkmn/streams";\n`);
+    fs.writeFileSync(path.resolve(sim, 'lib/streams.ts'), `export * from "@nxpkmn/streams";\n`);
 
     // Copy the files over, generating an 'import' statement for those that need it
     for (const file of COPIED) {
@@ -654,7 +654,7 @@ const changes = async (where, last, now, repo) => ({
         if (!file.startsWith('data/')) throw new Error('Unsupported import location');
         const original = fs.readFileSync(path.resolve(ps, file), 'utf8');
         fs.writeFileSync(path.resolve(mods, file.replace('data/mods', 'src')),
-          `${imports(MOD_IMPORTS[file], '@pkmn/sim', true)}${original}`);
+          `${imports(MOD_IMPORTS[file], '@nxpkmn/sim', true)}${original}`);
       } else {
         fs.copyFileSync(
           path.resolve(ps, file), path.resolve(mods, file.replace('data/mods', 'src')));

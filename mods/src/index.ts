@@ -22,7 +22,7 @@ import {
   Type,
   TypeData,
   TypeName,
-} from '@pkmn/dex-types';
+} from '@nxpkmn/dex-types';
 
 export class ModdedDex<
   A extends Ability = Ability,

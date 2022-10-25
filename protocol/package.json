@@ -1,5 +1,5 @@
 {
-  "name": "@xerxicodex/protocol",
+  "name": "@nxpkmn/protocol",
   "version": "0.4.3",
   "main": "build/index.js",
   "types": "build/index.d.ts",
@@ -9,11 +9,14 @@
     "./verifier": "./build/verifier/index.js"
   },
   "bin": {
-    "generate-handler": "./generate-handler",
-    "protocol-verifier": "./protocol-verifier"
+    "generate-handler": "generate-handler",
+    "protocol-verifier": "protocol-verifier"
   },
   "description": "Parsing logic for Pokémon Showdown's PROTOCOL and SIM-PROTOCOL",
-  "repository": "github:xerxicodex/ps",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xerxicodex/ps.git"
+  },
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -25,11 +28,11 @@
     "!src/*.test.*"
   ],
   "dependencies": {
-    "@pkmn/types": "^2.1.0"
+    "@nxpkmn/types": "https://gitpkg.now.sh/xerxicodex/ps/types"
   },
   "devDependencies": {
-    "@pkmn/dex": "^0.6.1",
-    "@pkmn/data": "^0.6.1"
+    "@nxpkmn/dex": "https://gitpkg.now.sh/xerxicodex/ps/dex",
+    "@nxpkmn/data": "https://gitpkg.now.sh/xerxicodex/ps/data"
   },
   "scripts": {
     "lint": "eslint --cache src --ext ts",
@@ -54,5 +57,10 @@
     "rules": {
       "no-redeclare": "off"
     }
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/xerxicodex/ps/issues"
+  },
+  "homepage": "https://github.com/xerxicodex/ps#readme",
+  "author": ""
 }

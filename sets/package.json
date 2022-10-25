@@ -1,11 +1,14 @@
 {
-  "name": "@xerxicodex/sets",
+  "name": "@nxpkmn/sets",
   "version": "4.0.0",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "unpkg": "build/production.min.js",
   "description": "Parsing logic for Pokémon Showdown sets and teams",
-  "repository": "github:xerxicodex/ps",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xerxicodex/ps.git"
+  },
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -17,7 +20,7 @@
     "!src/test"
   ],
   "dependencies": {
-    "@pkmn/types": "^2.1.0"
+    "@nxpkmn/types": "https://gitpkg.now.sh/xerxicodex/ps/types"
   },
   "scripts": {
     "lint": "eslint --cache src --ext ts",
@@ -36,5 +39,11 @@
       "node_modules/",
       "build/"
     ]
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/xerxicodex/ps/issues"
+  },
+  "homepage": "https://github.com/xerxicodex/ps#readme",
+  "devDependencies": {},
+  "author": ""
 }

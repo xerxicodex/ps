@@ -8,7 +8,7 @@ import {
 	PRNGSeed,
 	RandomTeamsTypes,
 	Species,
-} from '@pkmn/sim';
+} from '@nxpkmn/sim';
 
 export class RandomGen2Teams extends RandomGen3Teams {
 	constructor(dex: ModdedDex, format: Format, prng: PRNG | PRNGSeed | null) {

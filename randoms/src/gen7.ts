@@ -14,7 +14,7 @@ import {
 	StatID,
 	StatsTable,
 	toID,
-} from '@pkmn/sim';
+} from '@nxpkmn/sim';
 
 export interface BattleFactorySpecies {
 	flags: {megaOnly?: 1, zmoveOnly?: 1, limEevee?: 1};

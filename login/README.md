@@ -1,23 +1,23 @@
-# `@xerxicodex/login`
+# `@nxpkmn/login`
 
 ![Test Status](https://github.com/pkmn/ps/workflows/Tests/badge.svg)
 ![License](https://img.shields.io/badge/License-MIT-blue.svg)
-[![npm version](https://img.shields.io/npm/v/@xerxicodex/login.svg)](https://www.npmjs.com/package/@xerxicodex/login)
+[![npm version](https://img.shields.io/npm/v/@nxpkmn/login.svg)](https://www.npmjs.com/package/@nxpkmn/login)
 
 Logic for authenticating with Pokémon Showdown.
 
 ## Installation
 
 ```sh
-$ npm install @xerxicodex/login
+$ npm install @nxpkmn/login
 ```
 
-Alternatively, as [detailed below](#browser), if you are using `@xerxicodex/login` in the browser and want
+Alternatively, as [detailed below](#browser), if you are using `@nxpkmn/login` in the browser and want
 a convenient way to get started, simply depend on a transpiled and minified version via
 [unpkg](https://unpkg.com/):
 
 ```html
-<script src="https://unpkg.com/@xerxicodex/login"></script>
+<script src="https://unpkg.com/@nxpkmn/login"></script>
 ```
 
 ## Usage
@@ -25,12 +25,12 @@ a convenient way to get started, simply depend on a transpiled and minified vers
 In order to authenticate with Pokémon Showdown, a client must be able to make HTTP(S) requests to
 Pokémon Showdown's "login server" and to be able to communicate with its "sim server" via a
 WebSocket connection. A wide variety of libraries for simplifying these networking tasks exist, and
-as such, **`@xerxicodex/login` was designed to be completely agnostic to the client's choice of network
+as such, **`@nxpkmn/login` was designed to be completely agnostic to the client's choice of network
 layer**. `@pkmn` recommends [`fetch`](https://github.com/node-fetch/node-fetch) and
-[`ws`](https://github.com/websockets/ws), but `@xerxicodex/login` will work equally well with any native
+[`ws`](https://github.com/websockets/ws), but `@nxpkmn/login` will work equally well with any native
 or third-party network library.
 
-`@xerxicodex/login` provides helpers for several authentication "actions", though Pokémon Showdown expects
+`@nxpkmn/login` provides helpers for several authentication "actions", though Pokémon Showdown expects
 a particular login flow and attempting actions in an unexpected order will result in confusing
 error messages:
 
@@ -46,13 +46,13 @@ login the server will respond with an obtuse error message about attempting to r
 
 ### Examples
 
-The following examples demonstrate how to use `@xerxicodex/login` with various `HTTP` APIs (which tend
+The following examples demonstrate how to use `@nxpkmn/login` with various `HTTP` APIs (which tend
 to be less homogenous than WebSocket APIs), but a WebSocket is also required to authenticate with
 Pokémon Showdown. For example purposes, assume a WebSocket named `ws` has been set up as below:
 
 ```ts
 import * as WebSocket from 'websocket'
-import {Protocol} from '@xerxicodex/protocol';
+import {Protocol} from '@nxpkmn/protocol';
 
 const server = 'sim.smogon.com';
 const serverport = 8000;
@@ -79,18 +79,18 @@ ws.on('message', message => {
 ```
 
 To see a complete worked example, please see the [`login`](login) CLI which trivially logs in and
-out of Pokémon Showdown by leveraging `@xerxicodex/login` (though note that the majority of the complexity
+out of Pokémon Showdown by leveraging `@nxpkmn/login` (though note that the majority of the complexity
 comes from setup). [`index.html`](index.html) provides a similar example for the browser.
 
 #### `http`/`https`
 
 Node.js's standard [`https`](https://nodejs.org/api/https.html) library is somewhat verbose but
-perfectly functional for use with `@xerxicodex/login`:
+perfectly functional for use with `@nxpkmn/login`:
 
 ```ts
 import * as https from 'https';
 
-import {Action, Actions} from '@xerxicodex/login';
+import {Action, Actions} from '@nxpkmn/login';
 
 function fetch(action: Action) {
   return new Promise((resolve, reject) => {
@@ -122,10 +122,10 @@ async function onChallstr() {
 
 Similarly, the legacy
 [`XMLHttpRequest`](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest) API can be used
-within browsers along with `@xerxicodex/login` to authenticate:
+within browsers along with `@nxpkmn/login` to authenticate:
 
 ```html
-<script src="https://unpkg.com/@xerxicodex/login"></script>
+<script src="https://unpkg.com/@nxpkmn/login"></script>
 <script>
   ...
 
@@ -157,7 +157,7 @@ HTTP requests (`node-fetch` provides an isomorphic API for use åon with Node.js
 ```ts
 import fetch from 'node-fetch';
 
-import {Actions} from '@xerxicodex/login';
+import {Actions} from '@nxpkmn/login';
 
 async function onChallstr() {
   const action = Actions.login({username: 'User Name', password: 'password', challstr});
@@ -179,7 +179,7 @@ to work in the browser or on Node.js:
 ```ts
 import axios from 'axios';
 
-import {Actions} from '@xerxicodex/login';
+import {Actions} from '@nxpkmn/login';
 
 async function onChallstr() {
   const action = Actions.login({username: 'User Name', password: 'password', challstr});
@@ -201,7 +201,7 @@ async function onChallstr() {
 
 ```html
 <script src="https://code.jquery.com/jquery.min.js"></script>
-<script src="https://unpkg.com/@xerxicodex/login"></script>
+<script src="https://unpkg.com/@nxpkmn/login"></script>
 <script>
   ...
 
@@ -223,11 +223,11 @@ async function onChallstr() {
 
 ### Browser
 
-The recommended way of using `@xerxicodex/login` in a web browser is to **configure your bundler**
+The recommended way of using `@nxpkmn/login` in a web browser is to **configure your bundler**
 ([Webpack](https://webpack.js.org/), [Rollup](https://rollupjs.org/),
 [Parcel](https://parceljs.org/), etc) to minimize it and package it with the rest of your
 application. If you do not use a bundler, a convenience `production.min.js` is included in the
-package. You simply need to depend on `./node_modules/@xerxicodex/login/build/production.min.js` in a
+package. You simply need to depend on `./node_modules/@nxpkmn/login/build/production.min.js` in a
 `script` tag (which is what the unpkg shortcut above is doing), after which **`LoginTools` will be
 accessible as a global.**
 

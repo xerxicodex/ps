@@ -1,14 +1,17 @@
 {
-  "name": "@xerxicodex/login",
+  "name": "@nxpkmn/login",
   "version": "0.0.4",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "unpkg": "build/production.min.js",
   "bin": {
-    "login": "./login"
+    "login": "login"
   },
   "description": "Logic for authenticating with Pokémon Showdown",
-  "repository": "github:xerxicodex/ps",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xerxicodex/ps.git"
+  },
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -35,5 +38,10 @@
       "node_modules/",
       "build/"
     ]
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/xerxicodex/ps/issues"
+  },
+  "homepage": "https://github.com/xerxicodex/ps#readme",
+  "author": ""
 }

@@ -1,11 +1,14 @@
 {
-  "name": "@xerxicodex/dex",
+  "name": "@nxpkmn/dex",
   "version": "0.6.1",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "unpkg": "build/production.min.js",
   "description": "A unification of Pokémon Showdown's client's and server's data layers",
-  "repository": "github:xerxicodex/ps",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xerxicodex/ps.git"
+  },
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -16,7 +19,7 @@
     "index.ts"
   ],
   "dependencies": {
-    "@pkmn/dex-types": "^0.6.1"
+    "@nxpkmn/dex-types": "https://gitpkg.now.sh/xerxicodex/ps/dex/types"
   },
   "scripts": {
     "lint": "eslint --cache *.ts",
@@ -35,5 +38,11 @@
       "node_modules/",
       "build/"
     ]
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/xerxicodex/ps/issues"
+  },
+  "homepage": "https://github.com/xerxicodex/ps#readme",
+  "devDependencies": {},
+  "author": ""
 }

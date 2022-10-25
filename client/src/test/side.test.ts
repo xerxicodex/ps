@@ -1,5 +1,5 @@
-import {Effect, ID} from '@pkmn/dex';
-import {DetailedPokemon, Protocol} from '@pkmn/protocol';
+import {Effect, ID} from '@nxpkmn/dex';
+import {DetailedPokemon, Protocol} from '@nxpkmn/protocol';
 
 import {Side, Battle} from '../index';
 

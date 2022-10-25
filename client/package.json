@@ -1,5 +1,5 @@
 {
-  "name": "@xerxicodex/client",
+  "name": "@nxpkmn/client",
   "version": "0.4.3",
   "main": "build/index.js",
   "types": "build/index.d.ts",
@@ -15,11 +15,11 @@
     "!src/test"
   ],
   "dependencies": {
-    "@pkmn/data": "^0.6.1",
-    "@pkmn/protocol": "^0.4.3"
+    "@nxpkmn/data": "https://gitpkg.now.sh/xerxicodex/ps/data",
+    "@nxpkmn/protocol": "https://gitpkg.now.sh/xerxicodex/ps/protocol"
   },
   "devDependencies": {
-    "@pkmn/dex": "^0.6.1"
+    "@nxpkmn/dex": "https://gitpkg.now.sh/xerxicodex/ps/dex"
   },
   "scripts": {
     "lint": "eslint --cache src --ext ts",
@@ -37,5 +37,6 @@
       "node_modules/",
       "build/"
     ]
-  }
+  },
+  "author": ""
 }

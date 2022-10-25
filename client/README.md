@@ -1,8 +1,8 @@
-# `@xerxicodex/client`
+# `@nxpkmn/client`
 
 ![Test Status](https://github.com/pkmn/ps/workflows/Tests/badge.svg)
 ![License](https://img.shields.io/badge/License-MIT-blue.svg)
-[![npm version](https://img.shields.io/npm/v/@xerxicodex/client.svg)](https://www.npmjs.com/package/@xerxicodex/client)
+[![npm version](https://img.shields.io/npm/v/@nxpkmn/client.svg)](https://www.npmjs.com/package/@nxpkmn/client)
 
 Package encapsulating a refactored and extended version of the generic parts of the official
 [Pokémon Showdown](https://pokemonshowdown.com)'s client's engine.
@@ -11,7 +11,7 @@ The package has the following goals:
 
 - track everything Pokémon Showdown's client already tracks
 - provide a single place to track *all* known information about a battle
-- integrate seamlessly with other [`@pkmn`](https://pkmn.cc/@xerxicodex/) projects
+- integrate seamlessly with other [`@pkmn`](https://pkmn.cc/@nxpkmn/) projects
 
 To that end, any [divergence](#changes) from the canonical Pokémon Showdown's client can be
 explained as desirable to meet one of more of these requirements.
@@ -19,15 +19,15 @@ explained as desirable to meet one of more of these requirements.
 ## Installation
 
 ```sh
-$ npm install @xerxicodex/client
+$ npm install @nxpkmn/client
 ```
 
-Note that either [`@xerxicodex/dex`](../dex) or [`@xerxicodex/sim`](../sim) must also be installed to provide
-a `Dex` implementation for the [`@xerxicodex/data`](../data) library `@xerxicodex/client` depends on.
+Note that either [`@nxpkmn/dex`](../dex) or [`@nxpkmn/sim`](../sim) must also be installed to provide
+a `Dex` implementation for the [`@nxpkmn/data`](../data) library `@nxpkmn/client` depends on.
 
 ## Usage
 
-`@xerxicodex/client` maintains a battle's state based on information contained in the [Pokémon Showdown
+`@nxpkmn/client` maintains a battle's state based on information contained in the [Pokémon Showdown
 protocol](https://github.com/smogon/pokemon-showdown/blob/master/sim/SIM-PROTOCOL.md). A
 [`Battle`](src/battle.ts) can be instantiated with a `Generations` instance and used to track the
 state of a battle by `add`-ing protocol messages off the wire. The `Battle` can then be queried
@@ -37,9 +37,9 @@ the `|request|` messages sent from the server and together both provide a more c
 true state of the battle.
 
 ```ts
-import {Battle} from '@xerxicodex/client';
-import {Generations} from '@xerxicodex/data';
-import {Dex} from '@xerxicodex/dex';
+import {Battle} from '@nxpkmn/client';
+import {Generations} from '@nxpkmn/data';
+import {Dex} from '@nxpkmn/dex';
 
 const battle = new Battle(new Generations(Dex));
 
@@ -55,34 +55,34 @@ for await (const chunk of stream) {
 ```
 
 The [UI integration test](../integration/src/ui/index.ts) serves as an example for how the
-`@xerxicodex/client` library can be used to display the results of a battle visually. Note how it makes
+`@nxpkmn/client` library can be used to display the results of a battle visually. Note how it makes
 use of multiple `Handler`'s **ordered carefully** to account for when the `Battle` state was
-updated. [`@xerxicodex/view`](../view)'s [`LogFormatter`](../view/src/log-formatter.ts) is an example of
+updated. [`@nxpkmn/view`](../view)'s [`LogFormatter`](../view/src/log-formatter.ts) is an example of
 a `Handler` which depends on being run *before* the client's `Handler` (and has been designed to
 work hand-in-hand with `Battle`).
 
 ### Browser
 
-The recommended way of using `@xerxicodex/client` in a web browser is to **configure your bundler**
+The recommended way of using `@nxpkmn/client` in a web browser is to **configure your bundler**
 ([Webpack](https://webpack.js.org/), [Rollup](https://rollupjs.org/),
 [Parcel](https://parceljs.org/), etc) to minimize it and package it with the rest of your
 application.
 
 ## Changes
 
-`@xerxicodex/client` departs from Pokémon Showdown's client in the following ways:
+`@nxpkmn/client` departs from Pokémon Showdown's client in the following ways:
 
-- the package builds on top of [`@xerxicodex/protocol`](../protocol) to help improve type-safety and
+- the package builds on top of [`@nxpkmn/protocol`](../protocol) to help improve type-safety and
   relies on a separate [`Handler`](src/handler.ts) which is used to build up the `Battle` state.
 - numerous fields and their types have been renamed / rearranged / coalesced / tightened to better
-  match the `@xerxicodex/sim` representations and the types required by other `@pkmn` projects.
+  match the `@nxpkmn/sim` representations and the types required by other `@pkmn` projects.
 - the package can **handle `|request|` messages** in addition to the regular output log protocol.
   Pokémon Showdown handles `|request|` messages separately and allows for the information from the
   request to be used to improve the accuracy of the state that has been built up from battle output
-  with optional '`ServerPokemon`' parameters to various methods, `@xerxicodex/client` merges the request
+  with optional '`ServerPokemon`' parameters to various methods, `@nxpkmn/client` merges the request
   state with the state it has determined from the other protocol messages to ensure the `Battle`
   state always reflects the totality of information we have received from the server.
-- `@xerxicodex/client` allows for the sets of either team to be provided when a `Battle` is instantiated
+- `@nxpkmn/client` allows for the sets of either team to be provided when a `Battle` is instantiated
   so that the set information can be included with the tracked `Pokemon` instances (though note that
   the `TeamValidator` inside the simulator may make modifications to the set which may cause
   discrepancies).

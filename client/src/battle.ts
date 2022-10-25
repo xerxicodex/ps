@@ -9,7 +9,7 @@ import {
   SideID,
   StatsTable,
   toID,
-} from '@pkmn/data';
+} from '@nxpkmn/data';
 import {
   ArgName,
   ArgType,
@@ -23,7 +23,7 @@ import {
   PokemonSearchID,
   Protocol,
   SpeciesName,
-} from '@pkmn/protocol';
+} from '@nxpkmn/protocol';
 
 import {Field} from './field';
 import {Handler, Context as HandlerContext} from './handler';

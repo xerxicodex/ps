@@ -1,5 +1,5 @@
 {
-  "name": "@xerxicodex/sim",
+  "name": "@nxpkmn/sim",
   "version": "0.6.1",
   "description": "An automatically generated extraction of just the simulator portion of Pokémon Showdown",
   "homepage": "https://psim.us",
@@ -9,7 +9,10 @@
     ".": "./build/sim/index.js",
     "./tools": "./build/sim/tools/index.js"
   },
-  "repository": "github:xerxicodex/ps",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xerxicodex/ps.git"
+  },
   "author": "Guangcong Luo <guangcongluo@gmail.com> (http://guangcongluo.com)",
   "contributors": [
     "Cathy J. Fitzpatrick <cathy@cathyjf.com> (https://cathyjf.com)",
@@ -27,8 +30,8 @@
     "sim"
   ],
   "dependencies": {
-    "@pkmn/sets": "^4.0.0",
-    "@pkmn/streams": "^1.0.0"
+    "@nxpkmn/sets": "https://gitpkg.now.sh/xerxicodex/ps/sets",
+    "@nxpkmn/streams": "https://gitpkg.now.sh/xerxicodex/ps/streams"
   },
   "devDependencies": {
     "mocha": "^10.1.0"
@@ -40,5 +43,12 @@
     "lint": "eslint . --cache --ext .js,.ts",
     "pretest": "npm run build",
     "posttest": "npm run lint"
+  },
+  "bugs": {
+    "url": "https://github.com/xerxicodex/ps/issues"
+  },
+  "directories": {
+    "lib": "lib",
+    "test": "test"
   }
 }

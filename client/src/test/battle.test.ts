@@ -1,6 +1,6 @@
-import {Dex} from '@pkmn/dex';
-import {Generations, ID} from '@pkmn/data';
-import {DetailedPokemon, PokemonIdent, Username} from '@pkmn/protocol';
+import {Dex} from '@nxpkmn/dex';
+import {Generations, ID} from '@nxpkmn/data';
+import {DetailedPokemon, PokemonIdent, Username} from '@nxpkmn/protocol';
 
 import {Battle} from '../index';
 

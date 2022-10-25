@@ -1,4 +1,4 @@
-import type {ModdedSpeciesFormatsData} from '@pkmn/sim';
+import type {ModdedSpeciesFormatsData} from '@nxpkmn/sim';
 
 export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	beedrillmega: {

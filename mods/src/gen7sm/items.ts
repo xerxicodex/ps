@@ -1,4 +1,4 @@
-import type {ModdedItemData} from '@pkmn/sim';
+import type {ModdedItemData} from '@nxpkmn/sim';
 
 export const Items: {[k: string]: ModdedItemData} = {
 	kommoniumz: {

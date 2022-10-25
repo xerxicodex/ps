@@ -1,23 +1,23 @@
-# `@xerxicodex/img`
+# `@nxpkmn/img`
 
 ![Test Status](https://github.com/pkmn/ps/workflows/Tests/badge.svg)
 ![License](https://img.shields.io/badge/License-MIT-blue.svg)
-[![npm version](https://img.shields.io/npm/v/@xerxicodex/img.svg)](https://www.npmjs.com/package/@xerxicodex/img)
+[![npm version](https://img.shields.io/npm/v/@nxpkmn/img.svg)](https://www.npmjs.com/package/@nxpkmn/img)
 
 Logic for displaying [Pokémon Showdown's sprite and icon resources](https://pkmn.github.io/ps/img).
 
 ## Installation
 
 ```sh
-$ npm install @xerxicodex/img
+$ npm install @nxpkmn/img
 ```
 
-Alternatively, as [detailed below](#browser), if you are using `@xerxicodex/img` in the browser and want a
+Alternatively, as [detailed below](#browser), if you are using `@nxpkmn/img` in the browser and want a
 convenient way to get started, simply depend on a transpiled and minified version via
 [unpkg](https://unpkg.com/):
 
 ```html
-<script src="https://unpkg.com/@xerxicodex/img"></script>
+<script src="https://unpkg.com/@nxpkmn/img"></script>
 ```
 
 ## Usage
@@ -26,7 +26,7 @@ This package can be used to determine the information required to render sprites
 **without any dependencies**:
 
 ```ts
-import {Sprites, Icons} from '@xerxicodex/img';
+import {Sprites, Icons} from '@nxpkmn/img';
 
 // Shiny Charizard sprite from FireRed / LeafGreen
 const {url, w, h, pixelated} = Sprites.getPokemon('charizard', {gen: 'gen3frlg', shiny: true});
@@ -44,8 +44,8 @@ Alternatively, this library can be used with any implementation of the
 [`data/interface`](src/data/interface.ts):
 
 ```ts
-import {Icons, Sprites} from '@xerxicodex/img/adaptable';
-import {Data} from '@xerxicodex/img/data/interface';
+import {Icons, Sprites} from '@nxpkmn/img/adaptable';
+import {Data} from '@nxpkmn/img/data/interface';
 
 class MyData implements Data {
   ...
@@ -58,7 +58,7 @@ const MySprites = new Sprites(data);
 ```
 
 This option is primarily useful for either migration purposes, to modify the APIs to make data
-loading **asynchronous** (though see [`@xerxicodex/img/async`](src/async.ts)), or if you want to avoid
+loading **asynchronous** (though see [`@nxpkmn/img/async`](src/async.ts)), or if you want to avoid
 duplicating data that already exists in your application (though the only overlap is likely to be
 the `gen` and `num` fields which are quite small).
 
@@ -70,12 +70,12 @@ bandwidth costs). You should be able to easily copy the sprites from Pokémon Sh
 
 ### Browser
 
-The recommended way of using `@xerxicodex/img` in a web browser is to **configure your bundler**
+The recommended way of using `@nxpkmn/img` in a web browser is to **configure your bundler**
 ([Webpack](https://webpack.js.org/), [Rollup](https://rollupjs.org/),
 [Parcel](https://parceljs.org/), etc) to minimize it and package it with the rest of your
 application. If you do not use a bundler, a convenience `production.min.js` is included in the
 package (and used in the [`index.html`](index.html) example code). You simply need to depend on
-`./node_modules/@xerxicodex/img/build/production.min.js` in a `script` tag (which is what the unpkg
+`./node_modules/@nxpkmn/img/build/production.min.js` in a `script` tag (which is what the unpkg
 shortcut above is doing), after which **`PokemonSprites` and `PokemonIcons` will be accessible as
 globals.**
 

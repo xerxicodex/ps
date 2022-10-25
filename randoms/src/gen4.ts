@@ -12,7 +12,7 @@ import {
 	Species,
 	StatID,
 	toID,
-} from '@pkmn/sim';
+} from '@nxpkmn/sim';
 
 
 // These moves can be used even if we aren't setting up to use them:

@@ -1,4 +1,4 @@
-import type {LearnsetData} from '@pkmn/sim';
+import type {LearnsetData} from '@nxpkmn/sim';
 
 /* eslint-disable max-len */
 

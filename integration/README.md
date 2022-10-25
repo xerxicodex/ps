@@ -26,7 +26,7 @@ available for both tests:
 ### Simulator
 
 The simulator test can be started with **`test sim`** - this runs multiple random battles across
-generations with both the `smogon/pokemon-showdown` and `@xerxicodex/sim` code and ensures their input
+generations with both the `smogon/pokemon-showdown` and `@nxpkmn/sim` code and ensures their input
 and output matches. Additionally, it verifies the protocol messages the simulator produces. The
 simulator logic does not rely on the exhaustive logic the client test uses due to practical
 difficulties in synchronizing a stateful AI across two different simulations. In addition to the
@@ -50,7 +50,7 @@ regular flags, the following flags may be used with the simulator test:
 The client test can be started with **`test client`** and cycles through all generations and game
 types, attempting to use as many different effects as possible in the battles it randomly simulates.
 The protocol for the simulated battles are verified and then fed into
-`smogon/pokemon-showdown-client` and `@xerxicodex/client` and the formatted output is compared. The
+`smogon/pokemon-showdown-client` and `@nxpkmn/client` and the formatted output is compared. The
 following additional flags may be used:
 
 - **`--format`** / **`--formats`**: play the specified format(s) instead of

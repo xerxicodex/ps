@@ -13,8 +13,8 @@ import {
   Protocol,
   SpeciesName,
   Username,
-} from '@pkmn/protocol';
-import {ID, StatID, GenerationNum, SideID, TypeName} from '@pkmn/types';
+} from '@nxpkmn/protocol';
+import {ID, StatID, GenerationNum, SideID, TypeName} from '@nxpkmn/types';
 import {toID} from './common';
 import * as TextJSON from './data/text.json';
 
@@ -31,8 +31,8 @@ const Text = TextJSON as {
 /**
  * Tracks additional state required to display a battle in depth. If not provided the output will
  * be less detailed and accurate, though tracking all of this state is significantly more
- * involved. `@pkmn/client`'s `Battle` implements this, though note, the protocol messages need to
- * be fed into the `LogFormatter` **before** the `@pkmn/client`'s `Handler`.
+ * involved. `@nxpkmn/client`'s `Battle` implements this, though note, the protocol messages need to
+ * be fed into the `LogFormatter` **before** the `@nxpkmn/client`'s `Handler`.
  *
  * smogon/pokemon-showdown-client's `BattleTextParser` receives the protocol *after* the `Battle`
  * state has been updated, but PS mutates the protocol to encode the pre-updated state for the
