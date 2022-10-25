@@ -1,12 +1,18 @@
 import type { GetServerSideProps, NextPage } from "next";
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import FullScreenLoader from "../../../client/components/FullScreenLoader";
 import MainLayout from "../../../client/layouts/MainLayout";
 import { trpc } from "../../../client/utils/trpc";
 import { ITowerBattle } from "../../../server/engines/tower.engine";
 
-const BattleTower: NextPage = (id: number) => {
+const BattleTower: NextPage = () => {
+
+    const router = useRouter()
+    const { id } = router.query
+
+    const [towerId, setTowerId] = useState(0);
 
     const [battle, setBattle] = useState({} as ITowerBattle)
 
@@ -32,7 +38,13 @@ const BattleTower: NextPage = (id: number) => {
         }
     })
 
-   challenge({ tower_id: id })
+    useEffect(() => {
+        const _id = parseInt(id as string);
+        if (towerId !== _id) {
+            setTowerId(_id);
+            challenge({ tower_id: parseInt(id as string) })
+        }
+    }, [id])
 
     return (
         <MainLayout>

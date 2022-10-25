@@ -103,6 +103,21 @@ const HomePage: NextPage = () => {
         }
     };
 
+    const { mutate: challenge, isLoading: isChallenging } = trpc.useMutation(
+        "tower.challenge",
+        {
+            onSuccess(data) {
+                console.log("challenge", data);
+            },
+            onError(error: any) {
+                toast(error.message, {
+                    type: "error",
+                    position: "top-center",
+                });
+            },
+        }
+    );
+
     const header = (
         <div className="flex flex-wrap w-full h-full">
             <div className="text-xl md:text-4xl font-black text-slate-600 w-full mb-2">
@@ -176,7 +191,8 @@ const HomePage: NextPage = () => {
     const challengeBtn = (
         <div className="w-full h-full bg-gradient-to-r from-cyan-200 to-indigo-400 hover:opacity-75 hover:shadow-lg active:scale-95 cursor-pointer rounded-lg shadow overflow-hidden p-4">
             <div
-                onClick={() => router.push(`battle/tower/${tower.id}`)}
+                // onClick={() => router.push(`tower/battle/${tower.id}`)}
+                onClick={() => challenge({ tower_id: tower.id })}
                 className="flex items-center justify-center w-full h-full text-2xl text-lg font-semibold uppercase text-white"
             >
                 CHALLANGE

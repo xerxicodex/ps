@@ -179,6 +179,49 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@pkmn/client@^0.4.3":
+  version "0.4.3"
+  resolved "https://registry.yarnpkg.com/@pkmn/client/-/client-0.4.3.tgz#d7bb3701523e80ae3bc601cb436b3a4885cc3241"
+  integrity sha512-OfkFwJpyNPM6jeJ7+MHTnFndJsc9L8GAB9ukikHAHrv1gfFtASg3Til7+7yqOMsmcoBxL4sQFIk6Mpxm9gi9Tw==
+  dependencies:
+    "@pkmn/data" "^0.5.19"
+    "@pkmn/protocol" "^0.4.3"
+
+"@pkmn/data@^0.5.19":
+  version "0.5.28"
+  resolved "https://registry.yarnpkg.com/@pkmn/data/-/data-0.5.28.tgz#19708faaf09f0e7c4a037bf1898b1243933bce25"
+  integrity sha512-Rh2mcmsjB4A3Wwv02wkKqxD8fsn43qgD6oe+nem1EpKv1XNH8XWiq4o9RXm8b3z/jONHbEKXjgjWIMBhGjLpoQ==
+  dependencies:
+    "@pkmn/dex-types" "^0.5.28"
+
+"@pkmn/dex-types@^0.5.28":
+  version "0.5.28"
+  resolved "https://registry.yarnpkg.com/@pkmn/dex-types/-/dex-types-0.5.28.tgz#7083e0b67f2241cfb1c5e41f38f6f4b1f43e3f70"
+  integrity sha512-d087kpX+/GwAUyylgxGkokBJVb73e3D2VK/cQCintPi6TwdfpBD9pwEoATcJM6BiZBzgNugVlcKETIIiU2dQfA==
+  dependencies:
+    "@pkmn/types" "^2.1.0"
+
+"@pkmn/dex-types@^0.6.1":
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/@pkmn/dex-types/-/dex-types-0.6.1.tgz#528c7bbe019f9cc21265fede1ede352f3854a195"
+  integrity sha512-LZcvH9vTbdg58IZKUBISqQ1OHyW6ZTXRB9/WpFqaQtgACDsEAkVhxO2OnttOnsmKdctu8ilYjcklchJQBcwapA==
+  dependencies:
+    "@pkmn/types" "^2.1.0"
+
+"@pkmn/dex@^0.6.1":
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/@pkmn/dex/-/dex-0.6.1.tgz#eb490682f513a358290438b55cb383e2e0732cf2"
+  integrity sha512-lBQMwdCA3zht7KTy+AGBGsDCzIpRtraiLGwUKz+Etq/fNbIS/8CT5dlX6hVFZTt2zMhu448SvXy7kM3uXi+k9Q==
+  dependencies:
+    "@pkmn/dex-types" "^0.6.1"
+
+"@pkmn/protocol@^0.4.3":
+  version "0.4.3"
+  resolved "https://registry.yarnpkg.com/@pkmn/protocol/-/protocol-0.4.3.tgz#025dfde44d4c49b4abf4ae41bc19e51f6388bd7c"
+  integrity sha512-oJe0pqf7Z/H3vxDTjFr6T4VAVaUtMEuQ+3cOWIMb1b8zfGp/esGRdNyt/GGe/+pbF0OSJXIYH7aioKE4zNh9Dg==
+  dependencies:
+    "@pkmn/types" "^2.0.0"
+
 "@pkmn/randoms@^0.6.1":
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/@pkmn/randoms/-/randoms-0.6.1.tgz#8c25690aafbf750e7552323328ed953c420879c8"
@@ -206,10 +249,18 @@
   resolved "https://registry.yarnpkg.com/@pkmn/streams/-/streams-1.0.0.tgz#0b9d1189462e7cbcb430fbc53077bbaff6722567"
   integrity sha512-BtGUlaaKdC+4epkc8Bg8k9tEwZYNZP8tx2jtCqqhLMhri/BtmUe2OdSZRAKbwKfWWN/CwtqyEUjdNsjwwSld/g==
 
-"@pkmn/types@^2.1.0":
+"@pkmn/types@^2.0.0", "@pkmn/types@^2.1.0":
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/@pkmn/types/-/types-2.1.0.tgz#390c2ba69685208d446dae0efd95ae91f8432201"
   integrity sha512-liqA1fGio93hTZqwfLzWIO++WJTFce4d253r6FkomNTu/0Edso0q9qvNeuud8gvA5UhoF2h6J45mCGemPvZyNg==
+
+"@pkmn/view@^0.4.3":
+  version "0.4.3"
+  resolved "https://registry.yarnpkg.com/@pkmn/view/-/view-0.4.3.tgz#c5a9ad13d84430bcc9df611a537a5219870cfad4"
+  integrity sha512-YAe01n1c00dOsg5kUbfeBCiv0HsjELo5pmjKtr9XqaH28WKCO4I/g2jTlQ2nJ7VV3SZxjP3+y6jQ5Dt3g6gOWA==
+  dependencies:
+    "@pkmn/protocol" "^0.4.3"
+    "@pkmn/types" "^2.0.0"
 
 "@prisma/client@^4.4.0":
   version "4.4.0"

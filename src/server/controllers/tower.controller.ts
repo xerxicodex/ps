@@ -40,12 +40,14 @@ export const GetTowersHandler = async ({ ctx, input }: { ctx: Context, input: an
 };
 
 
-export const ChallengeTowerHandler = async ({ ctx, input }: { ctx: Context, input: { tower_id: number} }) => {
+export const ChallengeTowerHandler = async ({ ctx, input }: { ctx: Context, input: { tower_id: number } }) => {
     console.log("ChallengeTowerHandler", { input })
     try {
         const trainer = ctx.trainer;
 
         if (trainer) {
+            await prisma.towerChallenge.deleteMany({ where: { trainer } })
+
             const activeChallenge = await GetTrainerActiveTowerChallenge(trainer.id);
 
             if (!activeChallenge) {
@@ -53,24 +55,26 @@ export const ChallengeTowerHandler = async ({ ctx, input }: { ctx: Context, inpu
                 const trainerRoster = await GetTrainerRoster(trainer.id);
 
                 if (trainerRoster.length > 0) {
-                    
+
                     const challenge = await TrainerChallengeTower(trainer.id, input.tower_id)
-    
+
                     const battle = new TowerBattleEngine(trainer, trainerRoster, challenge);
-                    
+
+                    await battle.Start();
+
                     return {
                         status: "success",
                         battle,
                     };
 
                 } else {
-                    throw("trainer doesn't have any roster pokemon")
+                    throw ("trainer doesn't have any roster pokemon")
                 }
             } else {
-                throw("trainer has an existing challenge")
+                throw ("trainer has an existing challenge")
             }
         } else {
-            throw("trainer isn't active")
+            throw ("trainer isn't active")
         }
     } catch (err: any) {
         console.log('ChallengeTowerHandler error', err)

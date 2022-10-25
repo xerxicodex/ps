@@ -343,3 +343,9 @@ export function GetPokemonImageURLById(id: number, options: any) {
     // ${mega ? ("_" + mega.toLowerCase()) : ""}${gigantamax ? ("_" + gigantamax.toLowerCase()) : ""}${color ? ("_" + color.toLowerCase()) : ""}
     return `${process.env.IMAGE_HOST}/pokemon/poke_capture_${PadWithZero(id, '0000')}_${(PadWithZero(version, "000"))}_${gender}_${form}_00000000_f_${color}.png`
 }
+
+export function PokemonNameShowdownPatch(name: string) {
+    return {
+        'eiscueice': 'eiscue'
+    }[name] ?? name;
+}
