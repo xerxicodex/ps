@@ -1,11 +1,11 @@
 {
-  "name": "@pkmn/dex",
+  "name": "@nxpkmn/dex",
   "version": "0.6.1",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "unpkg": "build/production.min.js",
   "description": "A unification of Pokémon Showdown's client's and server's data layers",
-  "repository": "github:pkmn/ps",
+  "repository": "github:xerxicodex/ps",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -16,7 +16,7 @@
     "index.ts"
   ],
   "dependencies": {
-    "@pkmn/dex-types": "^0.6.1"
+    "@nxpkmn/dex-types": "^0.6.1"
   },
   "scripts": {
     "lint": "eslint --cache *.ts",

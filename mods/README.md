@@ -1,17 +1,17 @@
-# `@pkmn/mods`
+# `@nxpkmn/mods`
 
 ![Test Status](https://github.com/pkmn/ps/workflows/Tests/badge.svg)
 ![License](https://img.shields.io/badge/License-MIT-blue.svg)
-[![npm version](https://img.shields.io/npm/v/@pkmn/mods.svg)](https://www.npmjs.com/package/@pkmn/mods)
+[![npm version](https://img.shields.io/npm/v/@nxpkmn/mods.svg)](https://www.npmjs.com/package/@nxpkmn/mods)
 
 An automatically generated extraction of the non-canonical mainstream mods from the
 [smogon/pokemon-showdown](https://github.com/smogon/pokemon-showdown) simulator which can be
-applied to [`@pkmn/sim`](../sim) and [`@pkmn/dex`](../dex).
+applied to [`@nxpkmn/sim`](../sim) and [`@nxpkmn/dex`](../dex).
 
 ## Installation
 
 ```sh
-$ npm install @pkmn/mods
+$ npm install @nxpkmn/mods
 ```
 
 ## Usage
@@ -32,18 +32,18 @@ This package contains data and logic for several mods:
 - `gen8bdsp`: A mod on top of Generation 8 which implements Brilliant Diamond and Shining Pearl
 
 These mods can be applied to a `Dex` implementation by passing the data as an argument to the `mod`
-method. Because of type inconsistencies between `@pkmn/sim` and `@pkmn/dex`, to typecheck **the
+method. Because of type inconsistencies between `@nxpkmn/sim` and `@nxpkmn/dex`, to typecheck **the
 imported mod must be cast to `ModData`** first. This cast should be safe, but unfortunately results
 in slightly less ergonomic usage than would be desirable.
 
 ```ts
-import {Dex, ID, ModData} from '@pkmn/dex'; // '@pkmn/sim'
+import {Dex, ID, ModData} from '@nxpkmn/dex'; // '@nxpkmn/sim'
 
-const dex = Dex.mod('gen7sm' as ID, await import('@pkmn/mods/gen7sm') as ModData);
+const dex = Dex.mod('gen7sm' as ID, await import('@nxpkmn/mods/gen7sm') as ModData);
 ```
 
 The TypeScript compiler may require special configuration to be able to directly import a
-subdirectory of the main `@pkmn/mods` package - see the
+subdirectory of the main `@nxpkmn/mods` package - see the
 [`tsconfig.json` documentation](https://www.typescriptlang.org/tsconfig) on
 [`baseUrl`](https://www.typescriptlang.org/tsconfig#baseUrl) and
 [`paths`](https://www.typescriptlang.org/tsconfig#paths).
@@ -53,7 +53,7 @@ subdirectory of the main `@pkmn/mods` package - see the
  "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@pkmn/mods/*": ["node_modules/@pkmn/mods/build/*"]
+      "@nxpkmn/mods/*": ["node_modules/@nxpkmn/mods/build/*"]
     }
   }
 }
@@ -66,8 +66,8 @@ guaranteed to be safe). There are cleaner ways to implement typesafe mods, but t
 approach aims to simply acheive parity with the upstream Pokémon Showdown implementation.
 
 ```ts
-import {Dex, ID, ModData, Ability, AbilityData} from '@pkmn/dex'; // '@pkmn/sim'
-import {ModdexDex} from '@pkmn/mods';
+import {Dex, ID, ModData, Ability, AbilityData} from '@nxpkmn/dex'; // '@nxpkmn/sim'
+import {ModdexDex} from '@nxpkmn/mods';
 
 const dex = Dex.mod('foo' as ID, {
   Abilities: {
@@ -85,7 +85,7 @@ console.log(modded.abilities.get('magicguard').foo);
 
 ### Browser
 
-The recommended way of using `@pkmn/sim` in a web browser is to **configure your bundler**
+The recommended way of using `@nxpkmn/sim` in a web browser is to **configure your bundler**
 ([Webpack](https://webpack.js.org/), [Rollup](https://rollupjs.org/),
 [Parcel](https://parceljs.org/), etc) to minimize it and package it with the rest of your
 application.

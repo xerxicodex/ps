@@ -1,5 +1,5 @@
 {
-  "name": "@pkmn/client",
+  "name": "@nxpkmn/client",
   "version": "0.4.3",
   "main": "build/index.js",
   "types": "build/index.d.ts",
@@ -15,11 +15,11 @@
     "!src/test"
   ],
   "dependencies": {
-    "@pkmn/data": "^0.6.1",
-    "@pkmn/protocol": "^0.4.3"
+    "@nxpkmn/data": "^0.6.1",
+    "@nxpkmn/protocol": "^0.4.3"
   },
   "devDependencies": {
-    "@pkmn/dex": "^0.6.1"
+    "@nxpkmn/dex": "^0.6.1"
   },
   "scripts": {
     "lint": "eslint --cache src --ext ts",

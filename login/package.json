@@ -1,5 +1,5 @@
 {
-  "name": "@pkmn/login",
+  "name": "@nxpkmn/login",
   "version": "0.0.4",
   "main": "build/index.js",
   "types": "build/index.d.ts",
@@ -8,7 +8,7 @@
     "login": "./login"
   },
   "description": "Logic for authenticating with Pokémon Showdown",
-  "repository": "github:pkmn/ps",
+  "repository": "github:xerxicodex/ps",
   "license": "MIT",
   "publishConfig": {
     "access": "public"

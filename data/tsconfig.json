@@ -7,7 +7,7 @@
     "baseUrl": ".",
     "paths": {
       "@smogon/calc/*": ["node_modules/@smogon/calc/dist/*"],
-      "@pkmn/mods/*": ["node_modules/@pkmn/mods/build/*"]
+      "@nxpkmn/mods/*": ["node_modules/@nxpkmn/mods/build/*"]
     }
   },
   "files": ["index.ts", "index.test.ts"]

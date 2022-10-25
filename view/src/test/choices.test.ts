@@ -1,4 +1,4 @@
-import {Protocol} from '@pkmn/protocol';
+import {Protocol} from '@nxpkmn/protocol';
 
 import {ChoiceBuilder} from '../choices';
 

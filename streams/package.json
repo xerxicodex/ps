@@ -1,10 +1,10 @@
 {
-  "name": "@pkmn/streams",
+  "name": "@nxpkmn/streams",
   "version": "1.0.0",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "description": "An automatically generated extraction of Pokémon Showdown's streams library",
-  "repository": "github:pkmn/ps",
+  "repository": "github:xerxicodex/ps",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -22,7 +22,7 @@
     "test": "npm run lint"
   },
   "eslintConfig": {
-    "extends": "@pkmn",
+    "extends": "@nxpkmn",
     "rules": {
       "@typescript-eslint/quotes": "off",
       "@typescript-eslint/indent": [

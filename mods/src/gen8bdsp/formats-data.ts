@@ -1,4 +1,4 @@
-import type {ModdedSpeciesFormatsData} from '@pkmn/sim';
+import type {ModdedSpeciesFormatsData} from '@nxpkmn/sim';
 
 // TODO: alphabetize move names. I'm trying to implement this on a low-quality laptop under time pressure, so I haven't bothered doing so.
 export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {

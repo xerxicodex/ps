@@ -2,8 +2,8 @@
 # Contributing
 
 Please read through the index [README](README.md), the READMEs the index links to, and
-[pkmn.cc/@pkmn](https://pkmn.cc/@pkmn/) for general information about `@pkmn/ps` about development
-on `@pkmn` projects respectively. When opening issues or pull requests, please use one of the
+[pkmn.cc/@nxpkmn](https://pkmn.cc/@nxpkmn/) for general information about `@nxpkmn/ps` about development
+on `@nxpkmn` projects respectively. When opening issues or pull requests, please use one of the
 existing templates and fill them out to the best of your ability. Pull requests are unlikely to be
 merged without [tests](#Tests), but it is fine to open a pull request without tests for feedback or
 to ask for help with testing. :)
@@ -22,7 +22,7 @@ of packages that have to be kept in sync with Pokémon Showdown.
 
 `subpkg` is a minimal utility for managing projects with sub-packages (compare to
 [`lerna`](https://github.com/lerna/lerna) or `pnpm`'s support for
-['workspaces'](https://pnpm.js.org/en/workspaces)). `pkmn/ps` takes advantage of `subpkg` to declare
+['workspaces'](https://pnpm.js.org/en/workspaces)). `nxpkmn/ps` takes advantage of `subpkg` to declare
 all shared `dependencies` in the root [`package.json`](package.json) which ensures that all
 sub-packages end up using the same versions and each of the dependencies only need to be installed
 once for the project instead of per-package. To avoid needing to run all scripts from the root of
@@ -42,7 +42,7 @@ $ subpkg compile sim dex
 #### `bump`
 
 `subpkg` provides a '`bump`' subcommand that allows for bumping the versions of specific
-sub-packages. For simplicity, `pkmn/ps` keeps the versions of packages which include or are heavily
+sub-packages. For simplicity, `nxpkmn/ps` keeps the versions of packages which include or are heavily
 dependent on generated code in sync, so the following  helper is recommended:
 
 ```sh
@@ -68,7 +68,7 @@ $ subpkg link
 ### `import`
 
 The [`import`](import) script is responsible for syncing the `vendor/`-ed copies of Pokémon Showdown
-(note: `git submodule update --init` is required after cloning `pkmn/ps` for the first time to also
+(note: `git submodule update --init` is required after cloning `nxpkmn/ps` for the first time to also
 fetch these submodules) and **generating packages**. To quote from the comment in the `import`
 script's header:
 
@@ -85,7 +85,7 @@ changes upstream.
 
 To simplify use in the browser, several packages offer a 'bundled' version of their code. Ideally,
 something like [`microbundle`](https://github.com/developit/microbundle) would provide a turn-key
-solution here, but due to various limitations `pkmn/ps` currently relies on a fragile form of bundle
+solution here, but due to various limitations `nxpkmn/ps` currently relies on a fragile form of bundle
 generation which involves handwritten `bundle` scripts. These scripts depend on
 [`bunder.js`](bundler.js) which ultimately calls [Babel](https://babeljs.io/) and
 [`terser`](https://github.com/terser/terser) on the manually concatenated bundle. Tests exist to
@@ -101,7 +101,7 @@ whenever new packages are released.
 
 ### `update`
 
-To simplify keeping dependencies up to date, `pkmn/ps` leverages
+To simplify keeping dependencies up to date, `nxpkmn/ps` leverages
 [`npm-check-updates`](https://www.npmjs.com/package/npm-check-updates):
 
 ```sh
@@ -125,7 +125,7 @@ function update() {
 ## Tests
 
 Generating numerous packages from a project like Pokémon Showdown which was not designed with
-modularity in mind necessarily involves quite a bit of fragility, and `pkmn/ps` relies on a large
+modularity in mind necessarily involves quite a bit of fragility, and `nxpkmn/ps` relies on a large
 amount of unit and [integration](integration) tests to provide confidence that each of the packages
 are functional and stable. Before publishing anything, first **run `npm test:integration`** to
 execute the entire test suite.

@@ -8,7 +8,7 @@ try {
 }
 
 const packages = [];
-for (const dep of ['@pkmn/protocol', 'ws']) {
+for (const dep of ['@nxpkmn/protocol', 'ws']) {
   try {
     require.resolve(dep);
   } catch (err) {
@@ -28,7 +28,7 @@ if (packages.length) {
 const https = require('https');
 const readline = require('readline');
 
-const {Protocol} = require('@pkmn/protocol');
+const {Protocol} = require('@nxpkmn/protocol');
 const WebSocket = require('ws');
 
 const {Actions} = require('./build');

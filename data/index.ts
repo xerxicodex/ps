@@ -25,7 +25,7 @@ import {
   Tier,
   Type as DexType,
   TypeName,
-} from '@pkmn/dex-types';
+} from '@nxpkmn/dex-types';
 
 const DEFAULT_EXISTS = (d: Data) => {
   if (!d.exists) return false;
@@ -577,7 +577,7 @@ export class Learnsets {
   }
 
   // BUG: this only covers what Pokémon Showdown deems "teambuilder legality" - proper legality
-  // checks/restriction enforcement requires @pkmn/sim's TeamValidator.
+  // checks/restriction enforcement requires @nxpkmn/sim's TeamValidator.
   async learnable(name: string, restriction?: Restriction) {
     const species = this.gen.species.get(name);
     if (!species) return undefined;
@@ -631,7 +631,7 @@ export class Learnsets {
   }
 
   // BUG: this only covers what Pokémon Showdown deems "teambuilder legality" - proper legality
-  // checks/restriction enforcement requires @pkmn/sim's TeamValidator.
+  // checks/restriction enforcement requires @nxpkmn/sim's TeamValidator.
   async canLearn(name: string, move: Move | string, restriction?: Restriction) {
     const species = this.gen.species.get(name);
     if (!species) return false;
@@ -649,7 +649,7 @@ export class Learnsets {
   }
 
   // BUG: this only covers what Pokémon Showdown deems "teambuilder legality" - proper legality
-  // checks/restriction enforcement requires @pkmn/sim's TeamValidator.
+  // checks/restriction enforcement requires @nxpkmn/sim's TeamValidator.
   isLegal(move: Move, sources: MoveSource[] | undefined, gen: Generation | Restriction) {
     if (!sources) return undefined;
 
@@ -838,4 +838,4 @@ export {
   Nature,
   GenID,
   Dex,
-} from '@pkmn/dex-types';
+} from '@nxpkmn/dex-types';

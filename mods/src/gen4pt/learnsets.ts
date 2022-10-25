@@ -1,4 +1,4 @@
-import type {ModdedLearnsetData} from '@pkmn/sim';
+import type {ModdedLearnsetData} from '@nxpkmn/sim';
 
 export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 	bulbasaur: {

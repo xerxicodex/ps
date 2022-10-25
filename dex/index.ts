@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
-import * as T from '@pkmn/dex-types';
+import * as T from '@nxpkmn/dex-types';
 
 import * as AbilitiesJSON from './data/abilities.json';
 import * as AliasesJSON from './data/aliases.json';
@@ -1485,4 +1485,4 @@ export {
   // Nature,
   GenID,
   // Dex,
-} from '@pkmn/dex-types';
+} from '@nxpkmn/dex-types';

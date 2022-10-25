@@ -1,5 +1,5 @@
-import {ID, toID, SideCondition, PokemonSet} from '@pkmn/data';
-import {AvatarIdent, DetailedPokemon, Username} from '@pkmn/protocol';
+import {ID, toID, SideCondition, PokemonSet} from '@nxpkmn/data';
+import {AvatarIdent, DetailedPokemon, Username} from '@nxpkmn/protocol';
 
 import {Battle} from './battle';
 import {Pokemon} from './pokemon';

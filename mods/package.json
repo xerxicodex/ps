@@ -1,5 +1,5 @@
 {
-  "name": "@pkmn/mods",
+  "name": "@nxpkmn/mods",
   "version": "0.6.1",
   "main": "build/index.js",
   "types": "build/index.d.ts",
@@ -16,8 +16,8 @@
     "./gen8bdsp": "./build/gen8bdsp/index.js",
     "./gen8dlc1": "./build/gen8dlc1/index.js"
   },
-  "description": "Support for non-standard mods to @pkmn/sim and @pkmn/dex",
-  "repository": "github:pkmn/ps",
+  "description": "Support for non-standard mods to @nxpkmn/sim and @nxpkmn/dex",
+  "repository": "github:xerxicodex/ps",
   "author": "Guangcong Luo <guangcongluo@gmail.com> (http://guangcongluo.com)",
   "contributors": [
     "Cathy J. Fitzpatrick <cathy@cathyjf.com> (https://cathyjf.com)",
@@ -34,11 +34,11 @@
     "!src/*.test.*"
   ],
   "dependencies": {
-    "@pkmn/dex-types": "^0.6.1"
+    "@nxpkmn/dex-types": "^0.6.1"
   },
   "devDependencies": {
-    "@pkmn/dex": "^0.6.1",
-    "@pkmn/sim": "^0.6.1"
+    "@nxpkmn/dex": "^0.6.1",
+    "@nxpkmn/sim": "^0.6.1"
   },
   "scripts": {
     "lint": "eslint --cache src --ext ts",
@@ -58,7 +58,7 @@
     ]
   },
   "eslintConfig": {
-    "extends": "@pkmn",
+    "extends": "@nxpkmn",
     "overrides": [
       {
         "files": [

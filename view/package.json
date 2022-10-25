@@ -1,5 +1,5 @@
 {
-  "name": "@pkmn/view",
+  "name": "@nxpkmn/view",
   "version": "0.4.3",
   "main": "build/index.js",
   "types": "build/index.d.ts",
@@ -7,7 +7,7 @@
     "format-battle": "./format-battle"
   },
   "description": "Library for building Pokémon Showdown client UIs",
-  "repository": "github:pkmn/ps",
+  "repository": "github:xerxicodex/ps",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -19,8 +19,8 @@
     "!src/test"
   ],
   "dependencies": {
-    "@pkmn/protocol": "^0.4.3",
-    "@pkmn/types": "^2.1.0"
+    "@nxpkmn/protocol": "^0.4.3",
+    "@nxpkmn/types": "^2.1.0"
   },
   "scripts": {
     "lint": "eslint --cache src --ext ts",

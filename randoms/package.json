@@ -1,10 +1,10 @@
 {
-  "name": "@pkmn/randoms",
+  "name": "@nxpkmn/randoms",
   "version": "0.6.1",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "description": "Random team generation logic for Pokémon Showdown's Random Battle formats",
-  "repository": "github:pkmn/ps",
+  "repository": "github:xerxicodex/ps",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -16,7 +16,7 @@
     "!src/test"
   ],
   "dependencies": {
-    "@pkmn/sim": "^0.6.1"
+    "@nxpkmn/sim": "^0.6.1"
   },
   "scripts": {
     "lint": "eslint --cache src --ext ts",
@@ -36,7 +36,7 @@
     ]
   },
   "eslintConfig": {
-    "extends": "@pkmn",
+    "extends": "@nxpkmn",
     "rules": {
       "@typescript-eslint/quotes": "off",
       "@typescript-eslint/indent": [

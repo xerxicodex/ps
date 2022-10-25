@@ -1,11 +1,11 @@
 {
-  "name": "@pkmn/sets",
+  "name": "@nxpkmn/sets",
   "version": "4.0.0",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "unpkg": "build/production.min.js",
   "description": "Parsing logic for Pokémon Showdown sets and teams",
-  "repository": "github:pkmn/ps",
+  "repository": "github:xerxicodex/ps",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -17,7 +17,7 @@
     "!src/test"
   ],
   "dependencies": {
-    "@pkmn/types": "^2.1.0"
+    "@nxpkmn/types": "^2.1.0"
   },
   "scripts": {
     "lint": "eslint --cache src --ext ts",

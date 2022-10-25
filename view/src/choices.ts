@@ -1,5 +1,5 @@
-import {Protocol} from '@pkmn/protocol';
-import {ID} from '@pkmn/types';
+import {Protocol} from '@nxpkmn/protocol';
+import {ID} from '@nxpkmn/types';
 
 import {toID} from './common';
 

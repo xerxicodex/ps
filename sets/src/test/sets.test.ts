@@ -1,4 +1,4 @@
-import {PokemonSet, StatsTable} from '@pkmn/types';
+import {PokemonSet, StatsTable} from '@nxpkmn/types';
 import {_import, _unpack, Sets} from '../sets';
 import {GEN} from './data';
 

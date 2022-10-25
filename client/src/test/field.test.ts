@@ -1,5 +1,5 @@
-import {Dex} from '@pkmn/dex';
-import {Generations, ID} from '@pkmn/data';
+import {Dex} from '@nxpkmn/dex';
+import {Generations, ID} from '@nxpkmn/data';
 
 import {Field, Battle, Pokemon} from '../index';
 

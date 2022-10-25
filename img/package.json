@@ -1,11 +1,11 @@
 {
-  "name": "@pkmn/img",
+  "name": "@nxpkmn/img",
   "version": "0.1.20",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "unpkg": "build/production.min.js",
   "description": "Logic for displaying Pokémon Showdown's sprite/icon resources",
-  "repository": "github:pkmn/ps",
+  "repository": "github:xerxicodex/ps",
   "license": "MIT",
   "publishConfig": {
     "access": "public"

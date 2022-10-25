@@ -1,8 +1,8 @@
-# `@pkmn/sim`
+# `@nxpkmn/sim`
 
 ![Test Status](https://github.com/pkmn/ps/workflows/Tests/badge.svg)
 ![License](https://img.shields.io/badge/License-MIT-blue.svg)
-[![npm version](https://img.shields.io/npm/v/@pkmn/sim.svg)](https://www.npmjs.com/package/@pkmn/sim)
+[![npm version](https://img.shields.io/npm/v/@nxpkmn/sim.svg)](https://www.npmjs.com/package/@nxpkmn/sim)
 
 An automatically generated extraction of just the simulator portion of
 [smogon/pokemon-showdown](https://github.com/smogon/pokemon-showdown).
@@ -11,7 +11,7 @@ The package aims to meet the following requirements:
 
 - stay as close to `sim/` from `smogon/pokemon-showdown` as possible
 - be usable as a typed and verisoned module that exports a
-  [`@pkmn/dex-types`](../dex/types)-compatible data layer
+  [`@nxpkmn/dex-types`](../dex/types)-compatible data layer
 - be usable in the browser environment
 
 To that end, any [divergence](#changes) from the canonical Pokémon Showdown `sim/` directory can be
@@ -23,19 +23,19 @@ simulator and/or validator code in the browser, **you will probably be better of
 
 If you simply want access to the Pokémon Showdown's data layer but do not care about any of the
 logic required to implement the game mechanics and battle system, **please see
-[`@pkmn/data`](../data) (or [`@pkmn/dex`](../dex)).**
+[`@nxpkmn/data`](../data) (or [`@nxpkmn/dex`](../dex)).**
 
 ## Installation
 
 ```sh
-$ npm install @pkmn/sim
+$ npm install @nxpkmn/sim
 ```
 
 ## Usage
 
 ```ts
-import {Dex, BattleStreams, RandomPlayerAI, Teams} from '@pkmn/sim';
-import {TeamGenerators} from '@pkmn/randoms';
+import {Dex, BattleStreams, RandomPlayerAI, Teams} from '@nxpkmn/sim';
+import {TeamGenerators} from '@nxpkmn/randoms';
 
 Teams.setGeneratorFactory(TeamGenerators);
 
@@ -74,7 +74,7 @@ workings](https://github.com/smogon/pokemon-showdown/pull/5439) are also helpful
 
 ### Browser
 
-The recommended way of using `@pkmn/sim` in a web browser is to **configure your bundler**
+The recommended way of using `@nxpkmn/sim` in a web browser is to **configure your bundler**
 ([Webpack](https://webpack.js.org/), [Rollup](https://rollupjs.org/),
 [Parcel](https://parceljs.org/), etc) to minimize it and package it with the rest of your
 application.
@@ -92,14 +92,14 @@ Pokémon Showdown's `sim/` directory has been modified in the following ways:
   errors. `index.ts` files have been added to each of the generations in `data/`.
 - **only Gens 1 - 8 are supported, no other mods**. Generation 8 as the `base` mod is supported as
   with Pokémon Showdown, but after that only the canconical `genN` mods are supported (no Stadium,
-  Let's Go, or pet mods). However, the [`@pkmn/mods`](../mods) package provides the information
+  Let's Go, or pet mods). However, the [`@nxpkmn/mods`](../mods) package provides the information
   required for additional formats, and support for Other Metagames can be acheived with the modified
   `Dex#mod` method. The `Dex#mod` and `Dex.forGen` methods will `throw` if an unsupported mod/gen is
   requested.  A `Dex#modid` method has also been added which returns the current mod applied to the
   `Dex`.
-- **random battles are not supported by the `@pkmn/sim` package**. All team generation logic and
+- **random battles are not supported by the `@nxpkmn/sim` package**. All team generation logic and
   data has been removed from the package and are instead to be provided by the
-  [`@pkmn/randoms`](../randoms) package which exports a generator factory that can be configured
+  [`@nxpkmn/randoms`](../randoms) package which exports a generator factory that can be configured
   using the `Teams#setGeneratorFactory` method. Unless a team generator factory has been set
   `Teams#getGenerator` and `Teams#generate` will throw.
 - **all generations and all of their data are automatically loaded**. With Pokémon Showdown, data is
@@ -108,16 +108,16 @@ Pokémon Showdown's `sim/` directory has been modified in the following ways:
   loading older generations would still be desirable (and this package still lazily constructs the
   data objects), but lazy loading only works on web with asynchronous APIs which Pokémon Showdown
   does not support. `Dex#includeMods` is a no-op.
-- **`Teams` methods delegate to [`@pkmn/sets`](../sets)**. In Pokémon Showdown this logic is copied
-  between the client and server, but in `@pkmn` has been extracted into a module.
+- **`Teams` methods delegate to [`@nxpkmn/sets`](../sets)**. In Pokémon Showdown this logic is copied
+  between the client and server, but in `@nxpkmn` has been extracted into a module.
 - **`dataDir` and `dataSearch`  have been removed**.
-- in order to be [`@pkmn/dex-types`](../dex/types) compatible, the **asynchronous `learnsets` API
-  has been added** (though unlike like with [`@pkmn/dex`](../dex), the learnsets data is loaded at
+- in order to be [`@nxpkmn/dex-types`](../dex/types) compatible, the **asynchronous `learnsets` API
+  has been added** (though unlike like with [`@nxpkmn/dex`](../dex), the learnsets data is loaded at
   startup, not asynchronously), and **`Dex.data.Species` and `Dex.data.Types` 'aliases' have been
   added** for what Pokémon Showdown calls `Pokedex` and `TypeChart` respectively. However, it is
-  important to **note that the types in `@pkmn/sim` do not match the stricter `@pkmn/dex-types`**
-  directly, you must simply cast the `@pkmn/sim` `Dex` and trust that it will work.
-- **`DexConditions` has been modified to behave like the client (and `@pkmn/dex`)**. If an effect
+  important to **note that the types in `@nxpkmn/sim` do not match the stricter `@nxpkmn/dex-types`**
+  directly, you must simply cast the `@nxpkmn/sim` `Dex` and trust that it will work.
+- **`DexConditions` has been modified to behave like the client (and `@nxpkmn/dex`)**. If an effect
   is prefixed with a type (e.g. `'move: ...'`) then the type will be used to determine which API
   to search. The two differences with Pokémon Showdown's simulator is that the input is more lenient
   (the simulator expects `'move:<ID>'`, where the client allows for `'move: <Name>'`) and the

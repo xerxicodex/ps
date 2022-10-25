@@ -1,5 +1,5 @@
 {
-  "name": "@pkmn/protocol",
+  "name": "@nxpkmn/protocol",
   "version": "0.4.3",
   "main": "build/index.js",
   "types": "build/index.d.ts",
@@ -13,7 +13,7 @@
     "protocol-verifier": "./protocol-verifier"
   },
   "description": "Parsing logic for Pokémon Showdown's PROTOCOL and SIM-PROTOCOL",
-  "repository": "github:pkmn/ps",
+  "repository": "github:xerxicodex/ps",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -25,11 +25,11 @@
     "!src/*.test.*"
   ],
   "dependencies": {
-    "@pkmn/types": "^2.1.0"
+    "@nxpkmn/types": "^2.1.0"
   },
   "devDependencies": {
-    "@pkmn/dex": "^0.6.1",
-    "@pkmn/data": "^0.6.1"
+    "@nxpkmn/dex": "^0.6.1",
+    "@nxpkmn/data": "^0.6.1"
   },
   "scripts": {
     "lint": "eslint --cache src --ext ts",
@@ -50,7 +50,7 @@
     ]
   },
   "eslintConfig": {
-    "extends": "@pkmn",
+    "extends": "@nxpkmn",
     "rules": {
       "no-redeclare": "off"
     }

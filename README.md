@@ -1,5 +1,5 @@
 <p align="center">
-  <img alt="pkmn/ps" width="192" height="192" src="https://pkmn.cc/pokeball.png" />
+  <img alt="nxpkmn/ps" width="192" height="192" src="https://pkmn.cc/pokeball.png" />
   <br />
   <br />
   <a href="https://github.com/pkmn/ps/actions/workflows/test.yml">
@@ -14,32 +14,32 @@
 > [Pokémon Showdown](https://pokemonshowdown.com), [modularized into
 > packages](https://pkmn.cc/modular-ps).
 
-This is the top level of [`@pkmn`](https://pkmn.cc/@pkmn/)'s Pokémon Showdown components.
+This is the top level of [`@nxpkmn`](https://pkmn.cc/@nxpkmn/)'s Pokémon Showdown components.
 
-- [`@pkmn/sim`](sim): an automatically generated extraction of just the simulator portion of
+- [`@nxpkmn/sim`](sim): an automatically generated extraction of just the simulator portion of
   [smogon/pokemon-showdown](https://github.com/smogon/pokemon-showdown)
-- [`@pkmn/dex`](dex): a unification of
+- [`@nxpkmn/dex`](dex): a unification of
   [smogon/pokemon-showdown](https://github.com/smogon/pokemon-showdown)'s and
   [smogon/pokemon-showdown-client](https://github.com/smogon/pokemon-showdown-client)'s data layers
-- [`@pkmn/data`](data): a higher level data API wrapper compatible with [`@pkmn/sim`](sim) and
-  [`@pkmn/dex`](dex)
-- [`@pkmn/mods`](mods): support for non-standard modifications to [`@pkmn/sim`](sim) and
-  [`@pkmn/dex`](dex)
-- [`@pkmn/sets`](sets): importing and exporting logic for Pokémon Showdown's set specification
-- [`@pkmn/types`](types): TypeScript definitions for types common to Pokémon projects
-- [`@pkmn/protocol`](protocol): Parsing logic for Pokémon Showdown's
+- [`@nxpkmn/data`](data): a higher level data API wrapper compatible with [`@nxpkmn/sim`](sim) and
+  [`@nxpkmn/dex`](dex)
+- [`@nxpkmn/mods`](mods): support for non-standard modifications to [`@nxpkmn/sim`](sim) and
+  [`@nxpkmn/dex`](dex)
+- [`@nxpkmn/sets`](sets): importing and exporting logic for Pokémon Showdown's set specification
+- [`@nxpkmn/types`](types): TypeScript definitions for types common to Pokémon projects
+- [`@nxpkmn/protocol`](protocol): Parsing logic for Pokémon Showdown's
   [PROTOCOL](https://github.com/smogon/pokemon-showdown/blob/master/PROTOCOL.md) and
   [SIM-PROTOCOL](https://github.com/smogon/pokemon-showdown/blob/master/sim/SIM-PROTOCOL.md)
-- [`@pkmn/client`](client): a fork of
+- [`@nxpkmn/client`](client): a fork of
   [smogon/pokemon-showdown-client](https://github.com/smogon/pokemon-showdown-client)'s battle
-  engine, built on top of [`@pkmn/protocol`](protocol)
-- [`@pkmn/view`](view): a library for building Pokémon Showdown client UIs
-- [`@pkmn/img`](img): logic for displaying [Pokémon Showdown's sprite/icon
+  engine, built on top of [`@nxpkmn/protocol`](protocol)
+- [`@nxpkmn/view`](view): a library for building Pokémon Showdown client UIs
+- [`@nxpkmn/img`](img): logic for displaying [Pokémon Showdown's sprite/icon
   resources](https://github.com/smogon/sprites)
-- [`@pkmn/login`](login): logic for authenticating with Pokémon Showdown
-- [`@pkmn/randoms`](randoms): random team generation logic for Pokémon Showdown's Random Battle
-  formats, for use with [`@pkmn/sim`](sim)
-- [`@pkmn/streams`](streams): an automatically generated extraction of Pokémon Showdown's streams
+- [`@nxpkmn/login`](login): logic for authenticating with Pokémon Showdown
+- [`@nxpkmn/randoms`](randoms): random team generation logic for Pokémon Showdown's Random Battle
+  formats, for use with [`@nxpkmn/sim`](sim)
+- [`@nxpkmn/streams`](streams): an automatically generated extraction of Pokémon Showdown's streams
   library
 
 Everything in this repository is distributed under the terms of the [MIT License](LICENSE). For

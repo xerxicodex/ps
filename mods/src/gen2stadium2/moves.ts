@@ -1,4 +1,4 @@
-import type {ModdedMoveData} from '@pkmn/sim';
+import type {ModdedMoveData} from '@nxpkmn/sim';
 
 export const Moves: {[k: string]: ModdedMoveData} = {
 	// Belly Drum no longer boosts attack by 2 stages if under 50% health.

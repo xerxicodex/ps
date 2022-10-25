@@ -1,7 +1,7 @@
 {
   "name": "ps",
-  "private": true,
-  "repository": "github:pkmn/ps",
+  "private": false,
+  "repository": "github:xerxicodex/ps",
   "license": "MIT",
   "dependencies": {
     "@babel/cli": "^7.19.3",
@@ -26,7 +26,7 @@
     "@babel/plugin-transform-typescript": "^7.19.3",
     "@babel/preset-env": "^7.19.4",
     "@babel/preset-typescript": "^7.18.6",
-    "@pkmn/eslint-config": "^2.11.0",
+    "@nxpkmn/eslint-config": "^2.11.0",
     "@types/jest": "^29.2.0",
     "@types/node": "^18.11.2",
     "@typescript-eslint/eslint-plugin": "^5.40.1",

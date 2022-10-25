@@ -1,4 +1,4 @@
-import type {ModdedBattleScriptsData, StatID, StatsTable} from '@pkmn/sim';
+import type {ModdedBattleScriptsData, StatID, StatsTable} from '@nxpkmn/sim';
 
 export const Scripts: ModdedBattleScriptsData = {
 	inherit: 'gen7',

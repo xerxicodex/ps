@@ -5,7 +5,7 @@ import {
   PokemonSet,
   StatID,
   StatsTable,
-} from '@pkmn/types';
+} from '@nxpkmn/types';
 
 export interface DataTable<T> {
   get(name: string): Readonly<T> | undefined;
@@ -80,7 +80,7 @@ const DECODE_STAT: Readonly<{[name: string]: StatID}> = {
   spe: 'spe',
 };
 
-export {PokemonSet} from '@pkmn/types';
+export {PokemonSet} from '@nxpkmn/types';
 
 export const Sets = new class {
   pack(s: Partial<PokemonSet>) {

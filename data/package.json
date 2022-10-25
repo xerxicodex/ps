@@ -1,11 +1,11 @@
 {
-  "name": "@pkmn/data",
+  "name": "@nxpkmn/data",
   "version": "0.6.1",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "unpkg": "build/production.min.js",
   "description": "A forked implementation of the Pokémon Showdown client's data layer",
-  "repository": "github:pkmn/ps",
+  "repository": "github:xerxicodex/ps",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -16,12 +16,12 @@
     "index.ts"
   ],
   "dependencies": {
-    "@pkmn/dex-types": "^0.6.1"
+    "@nxpkmn/dex-types": "^0.6.1"
   },
   "devDependencies": {
-    "@pkmn/dex": "^0.6.1",
-    "@pkmn/mods": "^0.6.1",
-    "@pkmn/sim": "^0.6.1",
+    "@nxpkmn/dex": "^0.6.1",
+    "@nxpkmn/mods": "^0.6.1",
+    "@nxpkmn/sim": "^0.6.1",
     "@smogon/calc": "^0.6.0"
   },
   "scripts": {
@@ -43,7 +43,7 @@
     ],
     "moduleNameMapper": {
       "^@smogon/calc/(.*)$": "<rootDir>/node_modules/@smogon/calc/dist/$1",
-      "^@pkmn/mods/(.*)$": "<rootDir>/node_modules/@pkmn/mods/build/$1"
+      "^@nxpkmn/mods/(.*)$": "<rootDir>/node_modules/@nxpkmn/mods/build/$1"
     }
   }
 }

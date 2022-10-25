@@ -1,5 +1,5 @@
 
-import {GenerationNum, StatsTable} from '@pkmn/types';
+import {GenerationNum, StatsTable} from '@nxpkmn/types';
 import {Data, toID} from '../sets';
 
 const ABILITIES: {[id: string]: string} = {
