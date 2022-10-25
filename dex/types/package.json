@@ -15,7 +15,7 @@
     "index.d.ts"
   ],
   "dependencies": {
-    "@nxpkmn/types": "https://gitpkg.now.sh/xerxicodex/ps/types"
+    "@nxpkmn/types": "^2.1.0"
   },
   "scripts": {
     "lint": "eslint --cache --ext *.ts",

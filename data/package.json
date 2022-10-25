@@ -19,12 +19,12 @@
     "index.ts"
   ],
   "dependencies": {
-    "@nxpkmn/dex-types": "https://gitpkg.now.sh/xerxicodex/ps/dex/types"
+    "@nxpkmn/dex-types": "^0.6.1"
   },
   "devDependencies": {
-    "@nxpkmn/dex": "https://gitpkg.now.sh/xerxicodex/ps/dex",
-    "@nxpkmn/mods": "https://gitpkg.now.sh/xerxicodex/ps/mods",
-    "@nxpkmn/sim": "https://gitpkg.now.sh/xerxicodex/ps/sim",
+    "@nxpkmn/dex": "^0.6.1",
+    "@nxpkmn/mods": "^0.6.1",
+    "@nxpkmn/sim": "^0.6.1",
     "@smogon/calc": "^0.6.0"
   },
   "scripts": {

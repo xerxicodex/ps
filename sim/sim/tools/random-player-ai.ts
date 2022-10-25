@@ -16,16 +16,18 @@ export class RandomPlayerAI extends BattlePlayer {
 	protected readonly move: number;
 	protected readonly mega: number;
 	protected readonly prng: PRNG;
+	protected readonly randomSwitch: boolean;
 
 	constructor(
 		playerStream: ObjectReadWriteStream<string>,
-		options: {move?: number, mega?: number, seed?: PRNG | PRNGSeed | null } = {},
+		options: {move?: number, mega?: number, seed?: PRNG | PRNGSeed | null, randomSwitch?: boolean | null } = {},
 		debug = false
 	) {
 		super(playerStream, debug);
 		this.move = options.move || 1.0;
 		this.mega = options.mega || 0;
 		this.prng = options.seed && !Array.isArray(options.seed) ? options.seed : new PRNG(options.seed);
+		this.randomSwitch = options.randomSwitch ?? true;
 	}
 
 	receiveError(error: Error) {
@@ -46,7 +48,7 @@ export class RandomPlayerAI extends BattlePlayer {
 			const choices = request.forceSwitch.map((mustSwitch: AnyObject) => {
 				if (!mustSwitch) return `pass`;
 
-				const canSwitch = range(1, 6).filter(i => (
+				const canSwitch = range(1, pokemon.legnth).filter(i => (
 					pokemon[i - 1] &&
 					// not active
 					i > request.forceSwitch.length &&
@@ -138,7 +140,7 @@ export class RandomPlayerAI extends BattlePlayer {
 					return {choice: move, move: m};
 				});
 
-				const canSwitch = range(1, 6).filter(j => (
+				const canSwitch = range(1, pokemon.length).filter(j => (
 					pokemon[j - 1] &&
 					// not active
 					!pokemon[j - 1].active &&
@@ -197,7 +199,7 @@ export class RandomPlayerAI extends BattlePlayer {
 	}
 
 	protected chooseSwitch(active: AnyObject | undefined, switches: {slot: number, pokemon: AnyObject}[]): number {
-		return this.prng.sample(switches).slot;
+		return this.randomSwitch ? this.prng.sample(switches).slot : (switches.at(0) as {slot: number, pokemon: AnyObject}).slot;
 	}
 }
 

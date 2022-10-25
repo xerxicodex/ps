@@ -1,6 +1,6 @@
 {
   "name": "@nxpkmn/protocol",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "unpkg": "build/production.min.js",
@@ -28,11 +28,11 @@
     "!src/*.test.*"
   ],
   "dependencies": {
-    "@nxpkmn/types": "https://gitpkg.now.sh/xerxicodex/ps/types"
+    "@nxpkmn/types": "^2.1.0"
   },
   "devDependencies": {
-    "@nxpkmn/dex": "https://gitpkg.now.sh/xerxicodex/ps/dex",
-    "@nxpkmn/data": "https://gitpkg.now.sh/xerxicodex/ps/data"
+    "@nxpkmn/dex": "^0.6.1",
+    "@nxpkmn/data": "^0.6.1"
   },
   "scripts": {
     "lint": "eslint --cache src --ext ts",

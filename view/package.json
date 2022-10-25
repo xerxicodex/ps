@@ -1,6 +1,6 @@
 {
   "name": "@nxpkmn/view",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "bin": {
@@ -19,8 +19,8 @@
     "!src/test"
   ],
   "dependencies": {
-    "@nxpkmn/protocol": "https://gitpkg.now.sh/xerxicodex/ps/protocol",
-    "@nxpkmn/types": "https://gitpkg.now.sh/xerxicodex/ps/types"
+    "@nxpkmn/protocol": "^0.4.4",
+    "@nxpkmn/types": "^2.1.0"
   },
   "scripts": {
     "lint": "eslint --cache src --ext ts",

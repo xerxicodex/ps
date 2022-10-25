@@ -1,6 +1,6 @@
 {
   "name": "@nxpkmn/sim",
-  "version": "0.6.1",
+  "version": "0.6.10",
   "description": "An automatically generated extraction of just the simulator portion of Pokémon Showdown",
   "homepage": "https://psim.us",
   "main": "build/sim/index.js",
@@ -30,8 +30,9 @@
     "sim"
   ],
   "dependencies": {
-    "@nxpkmn/sets": "https://gitpkg.now.sh/xerxicodex/ps/sets",
-    "@nxpkmn/streams": "https://gitpkg.now.sh/xerxicodex/ps/streams"
+    "@nxpkmn/sets": "^4.0.1",
+    "@nxpkmn/streams": "^1.0.0",
+    "@nxpkmn/types": "^2.1.0"
   },
   "devDependencies": {
     "mocha": "^10.1.0"

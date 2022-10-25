@@ -1,8 +1,9 @@
 'use strict';
 
+const {Utils} = require('../../build/lib');
 const assert = require('./../assert');
 const common = require('./../common');
-const Utils = require('../../lib/utils').Utils;
+// const Utils = require('../../lib/utils').Utils;
 const BASE_TEAM_ORDER = [1, 2, 3, 4, 5, 6];
 
 const SINGLES_TEAMS = {
